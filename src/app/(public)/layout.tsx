@@ -17,7 +17,7 @@ export default function PublicLayout({
         Skip to content
       </a>
       <SiteNav />
-      <main id="main" className="flex flex-1 flex-col">
+      <main id="main" tabIndex={-1} className="flex flex-1 flex-col outline-none">
         {children}
       </main>
       <SiteFooter />
