@@ -1,10 +1,13 @@
 import type { Metadata } from "next";
 import Image from "next/image";
+import { Reveal } from "@/components/landing/reveal";
+import { ScrollReveal } from "@/components/motion/scroll-reveal";
+import { LightTable } from "@/components/photos/light-table";
 import { photos } from "@/content/photos";
 
 export const metadata: Metadata = {
   title: "Photos",
-  description: "Photographs by Simon Xu.",
+  description: "The light table in Simon Xu's studio.",
   alternates: {
     canonical: "/photos",
   },
@@ -14,34 +17,50 @@ export const metadata: Metadata = {
 
 export default function PhotosPage() {
   return (
-    <div className="mx-auto w-full max-w-6xl px-5 py-16 sm:px-8">
-      <header className="mb-10">
-        <h1 className="font-display text-4xl font-semibold tracking-tight text-foreground">
-          Photos
-        </h1>
+    <div className="mx-auto w-full max-w-6xl px-5 py-12 sm:px-8 lg:py-16">
+      <header className="mb-10 flex flex-col gap-3">
+        <Reveal>
+          <p className="font-mono text-xs uppercase tracking-[0.18em] text-muted-foreground">
+            Studio · Photos
+          </p>
+        </Reveal>
+        <Reveal delay={60}>
+          <h1 className="font-display text-[40px] font-semibold leading-[1.1] tracking-tight text-foreground sm:text-[48px]">
+            The light table
+          </h1>
+        </Reveal>
+        <Reveal delay={120}>
+          <p className="max-w-2xl text-base leading-7 text-muted-foreground">
+            {photos.length === 0
+              ? "No photos published yet. The table is lit; the roll hasn't been developed."
+              : "Photographs by Simon."}
+          </p>
+        </Reveal>
       </header>
 
       {photos.length === 0 ? (
-        <p className="text-muted-foreground">No photos published yet.</p>
+        <Reveal delay={160}>
+          <LightTable />
+        </Reveal>
       ) : (
         <ul className="grid gap-6 sm:grid-cols-2 lg:grid-cols-3">
-          {photos.map((photo) => (
-            <li key={photo.id}>
-              <figure>
+          {photos.map((photo, i) => (
+            <ScrollReveal as="li" key={photo.id} delay={(i % 3) * 60}>
+              <figure className="group overflow-hidden rounded-[18px] border border-border bg-surface">
                 <Image
                   src={photo.src}
                   alt={photo.alt}
                   width={photo.width}
                   height={photo.height}
-                  className="h-auto w-full rounded-[18px] border border-border"
+                  className="h-auto w-full transition-transform duration-500 group-hover:scale-[1.02] motion-reduce:group-hover:scale-100"
                 />
                 {photo.caption ? (
-                  <figcaption className="mt-2 text-sm text-muted-foreground">
+                  <figcaption className="px-4 py-3 text-sm text-muted-foreground">
                     {photo.caption}
                   </figcaption>
                 ) : null}
               </figure>
-            </li>
+            </ScrollReveal>
           ))}
         </ul>
       )}

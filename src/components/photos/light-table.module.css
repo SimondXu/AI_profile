@@ -1,0 +1,253 @@
+/* Light table: a back-lit panel with a strip of unexposed film and a stack
+   of empty prints. The glow follows the pointer through --mx/--my (set by
+   the component); everything else is CSS. Freezes under reduced motion. */
+
+.table {
+  --mx: 50%;
+  --my: 40%;
+  position: relative;
+  overflow: hidden;
+  border-radius: 24px;
+  border: 1px solid var(--border);
+  background:
+    radial-gradient(
+      42rem circle at var(--mx) var(--my),
+      color-mix(in srgb, var(--accent-soft) 85%, white) 0%,
+      transparent 60%
+    ),
+    linear-gradient(
+      180deg,
+      var(--surface),
+      color-mix(in srgb, var(--surface) 88%, var(--background))
+    );
+  box-shadow:
+    inset 0 1px 0 color-mix(in srgb, white 60%, transparent),
+    inset 0 0 80px color-mix(in srgb, white 30%, transparent),
+    0 30px 60px -36px color-mix(in srgb, black 40%, transparent);
+  transition: background 120ms linear;
+}
+
+:global(.dark) .table {
+  background:
+    radial-gradient(
+      42rem circle at var(--mx) var(--my),
+      color-mix(in srgb, var(--accent-soft) 80%, var(--accent)) 0%,
+      transparent 60%
+    ),
+    linear-gradient(180deg, var(--surface), var(--background));
+  box-shadow:
+    inset 0 1px 0 color-mix(in srgb, white 8%, transparent),
+    0 30px 60px -36px color-mix(in srgb, black 80%, transparent);
+}
+
+/* Frosted-glass grain. */
+.table::before {
+  content: "";
+  position: absolute;
+  inset: 0;
+  background-image: radial-gradient(
+    circle,
+    color-mix(in srgb, var(--foreground) 6%, transparent) 0.6px,
+    transparent 0.8px
+  );
+  background-size: 6px 6px;
+  opacity: 0.6;
+  pointer-events: none;
+}
+
+/* ── Film strip ──────────────────────────────────────────────────────── */
+
+.strip {
+  position: relative;
+  display: flex;
+  gap: 10px;
+  padding: 22px 14px;
+  overflow-x: auto;
+  scroll-snap-type: x proximity;
+  scrollbar-width: none;
+  border-radius: 6px;
+  background: var(--material-vinyl);
+  box-shadow:
+    0 1px 2px color-mix(in srgb, black 30%, transparent),
+    0 18px 40px -22px color-mix(in srgb, black 70%, transparent);
+  transform: rotate(-1.2deg);
+}
+
+.strip::-webkit-scrollbar {
+  display: none;
+}
+
+/* Sprocket holes, top and bottom. */
+.strip::before,
+.strip::after {
+  content: "";
+  position: absolute;
+  left: 0;
+  right: 0;
+  height: 10px;
+  background: repeating-linear-gradient(
+    90deg,
+    transparent 0 9px,
+    color-mix(in srgb, var(--surface) 92%, transparent) 9px 17px,
+    transparent 17px 24px
+  );
+  border-radius: 2px;
+  pointer-events: none;
+}
+
+.strip::before {
+  top: 6px;
+}
+
+.strip::after {
+  bottom: 6px;
+}
+
+.frame {
+  position: relative;
+  flex: 1 0 auto;
+  width: 9rem;
+  aspect-ratio: 3 / 2;
+  scroll-snap-align: center;
+  border-radius: 3px;
+  /* Unexposed negative, back-lit: amber base glowing from the table. */
+  background: radial-gradient(
+    120% 90% at 50% 40%,
+    #e2b06c 0%,
+    #c58a49 55%,
+    #8d5a2c 100%
+  );
+  box-shadow:
+    inset 0 0 0 1px color-mix(in srgb, white 18%, transparent),
+    inset 0 0 24px color-mix(in srgb, #ffe2b0 35%, transparent);
+  transition:
+    transform 200ms cubic-bezier(0.2, 0.7, 0.2, 1),
+    box-shadow 200ms ease;
+}
+
+.frame:hover {
+  transform: translateY(-4px);
+  box-shadow:
+    inset 0 0 0 1px color-mix(in srgb, white 25%, transparent),
+    0 10px 20px -12px color-mix(in srgb, black 60%, transparent);
+}
+
+.frameIndex {
+  position: absolute;
+  right: 6px;
+  top: 5px;
+  font-family: var(--font-mono);
+  font-size: 9px;
+  letter-spacing: 0.2em;
+  text-transform: uppercase;
+  color: color-mix(in srgb, #3a2410 70%, transparent);
+}
+
+/* ── Empty prints ────────────────────────────────────────────────────── */
+
+.stack {
+  position: relative;
+  width: 11rem;
+  height: 13rem;
+}
+
+.print {
+  position: absolute;
+  inset: 0;
+  display: flex;
+  flex-direction: column;
+  padding: 0.6rem 0.6rem 1.6rem;
+  border-radius: 6px;
+  background: var(--material-paper);
+  box-shadow:
+    0 1px 2px color-mix(in srgb, black 14%, transparent),
+    0 14px 30px -18px color-mix(in srgb, black 50%, transparent);
+  transform-origin: 50% 100%;
+  transform: rotate(var(--rest, 0deg));
+  transition: transform 420ms cubic-bezier(0.2, 0.7, 0.2, 1);
+}
+
+.stack:hover .print,
+.stack:focus-within .print {
+  transform: translateX(var(--shift, 0)) rotate(var(--fan, 0deg))
+    translateY(-6px);
+}
+
+.printImage {
+  flex: 1;
+  border-radius: 3px;
+  background: linear-gradient(
+    160deg,
+    color-mix(in srgb, var(--material-vinyl) 10%, #d8dbe4),
+    color-mix(in srgb, var(--material-vinyl) 26%, #b9bfcc)
+  );
+  box-shadow: inset 0 0 0 1px color-mix(in srgb, black 8%, transparent);
+}
+
+.printCaption {
+  margin-top: 0.55rem;
+  height: 2px;
+  width: 55%;
+  border-radius: 999px;
+  background: color-mix(in srgb, black 10%, transparent);
+}
+
+/* ── Shutter flash ───────────────────────────────────────────────────── */
+
+.flash {
+  position: absolute;
+  inset: 0;
+  z-index: 20;
+  border-radius: inherit;
+  background: white;
+  pointer-events: none;
+  opacity: 0;
+}
+
+.flash[data-on="true"] {
+  animation: shutter-flash 420ms ease-out both;
+}
+
+@keyframes shutter-flash {
+  0% {
+    opacity: 0.95;
+  }
+  100% {
+    opacity: 0;
+  }
+}
+
+.shutter {
+  position: relative;
+  display: grid;
+  place-items: center;
+  width: 3.25rem;
+  height: 3.25rem;
+  border-radius: 50%;
+  background: var(--foreground);
+  color: var(--background);
+  box-shadow:
+    0 0 0 4px color-mix(in srgb, var(--foreground) 12%, transparent),
+    0 10px 24px -12px color-mix(in srgb, black 60%, transparent);
+  transition: transform 120ms ease;
+}
+
+.shutter:active {
+  transform: scale(0.94);
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .table {
+    transition: none;
+  }
+  .frame,
+  .print {
+    transition: none;
+  }
+  .flash[data-on="true"] {
+    animation: none;
+  }
+  .shutter:active {
+    transform: none;
+  }
+}
