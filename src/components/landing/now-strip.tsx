@@ -92,22 +92,21 @@ export async function NowStrip() {
     const pushEvent = await fetchLastPush(username);
     if (!pushEvent) return null;
 
-    const repoName = pushEvent.repo.name.split("/").pop() ?? pushEvent.repo.name;
-    const repoUrl = `https://github.com/${pushEvent.repo.name}`;
     const location = config.personal.location?.current;
 
+    // Deliberately no repo name: the latest public push may be an unrelated
+    // side project; the signal here is "still shipping", not "what".
     return (
       <p className="font-mono text-[13px] text-muted-foreground sm:text-sm">
-        Last push ·{" "}
+        Last GitHub push ·{" "}
         <a
-          href={repoUrl}
+          href={config.social.github}
           target="_blank"
           rel="noopener noreferrer"
           className="underline-offset-4 hover:text-foreground hover:underline"
         >
-          {repoName}
-        </a>{" "}
-        · {relativeTime(pushEvent.created_at)}
+          {relativeTime(pushEvent.created_at)}
+        </a>
         {location ? ` · Based in ${location}` : null}
       </p>
     );

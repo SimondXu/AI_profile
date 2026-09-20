@@ -1,4 +1,5 @@
 import Link from "next/link";
+import { ProjectCover } from "@/components/projects/covers/project-cover";
 import { CollectionDesk } from "@/components/studio/collection-desk";
 import { projectPresentationBySlug } from "@/content/project-presentation";
 import { getConfig } from "@/lib/config-loader";
@@ -120,8 +121,16 @@ export default function LandingPage() {
                   href={`/projects/${project.slug}`}
                   className="group flex h-full flex-col gap-4 rounded-[18px] border border-border bg-surface p-5 transition-colors hover:border-input focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-ring"
                 >
-                  {/* cover slot: Lane B wires the programmatic SVG cover after merge */}
-                  <div className="aspect-[3/2] w-full rounded-[18px] border border-border bg-surface" />
+                  <div className="relative aspect-[3/2] w-full overflow-hidden rounded-[18px] border border-border bg-surface">
+                    <ProjectCover
+                      slug={project.slug}
+                      title={shortTitle}
+                      className="h-full w-full"
+                    />
+                    <span className="absolute bottom-2 right-3 rounded-full bg-surface/80 px-2 py-0.5 text-[12px] text-muted-foreground">
+                      Concept artwork
+                    </span>
+                  </div>
                   <div className="flex flex-1 flex-col gap-2">
                     <h3 className="font-display text-lg font-semibold text-foreground">
                       {shortTitle}

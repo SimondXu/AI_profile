@@ -65,3 +65,6 @@ Thumbs.db
 /task_plan.md
 /findings.md
 /progress.md
+
+# Claude Code agent worktrees
+/.claude/worktrees/

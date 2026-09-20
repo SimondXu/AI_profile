@@ -187,12 +187,7 @@ export function CollectionDesk({ avatarSrc, askQuestion }: CollectionDeskProps) 
         onPointerMove={handlePointerMove}
         onPointerLeave={handlePointerLeave}
       >
-        <motion.div
-          className={styles.avatarSlot}
-          initial={reducedMotion ? { opacity: 0 } : { opacity: 0, y: 12 }}
-          animate={{ opacity: 1, y: 0 }}
-          transition={{ duration: reducedMotion ? 0.2 : 0.32, ease: "easeOut" }}
-        >
+        <div className={cn(styles.avatarSlot, "reveal")}>
           <motion.div style={reducedMotion ? undefined : { x: avatarX, y: avatarY }}>
             <Image
               src={avatarSrc}
@@ -202,7 +197,7 @@ export function CollectionDesk({ avatarSrc, askQuestion }: CollectionDeskProps) 
               className="h-28 w-28 rounded-full border border-border object-cover"
             />
           </motion.div>
-        </motion.div>
+        </div>
 
         {objects.map((id, index) => {
           const meta = OBJECT_META[id];
@@ -210,16 +205,10 @@ export function CollectionDesk({ avatarSrc, askQuestion }: CollectionDeskProps) 
           const delayMs = (index + 1) * 40;
 
           return (
-            <motion.div
+            <div
               key={id}
-              className={cn(styles.slot, OBJECT_SLOT_CLASS[id])}
-              initial={reducedMotion ? { opacity: 0 } : { opacity: 0, y: 12 }}
-              animate={{ opacity: 1, y: 0 }}
-              transition={{
-                duration: reducedMotion ? 0.2 : 0.34,
-                delay: delayMs / 1000,
-                ease: "easeOut",
-              }}
+              className={cn(styles.slot, OBJECT_SLOT_CLASS[id], "reveal")}
+              style={{ animationDelay: `${delayMs}ms` }}
             >
               <motion.div style={reducedMotion ? undefined : { x: translate.x, y: translate.y }}>
                 <Link href={meta.href} className={linkClass}>
@@ -229,7 +218,7 @@ export function CollectionDesk({ avatarSrc, askQuestion }: CollectionDeskProps) 
                   </span>
                 </Link>
               </motion.div>
-            </motion.div>
+            </div>
           );
         })}
       </motion.div>

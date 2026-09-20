@@ -17,7 +17,7 @@
     "title": "Software Engineer, AI/ML",
     "email": "edisonapply@gmail.com",
     "phone": "626-552-1696",
-    "handle": "@EdisonWhale",
+    "handle": "@SimondXu",
     "bio": "I'm a software engineer on Highmark's AI/ML team. I build production AI systems for real-time voice training, agent evaluation, and enterprise knowledge retrieval, including the multimodal assistant and internal LLM gateway behind a GenAI platform that serves 6M+ prompts a year.\n\nMy work spans full-stack AI development, distributed systems, multi-agent orchestration, and RAG pipelines, plus the infrastructure underneath: LLM gateways, agent registries with policy gates and promotion controls, durable execution, and the evaluation and observability needed to ship reliable AI products.",
     "avatar": "/avatar.png",
     "fallbackAvatar": "/avatar.png",
@@ -336,7 +336,7 @@
   ],
   "social": {
     "linkedin": "https://linkedin.com/in/Edisonwhale",
-    "github": "https://github.com/edisonwhale",
+    "github": "https://github.com/SimondXu",
     "website": "https://www.simondxu.com"
   },
   "entryLevel": {

@@ -1,7 +1,5 @@
-"use client";
-
-import { motion, useReducedMotion } from "framer-motion";
-import type { ReactNode } from "react";
+import type { CSSProperties, ReactNode } from "react";
+import { cn } from "@/lib/utils";
 
 interface RevealProps {
   /** Stagger delay in ms, capped by callers at ~200ms per item. */
@@ -11,24 +9,18 @@ interface RevealProps {
 }
 
 /**
- * Tiny entrance wrapper: fades in and rises 8px once on mount. Honours
- * `prefers-reduced-motion` by dropping to an opacity-only transition.
+ * Entrance wrapper: fades in and rises 8px once. Implemented as a CSS
+ * animation (`.reveal` in globals.css) rather than a JS-driven one so the
+ * server-rendered HTML is never stuck invisible waiting for hydration, and
+ * `prefers-reduced-motion` is handled by the stylesheet.
  */
 export function Reveal({ delay = 0, children, className }: RevealProps) {
-  const reducedMotion = useReducedMotion();
+  const style: CSSProperties | undefined =
+    delay > 0 ? { animationDelay: `${delay}ms` } : undefined;
 
   return (
-    <motion.div
-      className={className}
-      initial={reducedMotion ? { opacity: 0 } : { opacity: 0, y: 8 }}
-      animate={{ opacity: 1, y: 0 }}
-      transition={{
-        duration: reducedMotion ? 0.2 : 0.36,
-        delay: delay / 1000,
-        ease: "easeOut",
-      }}
-    >
+    <div className={cn("reveal", className)} style={style}>
       {children}
-    </motion.div>
+    </div>
   );
 }

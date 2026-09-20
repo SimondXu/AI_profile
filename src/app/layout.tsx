@@ -113,7 +113,7 @@ const personJsonLd = {
   jobTitle: "Software Engineer",
   url: `${siteUrl}/`,
   sameAs: [
-    "https://github.com/edisonwhale",
+    "https://github.com/SimondXu",
     "https://linkedin.com/in/edisonwhale",
   ],
   worksFor: {
