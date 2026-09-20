@@ -2,6 +2,7 @@ import type { Metadata } from "next";
 import { Download } from "lucide-react";
 import { getConfig } from "@/lib/config-loader";
 import { ResumeDownloadLink } from "@/components/tracking/resume-download-link";
+import { Resume } from "@/components/resume";
 
 export const metadata: Metadata = {
   title: "Resume",
@@ -32,35 +33,58 @@ export default function ResumePage() {
   ).previous;
 
   return (
-    <div className="quiet-page quiet-resume-page">
-      <div className="quiet-resume-shell">
-        <header className="quiet-resume-header">
+    <div className="mx-auto w-full max-w-3xl px-4 py-10 sm:px-6">
+      <header className="flex flex-col gap-4 border-b border-border pb-8">
+        <div>
+          <h1 className="font-display text-4xl font-semibold tracking-tight text-foreground sm:text-5xl">
+            Resume
+          </h1>
+          <p className="mt-2 max-w-prose text-base text-muted-foreground">
+            {config.resume.description}
+          </p>
+        </div>
+
+        <dl className="flex flex-wrap gap-x-5 gap-y-1 font-mono text-xs text-muted-foreground print:hidden">
           <div>
-            <h1>{config.personal.name}</h1>
-            <p>{config.personal.title}</p>
+            <dt className="inline">Updated</dt>{" "}
+            <dd className="inline text-foreground">{config.resume.lastUpdated}</dd>
           </div>
+          <div>
+            <dt className="inline">Size</dt>{" "}
+            <dd className="inline text-foreground">{config.resume.fileSize}</dd>
+          </div>
+          <div>
+            <dt className="inline">Format</dt>{" "}
+            <dd className="inline text-foreground">{config.resume.fileType}</dd>
+          </div>
+        </dl>
+
+        <div className="flex flex-wrap items-center gap-4 print:hidden">
           <ResumeDownloadLink
-            className="quiet-primary-link"
             href={resumePdfUrl}
             download="Edison-resume-2026.pdf"
+            className="inline-flex h-11 items-center gap-2 rounded-[10px] bg-accent px-5 text-sm font-medium text-accent-foreground transition-opacity hover:opacity-90 focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-ring"
           >
-            <Download aria-hidden="true" />
+            <Download aria-hidden="true" className="h-4 w-4" />
             Download PDF
           </ResumeDownloadLink>
-        </header>
+        </div>
 
-        <div className="quiet-resume-contact">
-          <a href={`mailto:${config.personal.email}`}>
+        <div className="flex flex-wrap gap-x-4 gap-y-1 text-sm text-muted-foreground print:text-foreground">
+          <a href={`mailto:${config.personal.email}`} className="hover:text-foreground">
             {config.personal.email}
           </a>
           {config.personal.phone ? (
-            <a href={`tel:${config.personal.phone}`}>{config.personal.phone}</a>
+            <a href={`tel:${config.personal.phone}`} className="hover:text-foreground">
+              {config.personal.phone}
+            </a>
           ) : null}
           <span>{config.personal.location.current}</span>
           <a
             href={config.social.linkedin}
             target="_blank"
             rel="noopener noreferrer"
+            className="hover:text-foreground print:hidden"
           >
             LinkedIn
           </a>
@@ -68,110 +92,104 @@ export default function ResumePage() {
             href={config.social.github}
             target="_blank"
             rel="noopener noreferrer"
+            className="hover:text-foreground print:hidden"
           >
             GitHub
           </a>
         </div>
+      </header>
 
-        <section
-          className="quiet-resume-section"
-          aria-labelledby="resume-experience"
-        >
-          <h2 id="resume-experience">Experience</h2>
+      <div className="mt-8">
+        <Resume embedded />
+      </div>
+
+      <section className="mt-10" aria-labelledby="resume-experience">
+        <h2 id="resume-experience" className="font-display text-xl font-semibold text-foreground">
+          Experience
+        </h2>
+        <div className="mt-4 flex flex-col gap-6">
           {config.experience.map((experience) => (
-            <article
-              key={`${experience.company}-${experience.position}`}
-              className="quiet-resume-entry"
-            >
-              <div>
-                <h3>{experience.position}</h3>
-                <p>{experience.company}</p>
+            <article key={`${experience.company}-${experience.position}`} className="flex flex-col gap-1">
+              <div className="flex flex-wrap items-baseline justify-between gap-2">
+                <div>
+                  <h3 className="text-base font-semibold text-foreground">{experience.position}</h3>
+                  <p className="text-sm text-muted-foreground">{experience.company}</p>
+                </div>
+                <p className="font-mono text-xs text-muted-foreground">{experience.duration}</p>
               </div>
-              <p className="quiet-resume-date">{experience.duration}</p>
-              <p className="quiet-resume-description">
-                {experience.description}
-              </p>
+              <p className="max-w-prose text-sm text-foreground">{experience.description}</p>
               {experience.highlights?.length ? (
-                <ul className="quiet-resume-highlights">
+                <ul className="mt-1 list-disc space-y-1 pl-5 text-sm text-foreground">
                   {experience.highlights.map((highlight) => (
                     <li key={highlight}>{highlight}</li>
                   ))}
                 </ul>
               ) : null}
-              <p className="quiet-resume-tech">
-                {experience.technologies.join(", ")}
-              </p>
+              <p className="mt-1 text-xs text-muted-foreground">{experience.technologies.join(", ")}</p>
             </article>
           ))}
-        </section>
+        </div>
+      </section>
 
-        <section className="quiet-resume-grid">
-          <div className="quiet-resume-section">
-            <h2>Education</h2>
-            <article className="quiet-resume-entry">
-              <h3>{config.education.current.degree}</h3>
-              <p>{config.education.current.institution}</p>
-              <p className="quiet-resume-date">
-                {config.education.current.duration},{" "}
-                {config.education.current.graduationDate}
+      <section className="mt-10 grid gap-8 sm:grid-cols-2">
+        <div>
+          <h2 className="font-display text-xl font-semibold text-foreground">Education</h2>
+          <div className="mt-4 flex flex-col gap-4">
+            <article>
+              <h3 className="text-base font-semibold text-foreground">{config.education.current.degree}</h3>
+              <p className="text-sm text-muted-foreground">{config.education.current.institution}</p>
+              <p className="font-mono text-xs text-muted-foreground">
+                {config.education.current.duration}, {config.education.current.graduationDate}
               </p>
             </article>
             {previousEducation ? (
-              <article className="quiet-resume-entry">
-                <h3>{previousEducation.degree}</h3>
-                <p>{previousEducation.institution}</p>
-                <p className="quiet-resume-date">
+              <article>
+                <h3 className="text-base font-semibold text-foreground">{previousEducation.degree}</h3>
+                <p className="text-sm text-muted-foreground">{previousEducation.institution}</p>
+                <p className="font-mono text-xs text-muted-foreground">
                   {previousEducation.duration}
-                  {previousEducation.graduationDate
-                    ? `, ${previousEducation.graduationDate}`
-                    : ""}
+                  {previousEducation.graduationDate ? `, ${previousEducation.graduationDate}` : ""}
                 </p>
               </article>
             ) : null}
           </div>
-          <div className="quiet-resume-section">
-            <h2>Skills</h2>
-            <div className="quiet-resume-skills">
-              <p>
-                <strong>Applied AI</strong>
-                {config.skills.ml_ai.slice(0, 6).join(", ")}
-              </p>
-              <p>
-                <strong>Languages</strong>
-                {config.skills.programming.join(", ")}
-              </p>
-              <p>
-                <strong>Web</strong>
-                {config.skills.web_development.slice(0, 6).join(", ")}
-              </p>
-              <p>
-                <strong>Cloud and data</strong>
-                {[
-                  ...config.skills.databases,
-                  ...config.skills.devops_cloud.slice(0, 6),
-                ].join(", ")}
-              </p>
-            </div>
+        </div>
+        <div>
+          <h2 className="font-display text-xl font-semibold text-foreground">Skills</h2>
+          <div className="mt-4 flex flex-col gap-2 text-sm text-foreground">
+            <p>
+              <strong className="font-semibold">Applied AI </strong>
+              {config.skills.ml_ai.slice(0, 6).join(", ")}
+            </p>
+            <p>
+              <strong className="font-semibold">Languages </strong>
+              {config.skills.programming.join(", ")}
+            </p>
+            <p>
+              <strong className="font-semibold">Web </strong>
+              {config.skills.web_development.slice(0, 6).join(", ")}
+            </p>
+            <p>
+              <strong className="font-semibold">Cloud and data </strong>
+              {[...config.skills.databases, ...config.skills.devops_cloud.slice(0, 6)].join(", ")}
+            </p>
           </div>
-        </section>
+        </div>
+      </section>
 
-        <section
-          className="quiet-resume-section"
-          aria-labelledby="resume-projects"
-        >
-          <h2 id="resume-projects">Selected projects</h2>
-          <div className="quiet-resume-projects">
-            {featuredProjects.map((project) => (
-              <article key={project.title} className="quiet-resume-entry">
-                <h3>{project.title}</h3>
-                <p className="quiet-resume-description">
-                  {project.description}
-                </p>
-              </article>
-            ))}
-          </div>
-        </section>
-      </div>
+      <section className="mt-10" aria-labelledby="resume-projects">
+        <h2 id="resume-projects" className="font-display text-xl font-semibold text-foreground">
+          Selected projects
+        </h2>
+        <div className="mt-4 flex flex-col gap-4">
+          {featuredProjects.map((project) => (
+            <article key={project.title}>
+              <h3 className="text-base font-semibold text-foreground">{project.title}</h3>
+              <p className="max-w-prose text-sm text-foreground">{project.description}</p>
+            </article>
+          ))}
+        </div>
+      </section>
     </div>
   );
 }

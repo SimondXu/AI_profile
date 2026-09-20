@@ -85,9 +85,9 @@ const chatBubbleMessageVariants = cva("", {
   variants: {
     variant: {
       received:
-        "chat-bubble-received rounded-2xl rounded-tl-sm border px-5 py-4 text-[var(--hero-text)] shadow-sm backdrop-blur-md",
+        "rounded-2xl rounded-tl-sm border-0 bg-transparent px-5 py-4 text-foreground shadow-none",
       sent:
-        "chat-bubble-sent relative isolate overflow-hidden rounded-2xl rounded-tr-sm border px-5 py-3.5 text-[var(--chat-user-bubble-text)] shadow-sm backdrop-blur-xl",
+        "relative isolate overflow-hidden rounded-2xl rounded-tr-sm border border-border bg-surface px-5 py-3.5 text-foreground shadow-sm",
     },
     layout: {
       default: "",

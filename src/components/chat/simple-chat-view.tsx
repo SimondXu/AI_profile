@@ -1,24 +1,19 @@
 'use client';
 
-import { ChatRequestOptions, isToolOrDynamicToolUIPart } from 'ai';
+import { isToolOrDynamicToolUIPart } from 'ai';
 import { UIMessage } from '@ai-sdk/react';
 import ChatMessageContent from './chat-message-content';
 import ToolRenderer from './tool-renderer';
+import MessageLoading from '@/components/ui/chat/message-loading';
 
 interface SimplifiedChatViewProps {
   message: UIMessage;
   isLoading: boolean;
-  reload: (
-    chatRequestOptions?: ChatRequestOptions
-  ) => Promise<void>;
-  addToolResult?: <TOOL extends string>({ tool, toolCallId, output, }: { tool: TOOL; toolCallId: string; output: unknown; }) => Promise<void>;
 }
 
 export function SimplifiedChatView({
   message,
   isLoading,
-  reload,
-  addToolResult,
 }: SimplifiedChatViewProps) {
   if (message.role !== 'assistant') return null;
 
@@ -36,45 +31,39 @@ export function SimplifiedChatView({
     ?.filter((part) => part.type === 'text')
     .map((part) => part.type === 'text' ? part.text : '')
     .join(' ') || '';
-  
+
   // Check if we have meaningful text content (more than just confirmations)
   const hasTextContent = textContent.trim().length > 0;
   const hasTools = toolInvocations.length > 0;
-  
+
   // Show text content if we have meaningful content, even with tools present
   const showTextContent = hasTextContent;
 
   return (
-    <div className="flex h-full w-full flex-col px-4">
-      {/* Single scrollable container for both tool and text content */}
-      <div className="custom-scrollbar flex h-full w-full flex-col overflow-y-auto">
-        {/* Tool invocation result - displayed at the top */}
-        {hasTools && (
-          <div className="mb-4 w-full">
-            <ToolRenderer
-              toolInvocations={toolInvocations}
-              messageId={message.id || 'current-msg'}
-            />
-          </div>
-        )}
+    <div className="w-full max-w-prose">
+      {/* Tool invocation result - displayed at the top */}
+      {hasTools && (
+        <div className="mb-4 w-full">
+          <ToolRenderer
+            toolInvocations={toolInvocations}
+            messageId={message.id || 'current-msg'}
+          />
+        </div>
+      )}
 
-        {/* Text content - only show if meaningful and not redundant with tools */}
-        {showTextContent && (
-          <div className="w-full text-(--hero-text)">
-            <ChatMessageContent
-              message={message}
-              isLast={true}
-              isLoading={isLoading}
-              reload={reload}
-              addToolResult={addToolResult}
-              skipToolRendering={true}
-            />
-          </div>
-        )}
+      {/* Text content - only show if meaningful and not redundant with tools */}
+      {showTextContent && (
+        <div className="w-full text-foreground">
+          <ChatMessageContent message={message} />
+        </div>
+      )}
 
-        {/* Add some padding at the bottom for better scrolling experience */}
-        <div className="pb-4"></div>
-      </div>
+      {/* A subtle indicator while this message is still streaming */}
+      {isLoading && (
+        <div className="mt-2 flex items-center gap-2 text-muted-foreground">
+          <MessageLoading />
+        </div>
+      )}
     </div>
   );
 }

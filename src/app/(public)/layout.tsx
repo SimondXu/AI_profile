@@ -1,5 +1,7 @@
+import { AskPalette } from "@/components/site/ask-palette";
 import { SiteFooter } from "@/components/site/site-footer";
 import { SiteNav } from "@/components/site/site-nav";
+import { getConfig } from "@/lib/config-loader";
 
 export default function PublicLayout({
   children,
@@ -19,6 +21,7 @@ export default function PublicLayout({
         {children}
       </main>
       <SiteFooter />
+      <AskPalette questions={getConfig().aiProfile.featuredQuestions} />
     </div>
   );
 }
