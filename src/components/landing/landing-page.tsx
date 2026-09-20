@@ -2,24 +2,36 @@ import { MapPin } from "lucide-react";
 import Link from "next/link";
 import { ScrollReveal } from "@/components/motion/scroll-reveal";
 import { ProjectCover } from "@/components/projects/covers/project-cover";
-import { CollectionDesk } from "@/components/studio/collection-desk";
+import { CollectionDesk, type DeskNote } from "@/components/studio/collection-desk";
 import { projectPresentationBySlug } from "@/content/project-presentation";
 import { getConfig } from "@/lib/config-loader";
 import { AboutSection } from "./about-section";
 import { AiStatusPill } from "./ai-status-pill";
 import { ExperienceTimeline } from "./experience-timeline";
 import { HeroAskForm } from "./hero-ask-form";
-import { NowStrip } from "./now-strip";
+import { getLastPush } from "./now-strip";
 import { Reveal } from "./reveal";
 import { SectionHeader } from "./section-header";
 
 const pillClass =
   "inline-flex items-center gap-2 rounded-full border border-border bg-surface/70 px-3 py-1 font-mono text-[12px] text-muted-foreground backdrop-blur";
 
-export default function LandingPage() {
+/** First sentence of a paragraph — the hero says one thing, About says the rest. */
+export function firstSentence(text: string): string {
+  const match = text.match(/^[^.!?]*[.!?]/);
+  return (match ? match[0] : text).trim();
+}
+
+export default async function LandingPage() {
   const config = getConfig();
 
-  const positioning = (config.aiProfile.positioning || config.personal.bio).trim();
+  const positioning = firstSentence(config.aiProfile.positioning || config.personal.bio);
+  const lastPush = await getLastPush();
+  const note: DeskNote | null = lastPush
+    ? { text: `last push\n${lastPush.relative}`, href: lastPush.href }
+    : null;
+  const terminalQuestion =
+    config.aiProfile.followUpQuestions[0] ?? config.aiProfile.featuredQuestions[0] ?? "Who are you?";
 
   const askSuggestions = [
     ...config.aiProfile.featuredQuestions,
@@ -61,7 +73,7 @@ export default function LandingPage() {
             </h1>
           </Reveal>
           <Reveal delay={80}>
-            <p className="max-w-[46ch] text-[19px] leading-[1.5] text-muted-foreground sm:text-[20px]">
+            <p className="max-w-[40ch] font-display text-[22px] font-medium leading-[1.3] tracking-tight text-foreground sm:text-[26px]">
               {positioning}
             </p>
           </Reveal>
@@ -103,16 +115,29 @@ export default function LandingPage() {
             avatarSrc={config.personal.avatar}
             askQuestion={deskAskQuestion}
             lines={avatarLines}
+            terminalQuestion={terminalQuestion}
+            note={note}
           />
         </div>
       </section>
 
-      <div className="mx-auto w-full max-w-6xl px-5 sm:px-8">
-        <NowStrip />
-      </div>
-
       <AboutSection config={config} />
 
+      <section
+        id="experience"
+        className="mx-auto w-full max-w-6xl scroll-mt-20 border-t border-border px-5 py-16 sm:px-8 lg:py-24"
+        aria-labelledby="experience-title"
+      >
+        <ScrollReveal>
+          <SectionHeader
+            eyebrow="02 — Experience"
+            title="Experience"
+            titleId="experience-title"
+          />
+        </ScrollReveal>
+
+        <ExperienceTimeline entries={config.experience} />
+      </section>
       <section
         id="projects"
         className="mx-auto w-full max-w-6xl scroll-mt-20 border-t border-border px-5 py-16 sm:px-8 lg:py-24"
@@ -120,7 +145,7 @@ export default function LandingPage() {
       >
         <ScrollReveal>
           <SectionHeader
-            eyebrow="02 — Selected work"
+            eyebrow="03 — Selected work"
             title="Selected work"
             titleId="projects-title"
             action={
@@ -180,21 +205,6 @@ export default function LandingPage() {
         </div>
       </section>
 
-      <section
-        id="experience"
-        className="mx-auto w-full max-w-6xl scroll-mt-20 border-t border-border px-5 py-16 sm:px-8 lg:py-24"
-        aria-labelledby="experience-title"
-      >
-        <ScrollReveal>
-          <SectionHeader
-            eyebrow="03 — Experience"
-            title="Experience"
-            titleId="experience-title"
-          />
-        </ScrollReveal>
-
-        <ExperienceTimeline entries={config.experience} />
-      </section>
     </>
   );
 }

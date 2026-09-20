@@ -3,7 +3,8 @@
    file carries the desk's paper/cloth surface treatment (dot grid, "mat",
    inner top highlight — CSS-only, built from tokens) plus the absolute
    positioning that turns the desk into a composed scene at `md`. Mobile-first:
-   objects sit in a plain 2-column grid until `md`. */
+   link objects sit in a plain 2-column grid until `md`; purely decorative
+   pieces (avatar, speech bubble, sticky note, mug) only exist on the scene. */
 
 .scene {
   perspective: 1000px;
@@ -25,8 +26,6 @@
     aspect-ratio: 4 / 3;
     min-height: 320px;
     padding: 0;
-    /* Paper/cloth surface feel: faint dot grid + soft inner top highlight,
-       built only from tokens so it reads correctly in both themes. */
     background-image: radial-gradient(
       circle,
       color-mix(in srgb, var(--foreground) 7%, transparent) 1px,
@@ -36,8 +35,6 @@
     box-shadow: inset 0 1px 0 color-mix(in srgb, white 10%, transparent);
   }
 
-  /* Desk mat: a large soft rectangle behind the objects so the surface reads
-     as tactile rather than a flat panel. */
   .desk::before {
     content: "";
     position: absolute;
@@ -49,22 +46,45 @@
   }
 }
 
-.avatarSlot {
+/* Decorative pieces: hidden until the scene exists. */
+.decor {
   display: none;
 }
 
 @media (min-width: 768px) {
-  .avatarSlot {
+  .decor {
     display: block;
     position: absolute;
+    z-index: 15;
+  }
+
+  .avatarSlot {
     top: 6%;
     left: 6%;
     z-index: 20;
   }
+
+  .bubbleSlot {
+    top: 11%;
+    left: 37%;
+    width: clamp(7rem, 27%, 10.5rem);
+  }
+
+  .noteSlot {
+    bottom: 13%;
+    left: 40%;
+    width: clamp(5rem, 16%, 6rem);
+    z-index: 12;
+  }
+
+  .mugSlot {
+    top: 38%;
+    left: 58%;
+    z-index: 5;
+  }
 }
 
-/* Photo-card backing for the avatar: a small paper mount, pinned at a slight
-   angle so it reads as a photo on the desk rather than a floating PNG. */
+/* Photo-card backing for the avatar. */
 .avatarCard {
   display: inline-flex;
   transform: rotate(-4deg);
@@ -83,12 +103,10 @@
     z-index: 10;
   }
 
-  /* Composed scene, sized with `%` + `clamp()` so nothing overlaps across the
-     desk-width range the two-column hero produces from 1024px to 1440px
-     (roughly 440px–620px desk width): avatar top-left; Ask anchored to its
-     right as if the avatar is speaking; Resume top-right; Projects
-     bottom-left; Music/Photos bottom-center/right, kept positioned for
-     whenever those sections go live. */
+  /* Scene (desk width ≈ 440–620px): avatar top-left, bubble beside it,
+     resume top-right, projects bottom-left, terminal bottom-right, sticky
+     note under the avatar, mug in the bottom gap. Music/Photos keep slots
+     for when those sections go live. */
 
   .slotResume {
     top: 8%;
@@ -97,32 +115,32 @@
   }
 
   .slotAsk {
-    top: 12%;
-    left: 38%;
-    width: clamp(7.5rem, 30%, 12rem);
+    bottom: 8%;
+    right: 5%;
+    width: clamp(8.5rem, 36%, 12.5rem);
   }
 
   .slotProjects {
     bottom: 8%;
-    left: 8%;
-    width: clamp(10rem, 42%, 13rem);
+    left: 7%;
+    width: clamp(8rem, 30%, 11rem);
   }
 
   .slotMusic {
-    bottom: 8%;
-    left: 52%;
-    width: clamp(5rem, 15%, 6.5rem);
+    top: 46%;
+    right: 8%;
+    width: clamp(5rem, 15%, 6rem);
   }
 
   .slotPhotos {
-    bottom: 8%;
-    right: 5%;
-    width: clamp(5.5rem, 15%, 7.5rem);
+    top: 46%;
+    left: 40%;
+    width: clamp(5rem, 15%, 6rem);
   }
 }
 
-/* Speech tail on the Ask bubble, pointing back toward the avatar. */
-.askBubble::before {
+/* Speech tail on the bubble, pointing back toward the avatar. */
+.bubble::before {
   content: "";
   position: absolute;
   top: 1rem;
@@ -132,4 +150,76 @@
   background: var(--accent-soft);
   border-radius: 2px;
   transform: rotate(45deg);
+}
+
+/* Sticky note: slightly askew, with a folded corner. */
+.note {
+  transform: rotate(3deg);
+  background: color-mix(in srgb, #f6d96b 82%, var(--material-paper));
+  color: #3a3410;
+  box-shadow:
+    0 1px 2px color-mix(in srgb, black 12%, transparent),
+    0 8px 18px -10px color-mix(in srgb, black 30%, transparent);
+}
+
+.note::after {
+  content: "";
+  position: absolute;
+  right: 0;
+  bottom: 0;
+  width: 12px;
+  height: 12px;
+  background: linear-gradient(135deg, transparent 50%, color-mix(in srgb, black 12%, transparent) 50%);
+  border-bottom-right-radius: 6px;
+}
+
+/* Mug: a circle with a handle, drawn from tokens. */
+.mug {
+  position: relative;
+  width: 2.6rem;
+  height: 2.6rem;
+  border-radius: 50%;
+  background: var(--material-paper);
+  border: 1px solid color-mix(in srgb, black 12%, transparent);
+  box-shadow:
+    inset 0 0 0 5px color-mix(in srgb, black 8%, transparent),
+    inset 0 0 0 9px #4a2f1f,
+    0 6px 14px -8px color-mix(in srgb, black 40%, transparent);
+}
+
+.mug::after {
+  content: "";
+  position: absolute;
+  top: 50%;
+  right: -0.7rem;
+  width: 0.9rem;
+  height: 1.1rem;
+  transform: translateY(-50%);
+  border: 4px solid var(--material-paper);
+  border-left: 0;
+  border-radius: 0 0.6rem 0.6rem 0;
+}
+
+/* Terminal caret. */
+.caret::after {
+  content: "";
+  display: inline-block;
+  width: 0.5em;
+  height: 1em;
+  margin-left: 2px;
+  vertical-align: -0.15em;
+  background: currentColor;
+  animation: desk-caret 1s steps(2, start) infinite;
+}
+
+@keyframes desk-caret {
+  to {
+    visibility: hidden;
+  }
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .caret::after {
+    animation: none;
+  }
 }

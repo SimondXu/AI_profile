@@ -1,6 +1,6 @@
-import Image from "next/image";
 import { ScrollReveal } from "@/components/motion/scroll-reveal";
 import type { PortfolioConfig } from "@/types/portfolio";
+import { IdCard } from "./id-card";
 import { SectionHeader } from "./section-header";
 
 interface AboutSectionProps {
@@ -12,11 +12,22 @@ interface AboutSectionProps {
  * same paper material as the desk, and a slow strip of real interests.
  * Every value comes from portfolio-config.json; missing fields are skipped.
  */
+/** Everything after the first sentence — the hero already said that one. */
+function afterFirstSentence(text: string): string {
+  const match = text.match(/^[^.!?]*[.!?]\s*/);
+  return match ? text.slice(match[0].length).trim() : "";
+}
+
 export function AboutSection({ config }: AboutSectionProps) {
-  const [lead, ...rest] = config.personal.bio
+  const paragraphs = config.personal.bio
     .split("\n\n")
     .map((paragraph) => paragraph.trim())
     .filter(Boolean);
+  // Pull-quote: the belief half of the positioning statement; fall back to the
+  // first bio paragraph only if the positioning is a single sentence.
+  const belief = afterFirstSentence(config.aiProfile.positioning || "");
+  const lead = belief || paragraphs.shift() || "";
+  const rest = paragraphs;
 
   const education = config.education?.current ?? null;
   const location = config.personal.location?.current || null;
@@ -25,6 +36,7 @@ export function AboutSection({ config }: AboutSectionProps) {
   const focus = config.entryLevel?.focusAreas ?? [];
   const traits = config.personality?.traits ?? [];
   const interests = config.personality?.interests ?? [];
+  const funFacts = config.personality?.funFacts ?? [];
 
   return (
     <section
@@ -66,84 +78,28 @@ export function AboutSection({ config }: AboutSectionProps) {
         </ScrollReveal>
 
         <ScrollReveal delay={140}>
-          <div className="group relative mx-auto w-full max-w-sm rotate-[-1.5deg] rounded-[18px] bg-material-paper p-5 text-material-vinyl shadow-[0_1px_2px_rgba(0,0,0,0.12),0_18px_40px_-20px_rgba(0,0,0,0.45)] transition-transform duration-300 hover:rotate-0 motion-reduce:rotate-0 lg:mx-0">
-            <div className="flex items-center gap-4">
-              <Image
-                src={config.personal.avatar}
-                alt=""
-                width={56}
-                height={56}
-                className="h-14 w-14 rounded-[10px] border border-black/10 object-cover"
-              />
-              <div className="min-w-0">
-                <p className="truncate font-display text-lg font-semibold leading-tight">
-                  {config.personal.name}
-                </p>
-                <p className="truncate text-sm text-material-vinyl/70">
-                  {config.personal.title}
-                </p>
-              </div>
-            </div>
-
-            <dl className="mt-5 flex flex-col gap-3 border-t border-black/10 pt-4 text-sm">
-              {availability ? (
-                <div>
-                  <dt className="font-mono text-[11px] uppercase tracking-[0.18em] text-material-vinyl/60">
-                    Status
-                  </dt>
-                  <dd className="mt-1 flex items-center gap-2">
-                    <span className="pulse-dot text-emerald-600" aria-hidden="true" />
-                    <span>
-                      {availability}
-                      {relocation ? " · relocation OK" : ""}
-                    </span>
-                  </dd>
-                </div>
-              ) : null}
-              {location ? (
-                <div>
-                  <dt className="font-mono text-[11px] uppercase tracking-[0.18em] text-material-vinyl/60">
-                    Location
-                  </dt>
-                  <dd className="mt-1">{location}</dd>
-                </div>
-              ) : null}
-              {education ? (
-                <div>
-                  <dt className="font-mono text-[11px] uppercase tracking-[0.18em] text-material-vinyl/60">
-                    Education
-                  </dt>
-                  <dd className="mt-1">
-                    {education.degree}
-                    <span className="block text-material-vinyl/70">
-                      {education.institution} · {education.graduationDate}
-                    </span>
-                  </dd>
-                </div>
-              ) : null}
-              {focus.length ? (
-                <div>
-                  <dt className="font-mono text-[11px] uppercase tracking-[0.18em] text-material-vinyl/60">
-                    Focus
-                  </dt>
-                  <dd className="mt-1.5 flex flex-wrap gap-1.5">
-                    {focus.map((area) => (
-                      <span
-                        key={area}
-                        className="rounded-[6px] border border-black/10 bg-white/50 px-2 py-0.5 text-[12px]"
-                      >
-                        {area}
-                      </span>
-                    ))}
-                  </dd>
-                </div>
-              ) : null}
-            </dl>
-
-            <p className="mt-4 border-t border-black/10 pt-3 font-mono text-[10px] uppercase tracking-[0.2em] text-material-vinyl/50">
-              studio pass · {config.personal.handle}
-            </p>
-          </div>
+          <IdCard
+            name={config.personal.name}
+            title={config.personal.title}
+            handle={config.personal.handle}
+            avatarSrc={config.personal.avatar}
+            availability={
+              availability ? `${availability}${relocation ? " · relocation OK" : ""}` : null
+            }
+            facts={[
+              ...(location ? [{ label: "Location", value: location }] : []),
+              ...(education
+                ? [
+                    {
+                      label: "Education",
+                      value: `${education.degree}\n${education.institution} · ${education.graduationDate}`,
+                    },
+                  ]
+                : []),
+            ]}
+            focus={focus}
+            backLines={funFacts}
+          />
         </ScrollReveal>
       </div>
 
