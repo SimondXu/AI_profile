@@ -1,0 +1,298 @@
+/* Turntable: plinth surface, platter grooves, tonearm geometry, meters.
+   Colors come from tokens; per-element typography stays in Tailwind on the
+   JSX. Motion is CSS-only (platter spin, tonearm swing, meter bars) and
+   freezes under prefers-reduced-motion. */
+
+.deck {
+  position: relative;
+  border-radius: 24px;
+  background: linear-gradient(
+    160deg,
+    color-mix(in srgb, var(--material-wood) 34%, var(--surface)) 0%,
+    color-mix(in srgb, var(--material-wood) 18%, var(--surface)) 100%
+  );
+  border: 1px solid color-mix(in srgb, var(--material-wood) 40%, var(--border));
+  box-shadow:
+    inset 0 1px 0 color-mix(in srgb, white 35%, transparent),
+    0 1px 2px color-mix(in srgb, black 10%, transparent),
+    0 30px 60px -36px color-mix(in srgb, black 55%, transparent);
+  transition: box-shadow 600ms ease;
+}
+
+.deck[data-playing="true"] {
+  box-shadow:
+    inset 0 1px 0 color-mix(in srgb, white 35%, transparent),
+    0 1px 2px color-mix(in srgb, black 10%, transparent),
+    0 30px 60px -36px color-mix(in srgb, black 55%, transparent),
+    0 0 80px -20px color-mix(in srgb, var(--accent) 45%, transparent);
+}
+
+/* Wood grain, drawn from the token. */
+.deck::before {
+  content: "";
+  position: absolute;
+  inset: 0;
+  border-radius: inherit;
+  background: repeating-linear-gradient(
+    100deg,
+    transparent 0 14px,
+    color-mix(in srgb, var(--material-wood) 22%, transparent) 14px 16px,
+    transparent 16px 31px,
+    color-mix(in srgb, var(--material-wood) 12%, transparent) 31px 32px
+  );
+  opacity: 0.35;
+  pointer-events: none;
+}
+
+/* ── Platter ─────────────────────────────────────────────────────────── */
+
+.stage {
+  position: relative;
+  aspect-ratio: 1;
+  width: 100%;
+  max-width: 26rem;
+  margin-inline: auto;
+}
+
+.mat {
+  position: absolute;
+  inset: 4%;
+  border-radius: 50%;
+  background: color-mix(
+    in srgb,
+    var(--material-vinyl) 70%,
+    var(--material-wood)
+  );
+  box-shadow:
+    inset 0 2px 8px color-mix(in srgb, black 45%, transparent),
+    0 12px 30px -16px color-mix(in srgb, black 70%, transparent);
+}
+
+.record {
+  position: absolute;
+  inset: 7%;
+  border-radius: 50%;
+  background: repeating-radial-gradient(
+    circle at 50% 50%,
+    color-mix(in srgb, white 5%, var(--material-vinyl)) 0 1.5px,
+    var(--material-vinyl) 1.5px 3.5px
+  );
+  box-shadow:
+    inset 0 0 0 1px color-mix(in srgb, white 8%, transparent),
+    0 2px 4px color-mix(in srgb, black 40%, transparent);
+  animation: platter-spin var(--rev, 1.8s) linear infinite;
+  animation-play-state: paused;
+}
+
+/* Light sheen across the grooves so the spin reads even at rest. */
+.record::after {
+  content: "";
+  position: absolute;
+  inset: 0;
+  border-radius: 50%;
+  background: conic-gradient(
+    from 210deg,
+    transparent 0deg,
+    color-mix(in srgb, white 14%, transparent) 30deg,
+    transparent 60deg,
+    transparent 200deg,
+    color-mix(in srgb, white 9%, transparent) 225deg,
+    transparent 250deg
+  );
+  mix-blend-mode: screen;
+}
+
+.deck[data-playing="true"] .record {
+  animation-play-state: running;
+}
+
+.label {
+  position: absolute;
+  inset: 33%;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: space-between;
+  padding: 0.85rem 0;
+  border-radius: 50%;
+  background: radial-gradient(
+    circle at 35% 30%,
+    color-mix(in srgb, white 25%, var(--accent)),
+    var(--accent) 65%
+  );
+  color: var(--accent-foreground);
+  box-shadow: inset 0 0 0 1px color-mix(in srgb, black 20%, transparent);
+  text-align: center;
+}
+
+.spindle {
+  position: absolute;
+  left: 50%;
+  top: 50%;
+  width: 8px;
+  height: 8px;
+  transform: translate(-50%, -50%);
+  border-radius: 50%;
+  background: #d9d9d9;
+  box-shadow: 0 0 0 2px color-mix(in srgb, black 40%, transparent);
+  z-index: 3;
+}
+
+@keyframes platter-spin {
+  to {
+    transform: rotate(360deg);
+  }
+}
+
+/* ── Tonearm (SVG overlay on the stage) ──────────────────────────────── */
+
+.arm {
+  position: absolute;
+  inset: 0;
+  width: 100%;
+  height: 100%;
+  overflow: visible;
+  z-index: 4;
+  pointer-events: none;
+}
+
+.armPivot {
+  transform-box: view-box;
+  transform-origin: 88px 12px;
+  transform: rotate(0deg);
+  transition: transform 900ms cubic-bezier(0.3, 0.9, 0.3, 1);
+  filter: drop-shadow(0 2px 2px color-mix(in srgb, black 45%, transparent));
+}
+
+.deck[data-playing="true"] .armPivot {
+  transform: rotate(14deg);
+}
+
+.armTube {
+  stroke: #8f8f93;
+  stroke-width: 3.2;
+  stroke-linecap: round;
+}
+
+.armTubeHighlight {
+  stroke: #e2e2e4;
+  stroke-width: 1.1;
+  stroke-linecap: round;
+  transform: translate(-0.6px, -0.6px);
+}
+
+.headshell {
+  fill: #141416;
+  stroke: #3a3a3e;
+  stroke-width: 0.6;
+}
+
+.stylus {
+  fill: #d6d6d8;
+}
+
+.pivotBase {
+  fill: #9a9a9e;
+  stroke: #56565a;
+  stroke-width: 0.8;
+}
+
+.pivotCap {
+  fill: #e6e6e8;
+}
+
+/* ── Meter ───────────────────────────────────────────────────────────── */
+
+.meter {
+  display: flex;
+  align-items: flex-end;
+  gap: 4px;
+  height: 3.5rem;
+}
+
+.bar {
+  flex: 1;
+  min-width: 0;
+  height: 100%;
+  border-radius: 2px 2px 0 0;
+  background: linear-gradient(
+    180deg,
+    var(--accent),
+    color-mix(in srgb, var(--accent) 45%, transparent)
+  );
+  transform-origin: bottom;
+  transform: scaleY(var(--level, 0.06));
+  transition: transform 90ms linear;
+}
+
+.deck[data-playing="false"] .bar {
+  background: color-mix(in srgb, var(--foreground) 18%, transparent);
+}
+
+/* ── Strobe dot (on when the platter runs) ───────────────────────────── */
+
+.strobe {
+  width: 8px;
+  height: 8px;
+  border-radius: 50%;
+  background: color-mix(in srgb, var(--foreground) 22%, transparent);
+  transition:
+    background 300ms ease,
+    box-shadow 300ms ease;
+}
+
+.deck[data-playing="true"] .strobe {
+  background: #ff6b3d;
+  box-shadow: 0 0 10px 2px color-mix(in srgb, #ff6b3d 55%, transparent);
+}
+
+/* ── Range input ─────────────────────────────────────────────────────── */
+
+.range {
+  appearance: none;
+  width: 100%;
+  height: 4px;
+  border-radius: 999px;
+  background: linear-gradient(
+    90deg,
+    var(--accent) 0 var(--fill, 50%),
+    color-mix(in srgb, var(--foreground) 18%, transparent) var(--fill, 50%) 100%
+  );
+  outline: none;
+}
+
+.range::-webkit-slider-thumb {
+  appearance: none;
+  width: 18px;
+  height: 18px;
+  border-radius: 50%;
+  background: var(--surface);
+  border: 2px solid var(--accent);
+  box-shadow: 0 1px 3px color-mix(in srgb, black 25%, transparent);
+  cursor: pointer;
+}
+
+.range::-moz-range-thumb {
+  width: 18px;
+  height: 18px;
+  border-radius: 50%;
+  background: var(--surface);
+  border: 2px solid var(--accent);
+  cursor: pointer;
+}
+
+.range:focus-visible {
+  box-shadow: 0 0 0 3px color-mix(in srgb, var(--accent) 35%, transparent);
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .record {
+    animation: none;
+  }
+  .armPivot {
+    transition: none;
+  }
+  .bar {
+    transition: none;
+  }
+}

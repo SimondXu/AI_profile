@@ -6,6 +6,8 @@ export interface MusicSelection {
   artist: string;
   note?: string;
   externalUrl?: string;
+  /** Local audio file under /audio/ that the deck can play. */
+  audioSrc?: string;
 }
 
 const musicSelectionSchema = z.object({
@@ -18,6 +20,12 @@ const musicSelectionSchema = z.object({
     .url()
     .refine((value) => value.startsWith("https://"), {
       message: "externalUrl must be an https:// URL",
+    })
+    .optional(),
+  audioSrc: z
+    .string()
+    .refine((value) => value.startsWith("/audio/") && !value.includes(".."), {
+      message: "audioSrc must be a local path under /audio/",
     })
     .optional(),
 });

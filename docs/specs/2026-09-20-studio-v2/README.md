@@ -71,3 +71,16 @@ src/content/music.ts / photos.ts   只读空数组 + 类型（字段按基线 ar
 - 简历 PDF 仍是 `Edison-resume-2026.pdf`，内容署名待简历项目 `/resume-release` 出 Simon 版后替换，届时同步 `resume.pdfUrl` 与下载文件名。
 - `edisonwhale.com` → `www.simondxu.com` 301 属服务器配置，不在本仓库。
 - 基线文档 `2026-09-16-*` 与本文一起保留在 `docs/specs/`，作为决策记录。
+
+## 7. Music / Photos 首版（2026-09-20 追加，覆盖基线 §9/§10）
+
+用户决定：两页先做成有氛围的 placeholder，Music 直接做成可用播放器，playlist 内容 hold。
+
+- **Music `/music` — The deck**：`src/components/music/turntable.tsx` 是真播放器，双模式。
+  - 空唱片模式（`musicSelections` 里没有带 `audioSrc` 的条目）：落针后播放 Web Audio 现场合成的空唱片表面噪音（`surface-noise.ts`：低通白噪 + 随机爆豆 + 每转一次的幅度摆动，6 s 循环 buffer），标签写 "No record loaded"，**不显示进度条**（空唱片没有时长）。
+  - 曲目模式：`MusicSelection.audioSrc`（Zod 校验：必须是站内 `/audio/` 路径）驱动 `<audio>`，同一 analyser 出频谱；上一首/下一首、进度拖动、结束自动下一首。
+  - 共用：33⅓ / 45 转速（真的改 playbackRate 与盘面转速）、音量、12 段频谱（pre-fader）、唱臂落下/抬起、reduced-motion 下盘面不转。
+  - "On the shelf"：空态是三只空封套（hover 唱片从封套上抽出），有内容时列出 `musicSelections`。
+- **Photos `/photos` — The light table**：`src/components/photos/light-table.tsx`。灯箱光斑跟随指针、六格未曝光胶片、三张空白相纸 hover 扇开、快门彩蛋（只闪光 + 计数，不产生任何照片）。状态行 "Roll 01 · 0 / 36 exposed" 是诚实的空态。有内容时渲染 `photos` 网格。
+- 两页仍 `robots: noindex`，导航 `visible` 仍为 false；内容进来后翻 `src/content/site-sections.ts`。
+- 验收：axe 明暗各 0 违规；1440 / 390 无横向溢出；reduced-motion 下 `.record` 无动画；键盘 Enter 可落针；真实 `<audio>` 路径用临时 WAV 验证过播放/切歌/自动连播（fixture 已删）。
