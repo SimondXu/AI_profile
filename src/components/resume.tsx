@@ -37,7 +37,7 @@ export function Resume({ embedded = false }: ResumeProps) {
       {previewUrl && !previewUnavailable ? (
         <iframe
           src={previewUrl}
-          title="Edison Xu resume PDF"
+          title="Simon Xu resume PDF"
           className="quiet-resume-preview"
           onError={() => setPreviewUnavailable(true)}
         />

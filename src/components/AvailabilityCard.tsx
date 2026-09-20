@@ -40,7 +40,7 @@ export default function AvailabilityCard({ data }: AvailabilityCardProps) {
           <dd>{skills.join(", ")}</dd>
         </div>
       </dl>
-      <a href={`mailto:${config.personal.email}`}>Email Edison</a>
+      <a href={`mailto:${config.personal.email}`}>Email Simon</a>
     </section>
   );
 }

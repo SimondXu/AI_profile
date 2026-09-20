@@ -68,43 +68,58 @@ export const portfolioConfigSchema = z
         soft_skills: z.array(z.string()),
       })
       .passthrough(),
-    projects: z.array(
-      z
-        .object({
-          title: z.string(),
-          category: z.string(),
-          track: z.enum(["ai-ml", "full-stack"]),
-          summary: z.string(),
-          description: z.string(),
-          techStack: z.array(z.string()),
-          date: z.string(),
-          status: z.string(),
-          featured: z.boolean(),
-          achievements: z.array(z.string()).optional(),
-          metrics: z.array(z.string()).optional(),
-          links: z
-            .array(
-              z
-                .object({
-                  name: z.string(),
-                  url: z.string(),
-                })
-                .passthrough(),
-            )
-            .optional(),
-          images: z
-            .array(
-              z
-                .object({
-                  src: z.string(),
-                  alt: z.string(),
-                })
-                .passthrough(),
-            )
-            .optional(),
-        })
-        .passthrough(),
-    ),
+    projects: z
+      .array(
+        z
+          .object({
+            slug: z.string().regex(/^[a-z0-9]+(-[a-z0-9]+)*$/),
+            title: z.string(),
+            category: z.string(),
+            track: z.enum(["ai-ml", "full-stack"]),
+            summary: z.string(),
+            description: z.string(),
+            techStack: z.array(z.string()),
+            date: z.string(),
+            status: z.string(),
+            featured: z.boolean(),
+            achievements: z.array(z.string()).optional(),
+            metrics: z.array(z.string()).optional(),
+            links: z
+              .array(
+                z
+                  .object({
+                    name: z.string(),
+                    url: z.string(),
+                  })
+                  .passthrough(),
+              )
+              .optional(),
+            images: z
+              .array(
+                z
+                  .object({
+                    src: z.string(),
+                    alt: z.string(),
+                  })
+                  .passthrough(),
+              )
+              .optional(),
+          })
+          .passthrough(),
+      )
+      .superRefine((projects, ctx) => {
+        const seen = new Set<string>();
+        projects.forEach((project, index) => {
+          if (seen.has(project.slug)) {
+            ctx.addIssue({
+              code: z.ZodIssueCode.custom,
+              message: `Duplicate project slug "${project.slug}"`,
+              path: [index, "slug"],
+            });
+          }
+          seen.add(project.slug);
+        });
+      }),
     social: z
       .object({
         linkedin: z.string(),

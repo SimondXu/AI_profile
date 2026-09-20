@@ -1,0 +1,24 @@
+import { SiteFooter } from "@/components/site/site-footer";
+import { SiteNav } from "@/components/site/site-nav";
+
+export default function PublicLayout({
+  children,
+}: Readonly<{
+  children: React.ReactNode;
+}>) {
+  return (
+    <div className="flex min-h-screen flex-col">
+      <a
+        href="#main"
+        className="sr-only focus:not-sr-only focus:fixed focus:top-3 focus:left-3 focus:z-[100] focus:rounded-md focus:bg-accent focus:px-4 focus:py-2 focus:text-accent-foreground focus:outline-2 focus:outline-offset-2 focus:outline-ring"
+      >
+        Skip to content
+      </a>
+      <SiteNav />
+      <main id="main" className="flex flex-1 flex-col">
+        {children}
+      </main>
+      <SiteFooter />
+    </div>
+  );
+}

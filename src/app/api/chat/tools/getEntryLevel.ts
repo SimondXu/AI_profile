@@ -3,7 +3,7 @@ import { z } from 'zod';
 import { getConfig } from '@/lib/config-loader';
 
 export const getEntryLevel = tool({
-  description: 'Provides documented information about Edison\'s current role, target work, availability, location, and work authorization.',
+  description: 'Provides documented information about Simon\'s current role, target work, availability, location, and work authorization.',
   inputSchema: z.object({}),
   execute: async () => {
     const config = getConfig();

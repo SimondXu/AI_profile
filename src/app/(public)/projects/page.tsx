@@ -1,7 +1,6 @@
 import type { Metadata } from "next";
 import Link from "next/link";
 import { ProjectIndex } from "@/components/projects/project-index";
-import { SiteNav } from "@/components/site/site-nav";
 import { getConfig } from "@/lib/config-loader";
 import type { Project } from "@/types/portfolio";
 
@@ -9,6 +8,9 @@ export const metadata: Metadata = {
   title: "Projects",
   description:
     "Software projects spanning AI and ML systems, full-stack products, distributed runtimes, data systems, and mobile applications.",
+  alternates: {
+    canonical: "/projects",
+  },
 };
 
 const trackMetadata: Record<
@@ -70,8 +72,7 @@ export default async function ProjectsPage({
 
   return (
     <div className="quiet-page quiet-projects-page">
-      <SiteNav />
-      <main className="quiet-projects-shell">
+      <div className="quiet-projects-shell">
         <header className="quiet-projects-header">
           <h1>Projects</h1>
           <p>
@@ -116,7 +117,7 @@ export default async function ProjectsPage({
         <footer className="quiet-projects-footer">
           <Link href="/#projects">Back to selected projects</Link>
         </footer>
-      </main>
+      </div>
     </div>
   );
 }

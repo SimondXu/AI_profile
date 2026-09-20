@@ -2,7 +2,7 @@ User-agent: *
 Allow: /
 
 # Sitemap
-Sitemap: https://www.edisonwhale.com/sitemap.xml
+Sitemap: https://www.simondxu.com/sitemap.xml
 
 # Popular search engines
 User-agent: Googlebot

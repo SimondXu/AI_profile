@@ -63,6 +63,7 @@ export interface ProjectImage {
 }
 
 export interface Project {
+  slug: string;
   title: string;
   category: string;
   track: "ai-ml" | "full-stack";

@@ -10,7 +10,6 @@ import ChatLanding from "@/components/chat/chat-landing";
 import ChatMessageContent from "@/components/chat/chat-message-content";
 import HelperBoost from "@/components/chat/HelperBoost";
 import { SimplifiedChatView } from "@/components/chat/simple-chat-view";
-import { SiteNav } from "@/components/site/site-nav";
 import { ChatBubble, ChatBubbleMessage } from "@/components/ui/chat/chat-bubble";
 import { getTrackingSessionId } from "@/components/tracking/session-id";
 
@@ -135,8 +134,7 @@ export default function Chat() {
 
   return (
     <div className="quiet-page quiet-chat-page">
-      <SiteNav />
-      <main className="quiet-chat-main">
+      <div className="quiet-chat-main">
         <div
           ref={chatScrollRef}
           className="quiet-chat-scroll"
@@ -179,7 +177,7 @@ export default function Chat() {
                   <p>Chat is unavailable.</p>
                   <div>
                     <Link href="/resume">View resume</Link>
-                    <a href="mailto:edisonapply@gmail.com">Email Edison</a>
+                    <a href="mailto:edisonapply@gmail.com">Email Simon</a>
                   </div>
                 </div>
               ) : null}
@@ -202,7 +200,7 @@ export default function Chat() {
             isToolInProgress={isToolInProgress}
           />
         </div>
-      </main>
+      </div>
     </div>
   );
 }

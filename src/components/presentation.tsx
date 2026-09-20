@@ -12,7 +12,7 @@ export function Presentation({ embedded = false }: PresentationProps) {
   return (
     <section className="quiet-tool-surface" aria-labelledby="presentation-title">
       <h2 id="presentation-title" className={embedded ? "sr-only" : undefined}>
-        About Edison
+        About Simon
       </h2>
       <p>
         Software engineer on the Generative AI team at Highmark Health. His work

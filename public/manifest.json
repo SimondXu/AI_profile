@@ -1,13 +1,16 @@
 {
-  "name": "Edison Xu | Software Engineer, Generative AI",
-  "short_name": "Edison Xu",
-  "description": "Experience, projects, and resume for Edison Xu.",
+  "name": "Simon Xu | Software Engineer, AI/ML",
+  "short_name": "Simon Xu",
+  "description": "Experience, projects, and resume for Simon Xu.",
   "start_url": "/",
   "display": "standalone",
-  "background_color": "#f7f8fa",
-  "theme_color": "#121417",
+  "background_color": "#0f1115",
+  "theme_color": "#0f1115",
   "orientation": "portrait-primary",
-  "categories": ["portfolio", "developer tools"],
+  "categories": [
+    "portfolio",
+    "developer tools"
+  ],
   "lang": "en",
   "dir": "ltr",
   "icons": [
@@ -19,7 +22,7 @@
     }
   ],
   "scope": "/",
-  "id": "edison-xu-portfolio",
+  "id": "simon-xu-portfolio",
   "related_applications": [],
   "prefer_related_applications": false
 }

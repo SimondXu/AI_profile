@@ -1,7 +1,16 @@
+import type { Metadata } from "next";
 import { Download } from "lucide-react";
 import { getConfig } from "@/lib/config-loader";
-import { SiteNav } from "@/components/site/site-nav";
 import { ResumeDownloadLink } from "@/components/tracking/resume-download-link";
+
+export const metadata: Metadata = {
+  title: "Resume",
+  description:
+    "Experience, education, skills, and selected projects of Simon Xu, with a downloadable PDF resume.",
+  alternates: {
+    canonical: "/resume",
+  },
+};
 
 type EducationWithPrevious = {
   previous?: {
@@ -24,8 +33,7 @@ export default function ResumePage() {
 
   return (
     <div className="quiet-page quiet-resume-page">
-      <SiteNav />
-      <main className="quiet-resume-shell">
+      <div className="quiet-resume-shell">
         <header className="quiet-resume-header">
           <div>
             <h1>{config.personal.name}</h1>
@@ -163,7 +171,7 @@ export default function ResumePage() {
             ))}
           </div>
         </section>
-      </main>
+      </div>
     </div>
   );
 }

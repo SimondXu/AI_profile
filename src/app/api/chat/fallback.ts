@@ -68,7 +68,7 @@ function describeContact(includeResume: boolean) {
   const config = getConfig();
   const lines = [
     `Email: [${config.personal.email}](mailto:${config.personal.email})`,
-    `LinkedIn: [Edison Xu](${config.social.linkedin})`,
+    `LinkedIn: [${config.personal.name}](${config.social.linkedin})`,
     `GitHub: [${config.personal.handle}](${config.social.github})`,
     `Location: ${config.personal.location.current}`,
   ];
@@ -201,7 +201,7 @@ export function getFallbackAnswer(question: string) {
   const config = getConfig();
 
   if (/^\s*(hi|hello|hey|good (morning|afternoon|evening))\b/i.test(question)) {
-    return `Hi - I'm Edison's portfolio AI. ${config.aiProfile.positioning}\n\nYou can ask about his Highmark work, featured projects, technical decisions, role fit, or contact details.`;
+    return `Hi - I'm ${config.personal.name}'s portfolio AI. ${config.aiProfile.positioning}\n\nYou can ask about his Highmark work, featured projects, technical decisions, role fit, or contact details.`;
   }
 
   const featuredProjects = config.projects

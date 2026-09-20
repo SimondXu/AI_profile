@@ -5,7 +5,6 @@ import Image from "next/image";
 import Link from "next/link";
 import { useRouter } from "next/navigation";
 import { getConfig } from "@/lib/config-loader";
-import { SiteNav } from "@/components/site/site-nav";
 
 const prompts = [
   "What did you build at Highmark?",
@@ -51,19 +50,18 @@ export default function LandingPage() {
 
   return (
     <div className="quiet-page">
-      <SiteNav />
-      <main className="quiet-shell">
+      <div className="quiet-shell">
         <section className="quiet-hero" aria-labelledby="hero-title">
-          <aside className="quiet-profile-rail" aria-label="Edison Xu profile">
+          <aside className="quiet-profile-rail" aria-label="Simon Xu profile">
             <Image
               className="quiet-hero-avatar"
               src={config.personal.avatar}
-              alt="Edison Xu"
+              alt="Simon Xu"
               width={224}
               height={224}
               priority
             />
-            <h1 id="hero-title">Edison Xu</h1>
+            <h1 id="hero-title">Simon Xu</h1>
             <div className="quiet-profile-credentials">
               <p>Software Engineer, AI/ML</p>
               <p>M.S. CSE, Georgia Tech</p>
@@ -258,7 +256,7 @@ export default function LandingPage() {
             <Link href="/resume">Resume</Link>
           </div>
         </footer>
-      </main>
+      </div>
     </div>
   );
 }

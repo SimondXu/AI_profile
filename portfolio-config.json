@@ -1,6 +1,6 @@
 {
   "personal": {
-    "name": "Edison Xu",
+    "name": "Simon Xu",
     "location": {
       "current": "Atlanta, GA, USA",
       "remote": true,
@@ -140,6 +140,7 @@
   },
   "projects": [
     {
+      "slug": "conductor",
       "title": "Conductor: Distributed Multi-Agent Workflow Runtime",
       "category": "Distributed AI Systems",
       "track": "ai-ml",
@@ -163,6 +164,7 @@
       ]
     },
     {
+      "slug": "engram",
       "title": "Engram: Cross-Session Memory MCP for AI Coding Agents",
       "category": "Agent Memory and Evaluation",
       "track": "ai-ml",
@@ -190,6 +192,7 @@
       ]
     },
     {
+      "slug": "figbrain",
       "title": "FigBrain: Figma Multi-Agent Plugin",
       "category": "Multi-Agent Plugin",
       "track": "ai-ml",
@@ -213,6 +216,7 @@
       "metrics": ["~85% first-try accuracy", "~28% lower API costs"]
     },
     {
+      "slug": "ai-recognition-edge",
       "title": "AI Recognition in Edge Computing & Cloud Native",
       "category": "AI/ML & Edge Computing",
       "track": "ai-ml",
@@ -234,6 +238,7 @@
       "featured": false
     },
     {
+      "slug": "taxi-trip-map",
       "title": "Interactive Map Visualization for Taxi Trip Analysis",
       "category": "Data Visualization & Analysis",
       "track": "full-stack",
@@ -255,6 +260,7 @@
       "featured": false
     },
     {
+      "slug": "geeklib",
       "title": "GeekLib: AI-Enhanced Library Management System",
       "category": "Full-stack Development & AI",
       "track": "full-stack",
@@ -278,6 +284,7 @@
       "featured": false
     },
     {
+      "slug": "invoicepro",
       "title": "InovicePro: MERN Stack Invoice Management System",
       "category": "Full-stack Development & DevOps",
       "track": "full-stack",
@@ -303,6 +310,7 @@
       "featured": false
     },
     {
+      "slug": "whales-chat",
       "title": "Whales Chat: An Instant Messaging Mobile App",
       "category": "Mobile Development & AI",
       "track": "full-stack",
@@ -329,7 +337,7 @@
   "social": {
     "linkedin": "https://linkedin.com/in/Edisonwhale",
     "github": "https://github.com/edisonwhale",
-    "website": "https://www.edisonwhale.com"
+    "website": "https://www.simondxu.com"
   },
   "entryLevel": {
     "seeking": false,
@@ -427,10 +435,10 @@
       "Preserve approximation markers such as ~40%, ~85%, and ~28%; do not present them as exact audited values.",
       "Do not invent team size, confidential company architecture, customer names, ownership scope, deployment scale, or behavioral interview stories.",
       "If the sources do not answer a question, say that the public profile does not include enough detail and redirect to a related documented example.",
-      "If asked whether this is Edison personally, explain that this is Edison's portfolio AI answering from his resume and public profile."
+      "If asked whether this is Simon personally, explain that this is Simon's portfolio AI answering from his resume and public profile."
     ],
     "featuredQuestions": [
-      "What kind of engineer is Edison?",
+      "What kind of engineer is Simon?",
       "What did you build at Highmark?",
       "How do you make LLM systems reliable?"
     ],
@@ -448,7 +456,7 @@
     ],
     "frequentlyAskedQuestions": [
       {
-        "question": "What kind of engineer is Edison?",
+        "question": "What kind of engineer is Simon?",
         "matchTerms": [
           "kind of engineer",
           "describe yourself",
@@ -502,7 +510,7 @@
           "biggest mistake",
           "what is your weakness"
         ],
-        "answer": "That specific behavioral story is not documented in this public profile, so I do not want to manufacture a polished STAR answer. The closest grounded signal is how I approach ambiguity: define the user outcome and failure modes, build something testable, and use evaluation or traces to decide what changes next. A real conflict, failure, leadership, or weakness story should come directly from Edison rather than be inferred from a project bullet."
+        "answer": "That specific behavioral story is not documented in this public profile, so I do not want to manufacture a polished STAR answer. The closest grounded signal is how I approach ambiguity: define the user outcome and failure modes, build something testable, and use evaluation or traces to decide what changes next. A real conflict, failure, leadership, or weakness story should come directly from Simon rather than be inferred from a project bullet."
       },
       {
         "question": "What do you care about beyond model quality?",
@@ -695,7 +703,7 @@
           "compensation expectation",
           "salary range"
         ],
-        "answer": "A start date, notice period, and compensation target are not documented in the public profile, so I should not guess. The best next step is to contact Edison directly with the role, location, and level so he can answer in context."
+        "answer": "A start date, notice period, and compensation target are not documented in the public profile, so I should not guess. The best next step is to contact Simon directly with the role, location, and level so he can answer in context."
       },
       {
         "question": "What is your educational background?",
@@ -705,7 +713,7 @@
     ]
   },
   "resume": {
-    "title": "Edison Xu - Resume",
+    "title": "Simon Xu - Resume",
     "description": "Software Engineer (AI/ML) | Production AI Systems | MS CSE Georgia Tech | Highmark Inc.",
     "fileType": "PDF",
     "lastUpdated": "August 2026",
@@ -714,7 +722,7 @@
     "pdfUrl": "/Edison-resume-2026.pdf"
   },
   "chatbot": {
-    "name": "Edison",
+    "name": "Simon",
     "personality": "direct, pragmatic, systems-minded, and technically curious",
     "tone": "calm, conversational, and evidence-led",
     "language": "english",
@@ -795,7 +803,7 @@
   "meta": {
     "configVersion": "1.2",
     "lastUpdated": "2026-08-09",
-    "generatedBy": "Edison Xu",
+    "generatedBy": "Simon Xu",
     "description": "Complete portfolio configuration for AI-powered portfolio website"
   }
 }
