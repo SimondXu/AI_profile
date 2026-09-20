@@ -14,28 +14,12 @@ const nextConfig = {
     ],
   },
   eslint: {
-    // Ne bloque PAS le build en cas d'erreurs eslint
-    ignoreDuringBuilds: true,
+    ignoreDuringBuilds: false,
   },
   typescript: {
-    // Fast-track production builds even when strict type errors exist.
-    ignoreBuildErrors: true,
-  },
-  // output: 'standalone', // 在 Windows 上会导致 EPERM symlink 错误，如需 standalone 部署请在 Linux/macOS 上构建
-  experimental: {
-    turbo: {
-      rules: {
-        '*.svg': {
-          loaders: ['@svgr/webpack'],
-          as: '*.js',
-        },
-      },
-    },
+    ignoreBuildErrors: false,
   },
   compress: true,
-  env: {
-    CUSTOM_KEY: process.env.CUSTOM_KEY,
-  },
 };
 
 module.exports = nextConfig;

@@ -18,6 +18,7 @@ import { getProjects } from "./tools/getProjects";
 import { getResume } from "./tools/getResume";
 import { getSkills } from "./tools/getSkills";
 import { getTrustedClientIp } from "@/lib/tracking/client-ip";
+import { isTrackingSameOrigin } from "@/lib/tracking/request-validation";
 import { recordChatPrompt } from "@/lib/tracking/service";
 
 export const maxDuration = 30;
@@ -26,8 +27,34 @@ const MAX_MESSAGES = 20;
 const MAX_TEXT_CHARS = 12_000;
 const RATE_LIMIT_WINDOW_MS = 60_000;
 const RATE_LIMIT_MAX_REQUESTS = 20;
+const HOUR_MS = 60 * 60_000;
+const DAY_MS = 24 * HOUR_MS;
+const DEFAULT_MAX_OUTPUT_TOKENS = 1024;
+const UNTRUSTED_CLIENT_ID = "untrusted";
 
-const rateLimitStore = new Map<string, { count: number; resetAt: number }>();
+type RateLimitEntry = { count: number; resetAt: number };
+
+const rateLimitStore = new Map<string, RateLimitEntry>();
+const globalRateLimitStore = new Map<string, RateLimitEntry>();
+
+function parsePositiveInt(value: string | undefined, fallback: number) {
+  if (!value) return fallback;
+  const parsed = Number.parseInt(value, 10);
+  return Number.isInteger(parsed) && parsed > 0 ? parsed : fallback;
+}
+
+const CHAT_GLOBAL_MAX_PER_HOUR = parsePositiveInt(
+  process.env.CHAT_GLOBAL_MAX_PER_HOUR,
+  300,
+);
+const CHAT_GLOBAL_MAX_PER_DAY = parsePositiveInt(
+  process.env.CHAT_GLOBAL_MAX_PER_DAY,
+  1500,
+);
+const MAX_OUTPUT_TOKENS = parsePositiveInt(
+  process.env.OPENROUTER_MAX_OUTPUT_TOKENS,
+  DEFAULT_MAX_OUTPUT_TOKENS,
+);
 
 const chatRequestSchema = z.object({
   messages: z
@@ -68,29 +95,75 @@ const openrouterModel =
   process.env.OPENROUTER_MODEL || "openai/gpt-5.6-luna";
 
 function getClientIdentifier(req: Request) {
-  if (process.env.TRACKING_TRUST_PROXY !== "true") return null;
-  return createHash("sha256")
-    .update(getTrustedClientIp(req))
-    .digest("hex");
+  const ip = getTrustedClientIp(req);
+  if (ip === "unknown") return UNTRUSTED_CLIENT_ID;
+  return createHash("sha256").update(ip).digest("hex");
 }
 
-function isRateLimited(clientId: string | null) {
-  if (!clientId) return false;
-  const now = Date.now();
-  const current = rateLimitStore.get(clientId);
+function pruneExpired(store: Map<string, RateLimitEntry>, now: number) {
+  for (const [key, entry] of store) {
+    if (entry.resetAt <= now) store.delete(key);
+  }
+}
+
+/** Fixed-window counter; returns true once the window's count exceeds `max`. */
+function consumeWindow(
+  store: Map<string, RateLimitEntry>,
+  key: string,
+  windowMs: number,
+  max: number,
+  now: number,
+) {
+  const current = store.get(key);
 
   if (!current || current.resetAt <= now) {
-    rateLimitStore.set(clientId, {
-      count: 1,
-      resetAt: now + RATE_LIMIT_WINDOW_MS,
-    });
+    store.set(key, { count: 1, resetAt: now + windowMs });
     return false;
   }
 
   current.count += 1;
-  rateLimitStore.set(clientId, current);
+  return current.count > max;
+}
 
-  return current.count > RATE_LIMIT_MAX_REQUESTS;
+function getRateLimitReason(clientId: string) {
+  const now = Date.now();
+  pruneExpired(rateLimitStore, now);
+  pruneExpired(globalRateLimitStore, now);
+
+  if (
+    consumeWindow(
+      rateLimitStore,
+      clientId,
+      RATE_LIMIT_WINDOW_MS,
+      RATE_LIMIT_MAX_REQUESTS,
+      now,
+    )
+  ) {
+    return "per-client limit";
+  }
+  if (
+    consumeWindow(
+      globalRateLimitStore,
+      "hour",
+      HOUR_MS,
+      CHAT_GLOBAL_MAX_PER_HOUR,
+      now,
+    )
+  ) {
+    return "global hourly limit";
+  }
+  if (
+    consumeWindow(
+      globalRateLimitStore,
+      "day",
+      DAY_MS,
+      CHAT_GLOBAL_MAX_PER_DAY,
+      now,
+    )
+  ) {
+    return "global daily limit";
+  }
+  return null;
 }
 
 function getTotalTextLength(
@@ -146,13 +219,12 @@ function createFallbackResponse(question: string) {
 }
 
 export async function POST(req: Request) {
+  if (!isTrackingSameOrigin(req)) {
+    return Response.json({ error: "Forbidden" }, { status: 403 });
+  }
+
   try {
-    const clientId = getClientIdentifier(req);
-    if (isRateLimited(clientId)) {
-      return new Response("Too many requests. Please try again in a minute.", {
-        status: 429,
-      });
-    }
+    const rateLimitReason = getRateLimitReason(getClientIdentifier(req));
 
     const body = await req.json();
     const parsedBody = chatRequestSchema.safeParse(body);
@@ -180,6 +252,11 @@ export async function POST(req: Request) {
         pathname: trackingPathname ?? "/chat",
         prompt: lastUserText,
       });
+    }
+
+    if (rateLimitReason) {
+      console.warn(`[CHAT-API] Rate limited (${rateLimitReason}), serving local fallback`);
+      return createFallbackResponse(lastUserText);
     }
 
     if (!process.env.OPENROUTER_API_KEY) {
@@ -213,6 +290,7 @@ export async function POST(req: Request) {
       ),
       tools,
       stopWhen: stepCountIs(5),
+      maxOutputTokens: MAX_OUTPUT_TOKENS,
     };
 
     const result = streamText({

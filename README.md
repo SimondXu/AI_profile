@@ -121,6 +121,9 @@ Behavior:
 - Build: `npm run build`, Start: `npm start`
 
 Security note: never commit `.env.local` with real keys. If a key was committed, rotate it immediately from OpenRouter dashboard and remove secrets from git history.
+- `.env.docker` holds real server secrets and must never be tracked (it is gitignored; keep it that way).
+- Production must run Next.js >= 15.2.6 (React2Shell, CVE-2025-55182); this repo pins a patched 15.5.x.
+- Set `TRACKING_TRUST_PROXY=true` only when the origin is reachable exclusively through the trusted proxy (Cloudflare -> Caddy); otherwise forwarded headers can be spoofed.
 
 ---
 

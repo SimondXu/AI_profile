@@ -5,7 +5,8 @@ services:
       dockerfile: Dockerfile
     container_name: portfolio-app
     ports:
-      - "3000:3000"
+      # Loopback only: the reverse proxy (Caddy) must run on this same host.
+      - "127.0.0.1:3000:3000"
     env_file:
       - .env.docker
     environment:

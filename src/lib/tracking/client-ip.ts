@@ -13,6 +13,10 @@ function normalizeIp(value: string | null | undefined) {
 /**
  * Forwarded headers are only meaningful when the reverse proxy overwrites them.
  * Keep this opt-in because the public Docker port can otherwise be spoofed.
+ *
+ * Cloudflare always overwrites `cf-connecting-ip` but only *appends* to an
+ * existing `x-forwarded-for`, so a client-supplied first hop would survive;
+ * prefer the Cloudflare header when present.
  */
 export function getTrustedClientIp(request: Request) {
   if (process.env.TRACKING_TRUST_PROXY !== "true") return "unknown";
@@ -20,9 +24,9 @@ export function getTrustedClientIp(request: Request) {
   const forwarded = request.headers.get("x-forwarded-for");
   const forwardedIp = normalizeIp(forwarded?.split(",")[0]);
   return (
-    forwardedIp ??
-    normalizeIp(request.headers.get("x-real-ip")) ??
     normalizeIp(request.headers.get("cf-connecting-ip")) ??
+    normalizeIp(request.headers.get("x-real-ip")) ??
+    forwardedIp ??
     "unknown"
   );
 }
