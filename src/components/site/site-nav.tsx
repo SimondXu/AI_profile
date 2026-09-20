@@ -79,24 +79,22 @@ export function SiteNav() {
           className="hidden items-center gap-1 md:flex"
           aria-label="Primary navigation"
         >
-          {sections
-            .filter((section) => section.id !== "home")
-            .map((section) => {
-              const active = isActive(pathname, section.href);
-              return (
-                <Link
-                  key={section.id}
-                  href={section.href}
-                  aria-current={active ? "page" : undefined}
-                  className={cn(
-                    linkClass,
-                    "px-3 aria-[current=page]:underline aria-[current=page]:decoration-accent aria-[current=page]:decoration-2 aria-[current=page]:underline-offset-8",
-                  )}
-                >
-                  {section.label}
-                </Link>
-              );
-            })}
+          {sections.map((section) => {
+            const active = isActive(pathname, section.href);
+            return (
+              <Link
+                key={section.id}
+                href={section.href}
+                aria-current={active ? "page" : undefined}
+                className={cn(
+                  linkClass,
+                  "px-3 aria-[current=page]:underline aria-[current=page]:decoration-accent aria-[current=page]:decoration-2 aria-[current=page]:underline-offset-8",
+                )}
+              >
+                {section.label}
+              </Link>
+            );
+          })}
           <ThemeToggle className="ml-1" />
         </nav>
 

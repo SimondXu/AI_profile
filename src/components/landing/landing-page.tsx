@@ -3,9 +3,12 @@ import { ProjectCover } from "@/components/projects/covers/project-cover";
 import { CollectionDesk } from "@/components/studio/collection-desk";
 import { projectPresentationBySlug } from "@/content/project-presentation";
 import { getConfig } from "@/lib/config-loader";
+import { AboutSection } from "./about-section";
+import { ExperienceTimeline } from "./experience-timeline";
 import { HeroAskForm } from "./hero-ask-form";
 import { NowStrip } from "./now-strip";
 import { Reveal } from "./reveal";
+import { SectionHeader } from "./section-header";
 
 /** First sentence of a paragraph, used to keep the hero to one honest line. */
 function firstSentence(text: string): string {
@@ -30,11 +33,6 @@ export default function LandingPage() {
     "Ask me anything";
 
   const featuredProjects = config.projects.filter((project) => project.featured);
-  const bioParagraphs = config.personal.bio
-    .split("\n\n")
-    .filter((paragraph) => paragraph.trim().length > 0);
-  const heroBioParagraph = bioParagraphs[0];
-  const educationLine = `${config.education.current.degree}, ${config.education.current.institution} · ${config.education.current.graduationDate}`;
 
   return (
     <>
@@ -57,17 +55,10 @@ export default function LandingPage() {
             </h1>
           </Reveal>
           <Reveal delay={80}>
-            <p className="max-w-prose text-lg text-muted-foreground">
+            <p className="max-w-[38ch] text-lg text-muted-foreground">
               {positioning}
             </p>
           </Reveal>
-          {heroBioParagraph ? (
-            <Reveal delay={100}>
-              <p className="max-w-prose text-muted-foreground">
-                {heroBioParagraph}
-              </p>
-            </Reveal>
-          ) : null}
           <Reveal delay={120}>
             <div className="flex flex-wrap items-center gap-3">
               <Link
@@ -104,18 +95,27 @@ export default function LandingPage() {
         <NowStrip />
       </div>
 
+      <AboutSection config={config} />
+
       <section
         id="projects"
-        className="mx-auto w-full max-w-6xl scroll-mt-20 px-5 py-16 sm:px-8"
+        className="mx-auto w-full max-w-6xl scroll-mt-20 px-5 py-16 sm:px-8 lg:py-24"
         aria-labelledby="projects-title"
       >
         <Reveal>
-          <h2
-            id="projects-title"
-            className="font-display text-3xl font-semibold tracking-tight text-foreground sm:text-4xl"
-          >
-            Featured work
-          </h2>
+          <SectionHeader
+            eyebrow="01 — Selected work"
+            title="Selected work"
+            titleId="projects-title"
+            action={
+              <Link
+                href="/projects"
+                className="text-sm font-medium text-accent underline-offset-4 hover:underline focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-ring"
+              >
+                All projects →
+              </Link>
+            }
+          />
         </Reveal>
 
         <div className="mt-8 grid gap-6 sm:grid-cols-2 lg:grid-cols-3">
@@ -166,66 +166,18 @@ export default function LandingPage() {
 
       <section
         id="experience"
-        className="mx-auto w-full max-w-6xl scroll-mt-20 px-5 py-16 sm:px-8"
+        className="mx-auto w-full max-w-6xl scroll-mt-20 border-t border-border px-5 py-16 sm:px-8 lg:py-24"
         aria-labelledby="experience-title"
       >
         <Reveal>
-          <h2
-            id="experience-title"
-            className="font-display text-3xl font-semibold tracking-tight text-foreground sm:text-4xl"
-          >
-            Experience
-          </h2>
+          <SectionHeader
+            eyebrow="02 — Experience"
+            title="Experience"
+            titleId="experience-title"
+          />
         </Reveal>
 
-        <div className="mt-8 flex flex-col divide-y divide-border">
-          {config.experience.map((role) => (
-            <article
-              key={`${role.company}-${role.position}`}
-              className="flex flex-col gap-2 py-6 first:pt-0"
-            >
-              <div className="flex flex-wrap items-baseline justify-between gap-2">
-                <h3 className="text-base font-semibold text-foreground">
-                  {role.position} · {role.company}
-                </h3>
-                <p className="font-mono text-xs text-muted-foreground">
-                  {role.duration}
-                  {role.location ? ` · ${role.location}` : ""}
-                </p>
-              </div>
-              <p className="text-sm text-muted-foreground">{role.description}</p>
-              {role.highlights?.length ? (
-                <ul className="mt-1 list-inside list-disc space-y-1 text-sm text-muted-foreground">
-                  {role.highlights.slice(0, 3).map((highlight) => (
-                    <li key={highlight}>{highlight}</li>
-                  ))}
-                </ul>
-              ) : null}
-            </article>
-          ))}
-        </div>
-      </section>
-
-      <section
-        id="about"
-        className="mx-auto w-full max-w-6xl scroll-mt-20 px-5 py-16 sm:px-8"
-        aria-labelledby="about-title"
-      >
-        <Reveal>
-          <h2
-            id="about-title"
-            className="font-display text-3xl font-semibold tracking-tight text-foreground sm:text-4xl"
-          >
-            About
-          </h2>
-        </Reveal>
-
-        <div className="mt-6 max-w-prose space-y-4 text-base leading-relaxed text-muted-foreground">
-          {bioParagraphs.map((paragraph) => (
-            <p key={paragraph}>{paragraph}</p>
-          ))}
-          <p className="font-mono text-sm text-muted-foreground">{educationLine}</p>
-        </div>
+        <ExperienceTimeline entries={config.experience} />
       </section>
     </>
   );

@@ -7,6 +7,28 @@ import { ProjectDisclosure } from "./project-disclosure";
 
 const MAX_TECH_CHIPS = 4;
 
+/**
+ * Deterministic 32-bit FNV-1a hash, used to pick a colour bar for
+ * non-featured cards. Kept local: `generic-cover.tsx` doesn't export its
+ * copy, and covers are off-limits for this change.
+ */
+function hashSlug(input: string): number {
+  let hash = 0x811c9dc5;
+
+  for (let i = 0; i < input.length; i += 1) {
+    hash ^= input.charCodeAt(i);
+    hash = Math.imul(hash, 0x01000193);
+  }
+
+  return hash >>> 0;
+}
+
+const ACCENT_BAR_CLASSES = ["bg-accent", "bg-material-wood", "bg-material-vinyl"] as const;
+
+function accentBarClass(slug: string): string {
+  return ACCENT_BAR_CLASSES[hashSlug(slug) % ACCENT_BAR_CLASSES.length];
+}
+
 interface ProjectCardProps {
   project: Project;
 }
@@ -40,18 +62,28 @@ export function ProjectCard({ project }: ProjectCardProps) {
       ) : null}
 
       <div className="flex flex-1 flex-col gap-3 p-5 md:p-6">
+        {!project.featured ? (
+          <span
+            aria-hidden="true"
+            className={cn("h-1.5 w-12 rounded-full", accentBarClass(project.slug))}
+          />
+        ) : null}
+
         <p className="font-mono text-xs uppercase tracking-wide text-muted-foreground">
           {project.category}
         </p>
 
         <h2
-          className="font-display text-lg font-semibold text-foreground md:text-xl"
+          className={cn(
+            "font-display font-semibold text-foreground",
+            project.featured ? "text-[22px]" : "text-lg",
+          )}
           title={isShortened ? project.title : undefined}
         >
           {displayTitle}
         </h2>
 
-        <p className="text-sm leading-6 text-muted-foreground">{project.summary}</p>
+        <p className="text-[15px] leading-6 text-muted-foreground">{project.summary}</p>
 
         <div className="flex flex-wrap gap-2">
           {visibleTech.map((tech) => (
@@ -71,7 +103,16 @@ export function ProjectCard({ project }: ProjectCardProps) {
 
         <p className="font-mono text-xs text-muted-foreground">{project.date}</p>
 
-        <div className="mt-auto flex flex-wrap items-center gap-4 pt-2">
+        <div
+          className={cn(
+            "mt-auto flex flex-wrap gap-6 pt-4",
+            // Featured cards end here, so the rule marks the card's true
+            // bottom edge. Non-featured cards continue into
+            // `ProjectDisclosure`, which already opens with its own
+            // `border-t` — skipping it here avoids two rules back to back.
+            project.featured && "border-t border-border",
+          )}
+        >
           {project.featured ? (
             <Link
               href={`/projects/${project.slug}`}

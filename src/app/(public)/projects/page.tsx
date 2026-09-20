@@ -36,7 +36,10 @@ export default async function ProjectsPage({ searchParams }: ProjectsPageProps) 
   return (
     <div className="mx-auto w-full max-w-6xl px-5 py-16 sm:px-8">
       <header className="flex flex-col gap-4">
-        <h1 className="font-display text-4xl font-semibold tracking-tight text-foreground">
+        <p className="font-mono text-xs uppercase tracking-[0.18em] text-muted-foreground">
+          Archive
+        </p>
+        <h1 className="font-display text-[40px] font-semibold leading-[1.15] tracking-tight text-foreground">
           Projects
         </h1>
         <p className="max-w-2xl text-base leading-7 text-muted-foreground">
