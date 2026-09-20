@@ -13,11 +13,6 @@ import { useState } from 'react';
 
 export type ChatMessageContentProps = {
   message: UIMessage;
-  isLast?: boolean;
-  isLoading?: boolean;
-  reload?: () => Promise<void>;
-  addToolResult?: <TOOL extends string>({ tool, toolCallId, output, }: { tool: TOOL; toolCallId: string; output: unknown; }) => Promise<void>;
-  skipToolRendering?: boolean;
 };
 
 const CodeBlock = ({ content }: { content: string }) => {
