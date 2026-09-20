@@ -1,262 +1,215 @@
-"use client";
-
-import { FormEvent, useState } from "react";
-import Image from "next/image";
 import Link from "next/link";
-import { useRouter } from "next/navigation";
+import { CollectionDesk } from "@/components/studio/collection-desk";
+import { projectPresentationBySlug } from "@/content/project-presentation";
 import { getConfig } from "@/lib/config-loader";
+import { HeroAskForm } from "./hero-ask-form";
+import { NowStrip } from "./now-strip";
+import { Reveal } from "./reveal";
 
-const prompts = [
-  "What did you build at Highmark?",
-  "How does Conductor recover failed workflows?",
-  "How does Engram evaluate memory retrieval?",
-];
+/** First sentence of a paragraph, used to keep the hero to one honest line. */
+function firstSentence(text: string): string {
+  const match = text.match(/^[^.!?]*[.!?]/);
+  return (match ? match[0] : text).trim();
+}
 
 export default function LandingPage() {
-  const router = useRouter();
-  const [query, setQuery] = useState("");
   const config = getConfig();
-  const highmarkExperience = config.experience.filter((experience) =>
-    experience.company.startsWith("Highmark"),
-  );
-  const featuredProjects = config.projects.filter(
-    (project) => project.featured,
-  );
-  const [conductor, engram, figBrain] = featuredProjects;
-  const recruitmentMeta = [
-    config.personal.location.relocation
-      ? "Open to relocation nationwide"
-      : null,
-    config.personal.workAuthorization?.status
-      ?.replace(/^US\s+Citizen$/i, "U.S. citizen")
-      .trim(),
-    config.personal.workAuthorization?.requiresSponsorship === false
-      ? "No sponsorship required"
-      : null,
-  ]
-    .filter((item): item is string => Boolean(item))
-    .join(" · ");
 
-  const submitQuery = (value: string) => {
-    const trimmedQuery = value.trim();
-    if (!trimmedQuery) return;
-    router.push(`/chat?q=${encodeURIComponent(trimmedQuery)}`);
-  };
+  const positioningSource = config.aiProfile.positioning || config.personal.bio;
+  const positioning = firstSentence(positioningSource);
 
-  const handleSubmit = (event: FormEvent<HTMLFormElement>) => {
-    event.preventDefault();
-    submitQuery(query);
-  };
+  const heroAskPlaceholder =
+    config.aiProfile.featuredQuestions[0] ??
+    config.presetQuestions.me[0] ??
+    "Ask about my work";
+
+  const deskAskQuestion =
+    config.presetQuestions.me[0] ??
+    config.aiProfile.featuredQuestions[0] ??
+    "Ask me anything";
+
+  const featuredProjects = config.projects.filter((project) => project.featured);
+  const bioParagraphs = config.personal.bio
+    .split("\n\n")
+    .filter((paragraph) => paragraph.trim().length > 0);
+  const educationLine = `${config.education.current.degree}, ${config.education.current.institution} · ${config.education.current.graduationDate}`;
 
   return (
-    <div className="quiet-page">
-      <div className="quiet-shell">
-        <section className="quiet-hero" aria-labelledby="hero-title">
-          <aside className="quiet-profile-rail" aria-label="Simon Xu profile">
-            <Image
-              className="quiet-hero-avatar"
-              src={config.personal.avatar}
-              alt="Simon Xu"
-              width={224}
-              height={224}
-              priority
+    <>
+      <section
+        className="mx-auto grid w-full max-w-6xl gap-10 px-5 py-12 sm:px-8 sm:py-16 lg:grid-cols-2 lg:items-center lg:gap-16 lg:py-24"
+        aria-labelledby="hero-title"
+      >
+        <div className="flex flex-col gap-6">
+          <Reveal>
+            <p className="font-mono text-xs uppercase tracking-wide text-muted-foreground">
+              {config.personal.title}
+            </p>
+          </Reveal>
+          <Reveal delay={40}>
+            <h1
+              id="hero-title"
+              className="font-display text-4xl font-semibold tracking-tight text-foreground sm:text-5xl lg:text-[64px] lg:leading-[1.05]"
+            >
+              {config.personal.name}
+            </h1>
+          </Reveal>
+          <Reveal delay={80}>
+            <p className="max-w-prose text-lg text-muted-foreground">
+              {positioning}
+            </p>
+          </Reveal>
+          <Reveal delay={120}>
+            <div className="flex flex-wrap items-center gap-3">
+              <Link
+                href="/projects"
+                className="inline-flex min-h-11 items-center rounded-[10px] bg-accent px-5 text-sm font-medium text-accent-foreground transition-opacity hover:opacity-90 focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-ring"
+              >
+                See projects
+              </Link>
+              <Link
+                href="/resume"
+                className="inline-flex min-h-11 items-center rounded-[10px] border border-border px-5 text-sm font-medium text-foreground transition-colors hover:bg-surface-subtle focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-ring"
+              >
+                Resume
+              </Link>
+            </div>
+          </Reveal>
+          <Reveal delay={160}>
+            <HeroAskForm
+              placeholder={heroAskPlaceholder}
+              label="Ask my portfolio AI"
             />
-            <h1 id="hero-title">Simon Xu</h1>
-            <div className="quiet-profile-credentials">
-              <p>Software Engineer, AI/ML</p>
-              <p>M.S. CSE, Georgia Tech</p>
-            </div>
-            {recruitmentMeta ? (
-              <p className="quiet-profile-recruiting">{recruitmentMeta}</p>
-            ) : null}
-            <div className="quiet-profile-links">
-              <a
-                href={config.social.github}
-                target="_blank"
-                rel="noopener noreferrer"
-              >
-                GitHub
-              </a>
-              <a
-                href={config.social.linkedin}
-                target="_blank"
-                rel="noopener noreferrer"
-              >
-                LinkedIn
-              </a>
-              <Link href="/resume">Resume</Link>
-            </div>
-          </aside>
+          </Reveal>
+        </div>
 
-          <section
-            id="about"
-            className="quiet-biography"
-            aria-labelledby="biography-title"
+        <div>
+          <CollectionDesk
+            avatarSrc={config.personal.avatar}
+            askQuestion={deskAskQuestion}
+          />
+        </div>
+      </section>
+
+      <div className="mx-auto w-full max-w-6xl px-5 sm:px-8">
+        <NowStrip />
+      </div>
+
+      <section
+        id="projects"
+        className="mx-auto w-full max-w-6xl scroll-mt-20 px-5 py-16 sm:px-8"
+        aria-labelledby="projects-title"
+      >
+        <Reveal>
+          <h2
+            id="projects-title"
+            className="font-display text-3xl font-semibold tracking-tight text-foreground sm:text-4xl"
           >
-            <h2 id="biography-title">About</h2>
-            {config.personal.bio.split("\n\n").map((paragraph) => (
-              <p key={paragraph}>{paragraph}</p>
-            ))}
+            Featured work
+          </h2>
+        </Reveal>
 
-            <section className="quiet-ask-panel" aria-labelledby="ask-title">
-              <h3 id="ask-title">Ask about my work</h3>
-              <p id="profile-question-help" className="quiet-ask-help">
-                Ask a specific question about my experience or projects.
-              </p>
-              <form onSubmit={handleSubmit} className="quiet-ask-form">
-                <label htmlFor="profile-question">Question</label>
-                <input
-                  id="profile-question"
-                  value={query}
-                  onChange={(event) => setQuery(event.target.value)}
-                  placeholder="Ask about Highmark, Conductor, or Engram"
-                  aria-describedby="profile-question-help"
-                />
-                <button type="submit">Ask</button>
-              </form>
-              <div
-                className="quiet-prompt-list"
-                aria-label="Suggested questions"
-              >
-                {prompts.map((prompt) => (
-                  <button
-                    key={prompt}
-                    type="button"
-                    onClick={() => submitQuery(prompt)}
-                  >
-                    {prompt}
-                  </button>
-                ))}
-              </div>
-            </section>
-          </section>
-        </section>
+        <div className="mt-8 grid gap-6 sm:grid-cols-2 lg:grid-cols-3">
+          {featuredProjects.map((project, index) => {
+            const shortTitle =
+              projectPresentationBySlug[project.slug]?.shortTitle ?? project.title;
 
-        <section
-          id="experience"
-          className="quiet-experience-section"
-          aria-labelledby="experience-title"
-        >
-          <div className="quiet-experience-side">
-            <h2 id="experience-title">Experience</h2>
-            <p>Highmark Inc.</p>
-            <span>AI/ML team, 2024-present</span>
-          </div>
-          <div className="quiet-role-list">
-            {highmarkExperience.map((experience) => (
-              <article
-                key={`${experience.company}-${experience.position}`}
-                className="quiet-role"
-              >
-                <div>
-                  <h3>
-                    {experience.position.replace(" (", ", ").replace(")", "")}
-                  </h3>
-                  <p className="quiet-meta">
-                    {experience.duration} /{" "}
-                    {experience.location ?? experience.type}
-                  </p>
-                </div>
-                <p>{experience.description}</p>
-                {experience.highlights?.length ? (
-                  <ul className="quiet-role-highlights">
-                    {experience.highlights.map((highlight) => (
-                      <li key={highlight}>{highlight}</li>
+            return (
+              <Reveal key={project.slug} delay={Math.min(index * 40, 200)}>
+                <Link
+                  href={`/projects/${project.slug}`}
+                  className="group flex h-full flex-col gap-4 rounded-[18px] border border-border bg-surface p-5 transition-colors hover:border-input focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-ring"
+                >
+                  {/* cover slot: Lane B wires the programmatic SVG cover after merge */}
+                  <div className="aspect-[3/2] w-full rounded-[18px] border border-border bg-surface" />
+                  <div className="flex flex-1 flex-col gap-2">
+                    <h3 className="font-display text-lg font-semibold text-foreground">
+                      {shortTitle}
+                    </h3>
+                    <p className="text-sm text-muted-foreground">
+                      {project.summary}
+                    </p>
+                  </div>
+                  <ul className="flex flex-wrap gap-2">
+                    {project.techStack.slice(0, 4).map((tech) => (
+                      <li
+                        key={tech}
+                        className="rounded-[10px] border border-border px-2 py-1 font-mono text-xs text-muted-foreground"
+                      >
+                        {tech}
+                      </li>
                     ))}
                   </ul>
-                ) : null}
-                <span>{experience.technologies.slice(0, 5).join(", ")}</span>
-              </article>
-            ))}
-          </div>
-        </section>
+                </Link>
+              </Reveal>
+            );
+          })}
+        </div>
+      </section>
 
-        <section
-          id="projects"
-          className="quiet-work-section"
-          aria-labelledby="projects-title"
-        >
-          <header className="quiet-section-intro">
-            <h2 id="projects-title">Selected projects</h2>
-            <p>
-              Durable agent infrastructure, memory systems, and AI-native design
-              tools.
-            </p>
-          </header>
+      <section
+        id="experience"
+        className="mx-auto w-full max-w-6xl scroll-mt-20 px-5 py-16 sm:px-8"
+        aria-labelledby="experience-title"
+      >
+        <Reveal>
+          <h2
+            id="experience-title"
+            className="font-display text-3xl font-semibold tracking-tight text-foreground sm:text-4xl"
+          >
+            Experience
+          </h2>
+        </Reveal>
 
-          {conductor ? (
-            <article className="quiet-feature-work">
-              <div className="quiet-feature-lead">
-                <p className="quiet-meta">{conductor.date}</p>
-                <h3>{conductor.title.split(":")[0]}</h3>
-                <p className="quiet-tech">
-                  {conductor.techStack.slice(0, 5).join(", ")}
+        <div className="mt-8 flex flex-col divide-y divide-border">
+          {config.experience.map((role) => (
+            <article
+              key={`${role.company}-${role.position}`}
+              className="flex flex-col gap-2 py-6 first:pt-0"
+            >
+              <div className="flex flex-wrap items-baseline justify-between gap-2">
+                <h3 className="text-base font-semibold text-foreground">
+                  {role.position} · {role.company}
+                </h3>
+                <p className="font-mono text-xs text-muted-foreground">
+                  {role.duration}
+                  {role.location ? ` · ${role.location}` : ""}
                 </p>
               </div>
-              <div className="quiet-feature-details">
-                {(conductor.achievements ?? [conductor.description]).map(
-                  (detail) => (
-                    <p key={detail}>{detail}</p>
-                  ),
-                )}
-              </div>
+              <p className="text-sm text-muted-foreground">{role.description}</p>
+              {role.highlights?.length ? (
+                <ul className="mt-1 list-inside list-disc space-y-1 text-sm text-muted-foreground">
+                  {role.highlights.slice(0, 3).map((highlight) => (
+                    <li key={highlight}>{highlight}</li>
+                  ))}
+                </ul>
+              ) : null}
             </article>
-          ) : null}
+          ))}
+        </div>
+      </section>
 
-          <div className="quiet-secondary-work">
-            {engram ? (
-              <article>
-                <p className="quiet-meta">{engram.date}</p>
-                <h3>{engram.title.split(":")[0]}</h3>
-                <p>{engram.description}</p>
-                {engram.metrics?.[0] ? (
-                  <p className="quiet-project-result">{engram.metrics[0]}</p>
-                ) : null}
-                <span>{engram.techStack.slice(0, 5).join(", ")}</span>
-              </article>
-            ) : null}
-            {figBrain ? (
-              <article>
-                <p className="quiet-meta">{figBrain.date}</p>
-                <h3>{figBrain.title.split(":")[0]}</h3>
-                <p>{figBrain.description}</p>
-                {figBrain.metrics?.length ? (
-                  <p className="quiet-project-result">
-                    {figBrain.metrics.join(" / ")}
-                  </p>
-                ) : null}
-                <span>{figBrain.techStack.slice(0, 5).join(", ")}</span>
-              </article>
-            ) : null}
-          </div>
-          <Link className="quiet-projects-cta" href="/projects">
-            View all projects
-          </Link>
-        </section>
+      <section
+        id="about"
+        className="mx-auto w-full max-w-6xl scroll-mt-20 px-5 py-16 sm:px-8"
+        aria-labelledby="about-title"
+      >
+        <Reveal>
+          <h2
+            id="about-title"
+            className="font-display text-3xl font-semibold tracking-tight text-foreground sm:text-4xl"
+          >
+            About
+          </h2>
+        </Reveal>
 
-        <footer id="contact" className="quiet-footer">
-          <a href={`mailto:${config.personal.email}`}>
-            {config.personal.email}
-          </a>
-          <div>
-            <a
-              href={config.social.linkedin}
-              target="_blank"
-              rel="noopener noreferrer"
-            >
-              LinkedIn
-            </a>
-            <a
-              href={config.social.github}
-              target="_blank"
-              rel="noopener noreferrer"
-            >
-              GitHub
-            </a>
-            <Link href="/resume">Resume</Link>
-          </div>
-        </footer>
-      </div>
-    </div>
+        <div className="mt-6 max-w-prose space-y-4 text-base leading-relaxed text-muted-foreground">
+          {bioParagraphs.map((paragraph) => (
+            <p key={paragraph}>{paragraph}</p>
+          ))}
+          <p className="font-mono text-sm text-muted-foreground">{educationLine}</p>
+        </div>
+      </section>
+    </>
   );
 }
