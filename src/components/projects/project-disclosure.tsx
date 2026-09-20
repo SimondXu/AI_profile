@@ -24,9 +24,9 @@ export function ProjectDisclosure({ project }: ProjectDisclosureProps) {
 
       {project.achievements?.length ? (
         <div>
-          <h4 className="font-mono text-xs uppercase tracking-wide text-foreground">
+          <h3 className="font-mono text-xs uppercase tracking-wide text-foreground">
             Achievements
-          </h4>
+          </h3>
           <ul className="mt-2 list-disc space-y-1 pl-5">
             {project.achievements.map((achievement) => (
               <li key={achievement}>{achievement}</li>
@@ -37,9 +37,9 @@ export function ProjectDisclosure({ project }: ProjectDisclosureProps) {
 
       {project.metrics?.length ? (
         <div>
-          <h4 className="font-mono text-xs uppercase tracking-wide text-foreground">
+          <h3 className="font-mono text-xs uppercase tracking-wide text-foreground">
             Metrics
-          </h4>
+          </h3>
           <ul className="mt-2 space-y-1">
             {project.metrics.map((metric) => (
               <li key={metric}>{metric}</li>

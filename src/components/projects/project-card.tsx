@@ -44,12 +44,12 @@ export function ProjectCard({ project }: ProjectCardProps) {
           {project.category}
         </p>
 
-        <h3
+        <h2
           className="font-display text-lg font-semibold text-foreground md:text-xl"
           title={isShortened ? project.title : undefined}
         >
           {displayTitle}
-        </h3>
+        </h2>
 
         <p className="text-sm leading-6 text-muted-foreground">{project.summary}</p>
 
