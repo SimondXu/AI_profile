@@ -1,8 +1,7 @@
 import type { Metadata } from "next";
-import Link from "next/link";
-import { ProjectIndex } from "@/components/projects/project-index";
+import { ProjectFilter, type ProjectTrackFilter } from "@/components/projects/project-filter";
+import { ProjectGrid } from "@/components/projects/project-grid";
 import { getConfig } from "@/lib/config-loader";
-import type { Project } from "@/types/portfolio";
 
 export const metadata: Metadata = {
   title: "Projects",
@@ -13,110 +12,52 @@ export const metadata: Metadata = {
   },
 };
 
-const trackMetadata: Record<
-  Project["track"],
-  {
-    label: string;
-    href: string;
-  }
-> = {
-  "ai-ml": {
-    label: "AI / ML Systems",
-    href: "/projects?track=ai-ml",
-  },
-  "full-stack": {
-    label: "Full-stack Products",
-    href: "/projects?track=full-stack",
-  },
-};
-
-interface ProjectFilter {
-  label: string;
-  value: Project["track"] | "all";
-  href: string;
-  count: number;
-}
-
 interface ProjectsPageProps {
   searchParams: Promise<{ track?: string | string[] }>;
 }
 
-export default async function ProjectsPage({
-  searchParams,
-}: ProjectsPageProps) {
+export default async function ProjectsPage({ searchParams }: ProjectsPageProps) {
   const { track: requestedTrack } = await searchParams;
-  const activeTrack: Project["track"] | "all" =
+  const activeTrack: ProjectTrackFilter =
     requestedTrack === "ai-ml" || requestedTrack === "full-stack"
       ? requestedTrack
       : "all";
+
   const projects = getConfig().projects;
-  const aiProjects = projects.filter((project) => project.track === "ai-ml");
-  const fullStackProjects = projects.filter(
+  const aiCount = projects.filter((project) => project.track === "ai-ml").length;
+  const fullStackCount = projects.filter(
     (project) => project.track === "full-stack",
-  );
-  const filters: ProjectFilter[] = [
-    { label: "All", value: "all", href: "/projects", count: projects.length },
-    {
-      label: "AI / ML",
-      href: trackMetadata["ai-ml"].href,
-      value: "ai-ml",
-      count: aiProjects.length,
-    },
-    {
-      label: "Full-stack",
-      href: trackMetadata["full-stack"].href,
-      value: "full-stack",
-      count: fullStackProjects.length,
-    },
-  ];
+  ).length;
+  const visibleProjects =
+    activeTrack === "all"
+      ? projects
+      : projects.filter((project) => project.track === activeTrack);
 
   return (
-    <div className="quiet-page quiet-projects-page">
-      <div className="quiet-projects-shell">
-        <header className="quiet-projects-header">
-          <h1>Projects</h1>
-          <p>
-            A complete project archive spanning distributed AI systems,
-            developer tools, data-intensive applications, and full-stack
-            products.
-          </p>
-        </header>
+    <div className="mx-auto w-full max-w-6xl px-5 py-16 sm:px-8">
+      <header className="flex flex-col gap-4">
+        <h1 className="font-display text-4xl font-semibold tracking-tight text-foreground">
+          Projects
+        </h1>
+        <p className="max-w-2xl text-base leading-7 text-muted-foreground">
+          A complete project archive spanning distributed AI systems, developer
+          tools, data-intensive applications, and full-stack products.
+        </p>
+      </header>
 
-        <nav className="quiet-project-filters" aria-label="Filter projects">
-          {filters.map((filter) => (
-            <Link
-              key={filter.value}
-              href={filter.href}
-              scroll={false}
-              aria-current={filter.value === activeTrack ? "page" : undefined}
-            >
-              {filter.label} {filter.count}
-            </Link>
-          ))}
-        </nav>
+      <div className="mt-8">
+        <ProjectFilter
+          active={activeTrack}
+          counts={{
+            all: projects.length,
+            "ai-ml": aiCount,
+            "full-stack": fullStackCount,
+          }}
+        />
+      </div>
 
-        <div className="quiet-project-groups">
-          {activeTrack === "all" || activeTrack === "ai-ml" ? (
-            <ProjectIndex
-              label={trackMetadata["ai-ml"].label}
-              projects={aiProjects}
-              startIndex={0}
-              track="ai-ml"
-            />
-          ) : null}
-          {activeTrack === "all" || activeTrack === "full-stack" ? (
-            <ProjectIndex
-              label={trackMetadata["full-stack"].label}
-              projects={fullStackProjects}
-              startIndex={activeTrack === "all" ? aiProjects.length : 0}
-              track="full-stack"
-            />
-          ) : null}
-        </div>
-
-        <footer className="quiet-projects-footer">
-          <Link href="/#projects">Back to selected projects</Link>
-        </footer>
+      <div className="mt-8">
+        <ProjectGrid projects={visibleProjects} />
       </div>
     </div>
   );

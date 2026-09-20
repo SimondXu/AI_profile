@@ -1,0 +1,66 @@
+/*
+ * Hover reactions for the project covers. Every rule is gated behind
+ * `@media (hover: hover)` so touch devices see the static artwork, and every
+ * animated property is neutralised under `prefers-reduced-motion: reduce`.
+ * `.group` is the Tailwind marker class applied by the card that wraps the
+ * <ProjectCover>; these selectors reach into the SVG from there.
+ */
+
+.conductorFlow {
+  stroke-dasharray: 10 8;
+  stroke-dashoffset: 0;
+}
+
+.engramSlip {
+  transform: translateX(0);
+  transition: transform 0.3s ease;
+}
+
+.figbrainPart {
+  transform: translate(0, 0);
+  transition: transform 0.3s ease;
+}
+
+@media (hover: hover) {
+  :global(.group):hover .conductorFlow {
+    animation: covers-flow 2s linear infinite;
+  }
+
+  :global(.group):hover .engramSlip {
+    transform: translateX(10px);
+  }
+
+  :global(.group):hover .figbrainPartA {
+    transform: translate(5px, 4px);
+  }
+
+  :global(.group):hover .figbrainPartB {
+    transform: translate(-5px, 4px);
+  }
+
+  :global(.group):hover .figbrainPartC {
+    transform: translate(4px, -6px);
+  }
+
+  :global(.group):hover .figbrainPartD {
+    transform: translate(-6px, -4px);
+  }
+}
+
+@keyframes covers-flow {
+  to {
+    stroke-dashoffset: -36;
+  }
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .conductorFlow {
+    animation: none !important;
+  }
+
+  .engramSlip,
+  .figbrainPart {
+    transition: none !important;
+    transform: none !important;
+  }
+}
