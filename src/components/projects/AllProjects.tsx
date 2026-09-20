@@ -106,21 +106,26 @@ export default function AllProjects({
         {showHeading ? (
           <div className="flex flex-col gap-4 sm:flex-row sm:items-end sm:justify-between">
             <div className="space-y-3">
-              <p className="eyebrow">Projects</p>
-              <h2 className="section-title">Selected work</h2>
-              <p className="section-copy max-w-2xl">{headerDescription}</p>
+              <p className="text-[0.72rem] font-medium uppercase tracking-[0.22em] text-accent">
+                Projects
+              </p>
+              <h2 className="text-3xl font-semibold tracking-[-0.02em] text-foreground md:text-4xl">
+                Selected work
+              </h2>
+              <p className="max-w-2xl text-base leading-7 text-muted-foreground md:text-[1.05rem]">
+                {headerDescription}
+              </p>
             </div>
 
             {hasMultipleProjects ? (
               <div className="flex items-center gap-2 self-start sm:self-auto">
-                <span className="text-(--panel-body) min-w-14 text-sm">
+                <span className="min-w-14 text-sm text-muted-foreground">
                   {String(activeIndex + 1).padStart(2, "0")} / {String(projects.length).padStart(2, "0")}
                 </span>
                 <Button
                   type="button"
                   variant="outline"
                   size="icon"
-                  className="border-(--button-border) bg-surface/80 text-(--panel-body-strong) hover:bg-surface-subtle"
                   onClick={() => scrollToIndex(activeIndex - 1)}
                   disabled={activeIndex === 0}
                   aria-label="Show previous project"
@@ -131,7 +136,6 @@ export default function AllProjects({
                   type="button"
                   variant="outline"
                   size="icon"
-                  className="border-(--button-border) bg-surface/80 text-(--panel-body-strong) hover:bg-surface-subtle"
                   onClick={() => scrollToIndex(activeIndex + 1)}
                   disabled={activeIndex === projects.length - 1}
                   aria-label="Show next project"
@@ -145,7 +149,7 @@ export default function AllProjects({
 
         <div
           ref={scrollRef}
-          className="project-rail-scroll -mx-1 flex snap-x snap-mandatory gap-4 overflow-x-auto px-1 pb-3"
+          className="-mx-1 flex snap-x snap-mandatory gap-4 overflow-x-auto px-1 pb-3 [-ms-overflow-style:none] [scrollbar-width:none] [&::-webkit-scrollbar]:hidden"
           aria-label="Project carousel"
         >
           {projects.map((project, index) => {
@@ -162,10 +166,10 @@ export default function AllProjects({
                 ref={(node) => {
                   cardRefs.current[index] = node;
                 }}
-                className="feature-card chat-project-card flex min-w-[84%] snap-start flex-col overflow-hidden p-0 sm:min-w-120 lg:min-w-136"
+                className="flex min-w-[84%] snap-start flex-col overflow-hidden rounded-[18px] border border-border bg-surface p-0 sm:min-w-120 lg:min-w-136"
               >
                 {project.images?.[0] ? (
-                  <div className="feature-card-media aspect-video rounded-none rounded-t-[inherit]">
+                  <div className="aspect-video overflow-hidden rounded-t-[inherit] bg-surface-subtle">
                     <Image
                       src={project.images[0].src}
                       alt={project.images[0].alt}
@@ -179,18 +183,18 @@ export default function AllProjects({
                 <div className="space-y-5 p-5 md:p-6">
                   <div className="flex flex-wrap items-start justify-between gap-3">
                     <div className="space-y-2">
-                      <p className="section-eyebrow">
+                      <p className="text-[0.72rem] font-medium uppercase tracking-[0.22em] text-accent">
                         {project.category} · {project.date}
                       </p>
-                      <h3 className="section-heading text-xl tracking-[-0.02em] md:text-2xl">
+                      <h3 className="text-xl font-semibold tracking-[-0.02em] text-foreground md:text-2xl">
                         {project.title}
                       </h3>
                     </div>
 
                     {leadMetric ? (
-                      <div className="feature-callout max-w-56 text-xs font-medium sm:text-sm">
+                      <div className="inline-flex max-w-56 items-center gap-2 rounded-full border border-border bg-surface-subtle px-3.5 py-2 text-xs font-medium text-foreground sm:text-sm">
                         <span
-                          className="h-2 w-2 rounded-full bg-brand"
+                          className="h-2 w-2 rounded-full bg-accent"
                           aria-hidden="true"
                         />
                         <span>{leadMetric}</span>
@@ -198,7 +202,7 @@ export default function AllProjects({
                     ) : null}
                   </div>
 
-                  <p className="section-body text-sm leading-7 md:text-[0.98rem] [display:-webkit-box] [-webkit-box-orient:vertical] [-webkit-line-clamp:3] overflow-hidden">
+                  <p className="text-sm leading-7 text-muted-foreground md:text-[0.98rem] [display:-webkit-box] [-webkit-box-orient:vertical] [-webkit-line-clamp:3] overflow-hidden">
                     {project.description}
                   </p>
 
@@ -207,7 +211,7 @@ export default function AllProjects({
                       {supportingMetrics.map((metric) => (
                         <div
                           key={metric}
-                          className="feature-metric text-(--panel-body-strong) px-3.5 py-2.5 text-xs sm:text-sm"
+                          className="rounded-[10px] border border-border bg-surface-subtle px-3.5 py-2.5 text-xs text-foreground sm:text-sm"
                         >
                           {metric}
                         </div>
@@ -219,20 +223,20 @@ export default function AllProjects({
                     {project.techStack.slice(0, 5).map((tech) => (
                       <span
                         key={tech}
-                        className="surface-chip px-3 py-1.5 text-xs font-medium"
+                        className="rounded-full border border-border bg-accent-soft px-3 py-1.5 text-xs font-medium text-accent"
                       >
                         {tech}
                       </span>
                     ))}
                     {project.techStack.length > 5 ? (
-                      <span className="surface-chip px-3 py-1.5 text-xs font-medium">
+                      <span className="rounded-full border border-border bg-accent-soft px-3 py-1.5 text-xs font-medium text-accent">
                         +{project.techStack.length - 5} more
                       </span>
                     ) : null}
                   </div>
 
                   {topAchievements.length ? (
-                    <ul className="section-divider text-(--panel-body-strong) space-y-2 border-t pt-4 text-sm leading-6">
+                    <ul className="space-y-2 border-t pt-4 text-sm leading-6 text-foreground">
                       {topAchievements.map((achievement) => (
                         <li key={achievement}>{achievement}</li>
                       ))}
@@ -240,14 +244,13 @@ export default function AllProjects({
                   ) : null}
 
                   {visibleLinks.length ? (
-                    <div className="section-divider flex flex-wrap gap-3 border-t pt-4">
+                    <div className="flex flex-wrap gap-3 border-t pt-4">
                       {visibleLinks.map((link) => (
                         <Button
                           asChild
                           variant="outline"
                           size="sm"
                           key={link.url}
-                          className="border-(--button-border) bg-surface text-(--panel-body-strong) transition-colors hover:bg-surface-subtle hover:text-(--panel-body-strong)"
                         >
                           <a
                             href={link.url}
@@ -276,8 +279,8 @@ export default function AllProjects({
                 className={cn(
                   "h-2.5 rounded-full transition-all duration-200",
                   activeIndex === index
-                    ? "bg-brand w-6"
-                    : "bg-(--surface-chip-border) hover:bg-(--button-border) w-2.5"
+                    ? "w-6 bg-accent"
+                    : "w-2.5 bg-border hover:bg-input"
                 )}
                 aria-label={`View project ${index + 1}`}
                 aria-pressed={activeIndex === index}
@@ -293,9 +296,13 @@ export default function AllProjects({
     <div className="space-y-8">
       {showHeading ? (
         <div className="space-y-3">
-          <p className="eyebrow">Projects</p>
-          <h2 className="section-title">Selected work</h2>
-          <p className="section-copy max-w-2xl">
+          <p className="text-[0.72rem] font-medium uppercase tracking-[0.22em] text-accent">
+            Projects
+          </p>
+          <h2 className="text-3xl font-semibold tracking-[-0.02em] text-foreground md:text-4xl">
+            Selected work
+          </h2>
+          <p className="max-w-2xl text-base leading-7 text-muted-foreground md:text-[1.05rem]">
             {headerDescription}
           </p>
         </div>
@@ -312,32 +319,26 @@ export default function AllProjects({
           return (
             <article
               key={project.title}
-              className={cn(
-                "feature-card p-6 md:p-8",
-                index === 0 && "feature-card-spotlight"
-              )}
+              className="rounded-[18px] border border-border bg-surface p-6 md:p-8"
             >
               <div className="grid gap-8 lg:grid-cols-[minmax(0,1.15fr)_minmax(280px,0.85fr)] lg:items-start">
                 <div
-                  className={cn(
-                    "feature-card-body space-y-6",
-                    isReversed && "lg:order-2"
-                  )}
+                  className={cn("space-y-6", isReversed && "lg:order-2")}
                 >
                   <div className="flex flex-wrap items-start justify-between gap-4">
                     <div className="max-w-2xl space-y-3">
-                      <p className="section-eyebrow">
+                      <p className="text-[0.72rem] font-medium uppercase tracking-[0.22em] text-accent">
                         {project.category} · {project.date}
                       </p>
-                      <h3 className="section-heading text-2xl tracking-[-0.02em] md:text-3xl">
+                      <h3 className="text-2xl font-semibold tracking-[-0.02em] text-foreground md:text-3xl">
                         {project.title}
                       </h3>
                     </div>
 
                     {leadMetric ? (
-                      <div className="feature-callout text-sm font-medium">
+                      <div className="inline-flex items-center gap-2 rounded-full border border-border bg-surface-subtle px-3.5 py-2 text-sm font-medium text-foreground">
                         <span
-                          className="h-2 w-2 rounded-full bg-brand"
+                          className="h-2 w-2 rounded-full bg-accent"
                           aria-hidden="true"
                         />
                         <span>{leadMetric}</span>
@@ -345,7 +346,7 @@ export default function AllProjects({
                     ) : null}
                   </div>
 
-                  <p className="section-body max-w-2xl text-base leading-8 md:text-[1.02rem]">
+                  <p className="max-w-2xl text-base leading-8 text-muted-foreground md:text-[1.02rem]">
                     {project.description}
                   </p>
 
@@ -354,7 +355,7 @@ export default function AllProjects({
                       {supportingMetrics.map((metric) => (
                         <div
                           key={metric}
-                          className="feature-metric text-(--panel-body-strong) px-4 py-3 text-sm"
+                          className="rounded-[10px] border border-border bg-surface-subtle px-4 py-3 text-sm text-foreground"
                         >
                           {metric}
                         </div>
@@ -363,22 +364,24 @@ export default function AllProjects({
                   ) : null}
 
                   {project.achievements?.length ? (
-                    <ul className="feature-achievements section-divider text-(--panel-body-strong) space-y-3 border-t pt-5 text-sm leading-6">
+                    <ul className="space-y-3 border-t pt-5 text-sm leading-6 text-foreground">
                       {project.achievements.slice(0, 3).map((achievement) => (
-                        <li key={achievement}>{achievement}</li>
+                        <li
+                          key={achievement}
+                          className="relative pl-5 before:absolute before:left-0 before:top-2.5 before:h-1.5 before:w-1.5 before:rounded-full before:bg-accent"
+                        >
+                          {achievement}
+                        </li>
                       ))}
                     </ul>
                   ) : null}
                 </div>
 
                 <div
-                  className={cn(
-                    "feature-card-side space-y-4",
-                    isReversed && "lg:order-1"
-                  )}
+                  className={cn("space-y-4", isReversed && "lg:order-1")}
                 >
                   {project.images?.[0] ? (
-                    <div className="feature-card-media">
+                    <div className="min-h-56 overflow-hidden rounded-[18px] border border-border bg-surface-subtle">
                       <Image
                         src={project.images[0].src}
                         alt={project.images[0].alt}
@@ -389,13 +392,15 @@ export default function AllProjects({
                     </div>
                   ) : null}
 
-                  <div className="feature-card-panel space-y-4 p-5">
-                    <p className="section-eyebrow">Tech stack</p>
+                  <div className="space-y-4 rounded-[18px] border border-border bg-surface-subtle p-5">
+                    <p className="text-[0.72rem] font-medium uppercase tracking-[0.22em] text-accent">
+                      Tech stack
+                    </p>
                     <div className="flex flex-wrap gap-2">
                       {project.techStack.slice(0, 8).map((tech) => (
                         <span
                           key={tech}
-                          className="surface-chip px-3 py-1.5 text-xs font-medium"
+                          className="rounded-full border border-border bg-accent-soft px-3 py-1.5 text-xs font-medium text-accent"
                         >
                           {tech}
                         </span>
@@ -403,14 +408,13 @@ export default function AllProjects({
                     </div>
 
                     {project.links?.length ? (
-                      <div className="section-divider flex flex-wrap gap-3 border-t pt-4">
+                      <div className="flex flex-wrap gap-3 border-t pt-4">
                         {project.links.map((link) => (
                           <Button
                             asChild
                             variant="outline"
                             size="sm"
                             key={link.url}
-                            className="border-(--button-border) bg-surface text-(--panel-body-strong) transition-colors hover:bg-surface-subtle hover:text-(--panel-body-strong)"
                           >
                             <a
                               href={link.url}
