@@ -33,6 +33,7 @@ export default function LandingPage() {
   const bioParagraphs = config.personal.bio
     .split("\n\n")
     .filter((paragraph) => paragraph.trim().length > 0);
+  const heroBioParagraph = bioParagraphs[0];
   const educationLine = `${config.education.current.degree}, ${config.education.current.institution} · ${config.education.current.graduationDate}`;
 
   return (
@@ -60,6 +61,13 @@ export default function LandingPage() {
               {positioning}
             </p>
           </Reveal>
+          {heroBioParagraph ? (
+            <Reveal delay={100}>
+              <p className="max-w-prose text-muted-foreground">
+                {heroBioParagraph}
+              </p>
+            </Reveal>
+          ) : null}
           <Reveal delay={120}>
             <div className="flex flex-wrap items-center gap-3">
               <Link

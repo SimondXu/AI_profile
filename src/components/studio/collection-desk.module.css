@@ -1,7 +1,9 @@
-/* Collection Desk geometry only — colors, radii and typography stay in
-   Tailwind utility classes on the JSX. Mobile-first: objects sit in a plain
-   2-column grid until `md`, where the desk becomes an absolutely positioned
-   scene. */
+/* Collection Desk: surface material + object geometry. Per-object colors,
+   radii and typography stay in Tailwind utility classes on the JSX; this
+   file carries the desk's paper/cloth surface treatment (dot grid, "mat",
+   inner top highlight — CSS-only, built from tokens) plus the absolute
+   positioning that turns the desk into a composed scene at `md`. Mobile-first:
+   objects sit in a plain 2-column grid until `md`. */
 
 .scene {
   perspective: 1000px;
@@ -23,6 +25,27 @@
     aspect-ratio: 4 / 3;
     min-height: 320px;
     padding: 0;
+    /* Paper/cloth surface feel: faint dot grid + soft inner top highlight,
+       built only from tokens so it reads correctly in both themes. */
+    background-image: radial-gradient(
+      circle,
+      color-mix(in srgb, var(--foreground) 7%, transparent) 1px,
+      transparent 1px
+    );
+    background-size: 18px 18px;
+    box-shadow: inset 0 1px 0 color-mix(in srgb, white 10%, transparent);
+  }
+
+  /* Desk mat: a large soft rectangle behind the objects so the surface reads
+     as tactile rather than a flat panel. */
+  .desk::before {
+    content: "";
+    position: absolute;
+    inset: 7%;
+    z-index: 0;
+    border-radius: 18px;
+    background: color-mix(in srgb, var(--material-wood) 14%, transparent);
+    pointer-events: none;
   }
 }
 
@@ -34,10 +57,20 @@
   .avatarSlot {
     display: block;
     position: absolute;
-    top: 1.5rem;
-    left: 1.5rem;
+    top: 6%;
+    left: 6%;
     z-index: 20;
   }
+}
+
+/* Photo-card backing for the avatar: a small paper mount, pinned at a slight
+   angle so it reads as a photo on the desk rather than a floating PNG. */
+.avatarCard {
+  display: inline-flex;
+  transform: rotate(-4deg);
+  box-shadow:
+    0 1px 2px color-mix(in srgb, black 14%, transparent),
+    0 10px 24px -14px color-mix(in srgb, black 32%, transparent);
 }
 
 .slot {
@@ -47,41 +80,56 @@
 @media (min-width: 768px) {
   .slot {
     position: absolute;
+    z-index: 10;
   }
 
-  /* Row 1 (top): avatar (left, fixed) · resume (center) · ask (right).
-     Row 2 (bottom): projects (left) · music (center) · photos (right).
-     Row separation keeps every pair clear of the others down to the
-     ~448px desk width that shows up right after the 1024px breakpoint,
-     where the hero switches from stacked to two columns. */
+  /* Composed scene, sized with `%` + `clamp()` so nothing overlaps across the
+     desk-width range the two-column hero produces from 1024px to 1440px
+     (roughly 440px–620px desk width): avatar top-left; Ask anchored to its
+     right as if the avatar is speaking; Resume top-right; Projects
+     bottom-left; Music/Photos bottom-center/right, kept positioned for
+     whenever those sections go live. */
 
   .slotResume {
-    top: 6%;
-    left: 36%;
-    width: 6rem;
+    top: 8%;
+    right: 6%;
+    width: clamp(6.5rem, 19%, 7.5rem);
   }
 
   .slotAsk {
-    top: 8%;
-    right: 6%;
-    width: 8.5rem;
+    top: 12%;
+    left: 38%;
+    width: clamp(7.5rem, 30%, 12rem);
   }
 
   .slotProjects {
-    bottom: 6%;
-    left: 6%;
-    width: 9.5rem;
+    bottom: 8%;
+    left: 8%;
+    width: clamp(10rem, 42%, 13rem);
   }
 
   .slotMusic {
-    bottom: 6%;
-    left: 42%;
-    width: 6.5rem;
+    bottom: 8%;
+    left: 52%;
+    width: clamp(5rem, 15%, 6.5rem);
   }
 
   .slotPhotos {
-    bottom: 6%;
-    right: 6%;
-    width: 7.5rem;
+    bottom: 8%;
+    right: 5%;
+    width: clamp(5.5rem, 15%, 7.5rem);
   }
+}
+
+/* Speech tail on the Ask bubble, pointing back toward the avatar. */
+.askBubble::before {
+  content: "";
+  position: absolute;
+  top: 1rem;
+  left: -5px;
+  width: 12px;
+  height: 12px;
+  background: var(--accent-soft);
+  border-radius: 2px;
+  transform: rotate(45deg);
 }

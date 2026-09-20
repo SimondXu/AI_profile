@@ -59,36 +59,70 @@ function canTilt(): boolean {
   return fine && !reduced;
 }
 
+const SHADOW_REST =
+  "shadow-[0_1px_2px_rgba(0,0,0,0.12),0_10px_24px_-14px_rgba(0,0,0,0.28)]";
+const SHADOW_HOVER =
+  "group-hover:shadow-[0_2px_4px_rgba(0,0,0,0.16),0_18px_36px_-14px_rgba(0,0,0,0.38)] group-focus-visible:shadow-[0_2px_4px_rgba(0,0,0,0.16),0_18px_36px_-14px_rgba(0,0,0,0.38)]";
+
 /** Object visuals — decorative markup only; the real link + label carry semantics. */
 function ObjectVisual({ id, askQuestion }: { id: DeskObjectId; askQuestion: string }) {
   switch (id) {
     case "projects":
       return (
         <div className="relative h-20 w-full" aria-hidden="true">
-          <div className="absolute inset-x-2 top-3 h-14 rounded-[10px] border border-border bg-material-paper transition-transform duration-200 group-hover:-translate-x-2 group-hover:-translate-y-1 group-hover:rotate-[-4deg] group-focus-visible:-translate-x-2 group-focus-visible:-translate-y-1 group-focus-visible:rotate-[-4deg]" />
-          <div className="absolute inset-x-1 top-1.5 h-14 rounded-[10px] border border-border bg-material-paper transition-transform duration-200 group-hover:translate-y-0 group-focus-visible:translate-y-0" />
-          <div className="absolute inset-x-0 top-0 h-14 rounded-[10px] border border-border bg-material-paper transition-transform duration-200 group-hover:translate-x-2 group-hover:-translate-y-1 group-hover:rotate-[4deg] group-focus-visible:translate-x-2 group-focus-visible:-translate-y-1 group-focus-visible:rotate-[4deg]" />
+          <div
+            className={cn(
+              "absolute inset-x-2 top-3 h-14 rotate-[-6deg] rounded-[10px] border border-border bg-material-paper transition-transform duration-200 group-hover:-translate-x-3 group-hover:-translate-y-1.5 group-hover:rotate-[-12deg] group-focus-visible:-translate-x-3 group-focus-visible:-translate-y-1.5 group-focus-visible:rotate-[-12deg] motion-reduce:group-hover:translate-x-0 motion-reduce:group-hover:translate-y-0 motion-reduce:group-hover:rotate-[-6deg] motion-reduce:group-focus-visible:translate-x-0 motion-reduce:group-focus-visible:translate-y-0 motion-reduce:group-focus-visible:rotate-[-6deg]",
+              SHADOW_REST,
+              SHADOW_HOVER,
+            )}
+          />
+          <div
+            className={cn(
+              "absolute inset-x-1 top-1.5 h-14 rounded-[10px] border border-border bg-material-paper transition-transform duration-200 group-hover:-translate-y-1 group-focus-visible:-translate-y-1 motion-reduce:group-hover:translate-y-0 motion-reduce:group-focus-visible:translate-y-0",
+              SHADOW_REST,
+              SHADOW_HOVER,
+            )}
+          />
+          <div
+            className={cn(
+              "absolute inset-x-0 top-0 h-14 rotate-[6deg] rounded-[10px] border border-border bg-material-paper transition-transform duration-200 group-hover:translate-x-3 group-hover:-translate-y-1.5 group-hover:rotate-[12deg] group-focus-visible:translate-x-3 group-focus-visible:-translate-y-1.5 group-focus-visible:rotate-[12deg] motion-reduce:group-hover:translate-x-0 motion-reduce:group-hover:translate-y-0 motion-reduce:group-hover:rotate-[6deg] motion-reduce:group-focus-visible:translate-x-0 motion-reduce:group-focus-visible:translate-y-0 motion-reduce:group-focus-visible:rotate-[6deg]",
+              SHADOW_REST,
+              SHADOW_HOVER,
+            )}
+          />
         </div>
       );
     case "resume":
       return (
         <div
-          className="relative h-32 w-full rounded-[10px] border border-border bg-material-paper p-3 shadow-sm transition-all duration-200 group-hover:-translate-y-1.5 group-hover:shadow-md group-focus-visible:-translate-y-1.5 group-focus-visible:shadow-md"
+          className={cn(
+            "relative h-36 w-full rotate-[3deg] rounded-[10px] border border-border bg-material-paper p-3 transition-all duration-200 group-hover:-translate-y-1.5 group-hover:rotate-[1deg] group-focus-visible:-translate-y-1.5 group-focus-visible:rotate-[1deg] motion-reduce:group-hover:translate-y-0 motion-reduce:group-hover:rotate-[3deg] motion-reduce:group-focus-visible:translate-y-0 motion-reduce:group-focus-visible:rotate-[3deg]",
+            SHADOW_REST,
+            SHADOW_HOVER,
+          )}
           aria-hidden="true"
         >
-          <div className="h-1.5 w-4/5 rounded bg-border" />
-          <div className="mt-2.5 h-1.5 w-3/5 rounded bg-border" />
-          <div className="mt-2.5 h-1.5 w-full rounded bg-border" />
-          <div className="mt-2.5 h-1.5 w-2/3 rounded bg-border" />
+          <div className="h-[3px] w-2/5 rounded-full bg-accent" />
+          <div className="mt-2.5 h-1.5 w-4/5 rounded bg-border" />
+          <div className="mt-2 h-1.5 w-3/5 rounded bg-border" />
+          <div className="mt-2 h-1.5 w-full rounded bg-border" />
+          <div className="mt-2 h-1.5 w-2/3 rounded bg-border" />
+          <div className="mt-2 h-1.5 w-4/5 rounded bg-border" />
         </div>
       );
     case "ask":
       return (
         <div
-          className="relative rounded-[18px] bg-accent-soft px-3 py-2.5 text-xs text-foreground shadow-sm transition-transform duration-200 group-hover:-translate-y-1.5 group-focus-visible:-translate-y-1.5"
+          className={cn(
+            "relative w-full rounded-[18px] bg-accent-soft px-3.5 py-3 text-xs text-foreground transition-all duration-200 group-hover:-translate-y-1.5 group-focus-visible:-translate-y-1.5 motion-reduce:group-hover:translate-y-0 motion-reduce:group-focus-visible:translate-y-0",
+            SHADOW_REST,
+            SHADOW_HOVER,
+            styles.askBubble,
+          )}
           aria-hidden="true"
         >
-          <p className="line-clamp-2">{askQuestion}</p>
+          <p className="line-clamp-2 leading-snug">{askQuestion}</p>
         </div>
       );
     case "music":
@@ -189,13 +223,15 @@ export function CollectionDesk({ avatarSrc, askQuestion }: CollectionDeskProps) 
       >
         <div className={cn(styles.avatarSlot, "reveal")}>
           <motion.div style={reducedMotion ? undefined : { x: avatarX, y: avatarY }}>
-            <Image
-              src={avatarSrc}
-              alt=""
-              width={112}
-              height={112}
-              className="h-28 w-28 rounded-full border border-border object-cover"
-            />
+            <div className={cn(styles.avatarCard, "rounded-[10px] bg-material-paper p-1.5")}>
+              <Image
+                src={avatarSrc}
+                alt=""
+                width={128}
+                height={128}
+                className="h-32 w-32 rounded-[6px] object-cover"
+              />
+            </div>
           </motion.div>
         </div>
 
