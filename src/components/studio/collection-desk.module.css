@@ -1,0 +1,87 @@
+/* Collection Desk geometry only — colors, radii and typography stay in
+   Tailwind utility classes on the JSX. Mobile-first: objects sit in a plain
+   2-column grid until `md`, where the desk becomes an absolutely positioned
+   scene. */
+
+.scene {
+  perspective: 1000px;
+}
+
+.desk {
+  position: relative;
+  display: grid;
+  grid-template-columns: repeat(2, 1fr);
+  gap: 1rem;
+  width: 100%;
+  padding: 1.5rem;
+  transform-style: preserve-3d;
+}
+
+@media (min-width: 768px) {
+  .desk {
+    display: block;
+    aspect-ratio: 4 / 3;
+    min-height: 320px;
+    padding: 0;
+  }
+}
+
+.avatarSlot {
+  display: none;
+}
+
+@media (min-width: 768px) {
+  .avatarSlot {
+    display: block;
+    position: absolute;
+    top: 1.5rem;
+    left: 1.5rem;
+    z-index: 20;
+  }
+}
+
+.slot {
+  position: static;
+}
+
+@media (min-width: 768px) {
+  .slot {
+    position: absolute;
+  }
+
+  /* Row 1 (top): avatar (left, fixed) · resume (center) · ask (right).
+     Row 2 (bottom): projects (left) · music (center) · photos (right).
+     Row separation keeps every pair clear of the others down to the
+     ~448px desk width that shows up right after the 1024px breakpoint,
+     where the hero switches from stacked to two columns. */
+
+  .slotResume {
+    top: 6%;
+    left: 36%;
+    width: 6rem;
+  }
+
+  .slotAsk {
+    top: 8%;
+    right: 6%;
+    width: 8.5rem;
+  }
+
+  .slotProjects {
+    bottom: 6%;
+    left: 6%;
+    width: 9.5rem;
+  }
+
+  .slotMusic {
+    bottom: 6%;
+    left: 42%;
+    width: 6.5rem;
+  }
+
+  .slotPhotos {
+    bottom: 6%;
+    right: 6%;
+    width: 7.5rem;
+  }
+}
