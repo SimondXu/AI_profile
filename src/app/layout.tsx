@@ -86,8 +86,8 @@ export const metadata: Metadata = {
     title: siteTitle,
     description:
       "Production AI experience and projects spanning agent runtimes, evaluation, memory, and enterprise retrieval.",
-    creator: "@edisonwhale",
-    site: "@edisonwhale",
+    creator: "@simondxu",
+    site: "@simondxu",
   },
   icons: {
     icon: [
@@ -114,7 +114,7 @@ const personJsonLd = {
   url: `${siteUrl}/`,
   sameAs: [
     "https://github.com/SimondXu",
-    "https://linkedin.com/in/edisonwhale",
+    "https://linkedin.com/in/simondxu",
   ],
   worksFor: {
     "@type": "Organization",
