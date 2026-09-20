@@ -1,3 +1,4 @@
+import { ScrollReveal } from "@/components/motion/scroll-reveal";
 import type { Project } from "@/types/portfolio";
 import { ProjectCard } from "./project-card";
 
@@ -15,8 +16,14 @@ interface ProjectGridProps {
 export function ProjectGrid({ projects }: ProjectGridProps) {
   return (
     <div className="grid grid-cols-1 gap-6 sm:grid-cols-2 lg:grid-cols-3 lg:[grid-auto-flow:dense]">
-      {projects.map((project) => (
-        <ProjectCard key={project.slug} project={project} />
+      {projects.map((project, index) => (
+        <ScrollReveal
+          key={project.slug}
+          delay={(index % 3) * 70}
+          className={project.featured ? "lg:col-span-2" : undefined}
+        >
+          <ProjectCard project={project} />
+        </ScrollReveal>
       ))}
     </div>
   );

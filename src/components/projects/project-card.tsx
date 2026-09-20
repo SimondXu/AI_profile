@@ -45,7 +45,7 @@ export function ProjectCard({ project }: ProjectCardProps) {
     <article
       className={cn(
         "group flex flex-col overflow-hidden rounded-[18px] border border-border bg-surface transition-[transform,border-color] duration-200 hover:-translate-y-1 hover:border-input",
-        project.featured && "lg:col-span-2",
+        project.featured && "h-full",
       )}
     >
       {project.featured ? (

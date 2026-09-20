@@ -66,7 +66,7 @@ export function SiteNav() {
   }, [open]);
 
   return (
-    <header className="sticky top-0 z-50 border-b border-border bg-background">
+    <header className="sticky top-0 z-50 border-b border-border/70 bg-background/80 backdrop-blur-md supports-[backdrop-filter]:bg-background/70">
       <div className="mx-auto flex h-16 w-full max-w-6xl items-center justify-between gap-4 px-4 sm:px-6">
         <Link
           href="/"
@@ -122,7 +122,7 @@ export function SiteNav() {
         <nav
           id={menuId}
           aria-label="Primary navigation"
-          className="border-t border-border bg-background md:hidden"
+          className="border-t border-border bg-background/95 backdrop-blur-md md:hidden"
         >
           <ul className="mx-auto flex w-full max-w-6xl flex-col px-4 py-2 sm:px-6">
             {sections.map((section) => {

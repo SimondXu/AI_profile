@@ -9,15 +9,28 @@ import {
 } from "framer-motion";
 import Image from "next/image";
 import Link from "next/link";
-import type { PointerEvent as ReactPointerEvent } from "react";
+import {
+  type PointerEvent as ReactPointerEvent,
+  useCallback,
+  useEffect,
+  useRef,
+  useState,
+} from "react";
+import { WAVE_EVENT } from "@/components/site/shortcuts";
 import { visibleSections } from "@/content/site-sections";
 import { cn } from "@/lib/utils";
 import styles from "./collection-desk.module.css";
 
 interface CollectionDeskProps {
   avatarSrc: string;
+  /** What the speech bubble shows at rest. */
   askQuestion: string;
+  /** Real lines (fun facts, beliefs) the avatar cycles through when tapped. */
+  lines?: ReadonlyArray<string>;
 }
+
+const WAVE_MS = 900;
+const WAVE_LINE = "Hi! Ask me anything.";
 
 type DeskObjectId = "projects" | "resume" | "ask" | "music" | "photos";
 
@@ -161,10 +174,41 @@ const OBJECT_META: Record<DeskObjectId, { label: string; href: string }> = {
  * objects. Only sections marked `visible` in site-sections.ts render, so
  * empty Music/Photos routes stay off the desk until they have content.
  */
-export function CollectionDesk({ avatarSrc, askQuestion }: CollectionDeskProps) {
+export function CollectionDesk({
+  avatarSrc,
+  askQuestion,
+  lines = [],
+}: CollectionDeskProps) {
   const reducedMotion = useReducedMotion();
   const visibleIds = new Set(visibleSections().map((section) => section.id));
   const objects = OBJECT_ORDER.filter((id) => visibleIds.has(id));
+
+  // The avatar "talks": tapping it cycles real lines from the config; typing
+  // "hi" anywhere (see Shortcuts) makes the objects wave and greets back.
+  const [bubble, setBubble] = useState(askQuestion);
+  const [waving, setWaving] = useState(false);
+  const lineIndex = useRef(-1);
+  const waveTimer = useRef<number | null>(null);
+
+  const sayNextLine = useCallback(() => {
+    if (lines.length === 0) return;
+    lineIndex.current = (lineIndex.current + 1) % lines.length;
+    setBubble(lines[lineIndex.current]);
+  }, [lines]);
+
+  useEffect(() => {
+    const handleWave = () => {
+      setBubble(WAVE_LINE);
+      setWaving(true);
+      if (waveTimer.current) window.clearTimeout(waveTimer.current);
+      waveTimer.current = window.setTimeout(() => setWaving(false), WAVE_MS);
+    };
+    window.addEventListener(WAVE_EVENT, handleWave);
+    return () => {
+      window.removeEventListener(WAVE_EVENT, handleWave);
+      if (waveTimer.current) window.clearTimeout(waveTimer.current);
+    };
+  }, []);
 
   const mx = useMotionValue(0);
   const my = useMotionValue(0);
@@ -223,17 +267,31 @@ export function CollectionDesk({ avatarSrc, askQuestion }: CollectionDeskProps) 
       >
         <div className={cn(styles.avatarSlot, "reveal")}>
           <motion.div style={reducedMotion ? undefined : { x: avatarX, y: avatarY }}>
-            <div className={cn(styles.avatarCard, "rounded-[10px] bg-material-paper p-1.5")}>
+            <button
+              type="button"
+              onClick={sayNextLine}
+              aria-label={lines.length ? "Tap for a fun fact about Simon" : "Simon's avatar"}
+              title={lines.length ? "Tap for a fun fact" : undefined}
+              className={cn(
+                styles.avatarCard,
+                "block rounded-[10px] bg-material-paper p-1.5 transition-transform duration-200 hover:-translate-y-1 hover:rotate-[-2deg] focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-ring motion-reduce:hover:translate-y-0 motion-reduce:hover:rotate-0",
+                waving && "wave",
+              )}
+            >
               <Image
                 src={avatarSrc}
                 alt=""
                 width={128}
                 height={128}
+                priority
                 className="h-32 w-32 rounded-[6px] object-cover"
               />
-            </div>
+            </button>
           </motion.div>
         </div>
+        <p className="sr-only" aria-live="polite">
+          {bubble}
+        </p>
 
         {objects.map((id, index) => {
           const meta = OBJECT_META[id];
@@ -247,8 +305,12 @@ export function CollectionDesk({ avatarSrc, askQuestion }: CollectionDeskProps) 
               style={{ animationDelay: `${delayMs}ms` }}
             >
               <motion.div style={reducedMotion ? undefined : { x: translate.x, y: translate.y }}>
-                <Link href={meta.href} className={linkClass}>
-                  <ObjectVisual id={id} askQuestion={askQuestion} />
+                <Link
+                  href={meta.href}
+                  className={cn(linkClass, waving && "wave")}
+                  style={waving ? { ["--wave-delay" as string]: `${index * 90}ms` } : undefined}
+                >
+                  <ObjectVisual id={id} askQuestion={bubble} />
                   <span className="text-sm font-medium text-foreground">
                     {meta.label}
                   </span>

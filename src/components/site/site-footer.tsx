@@ -53,7 +53,13 @@ export function SiteFooter() {
               LinkedIn
             </a>
           </div>
-          <p className="text-xs">Built with Next.js</p>
+          <p className="text-xs">
+            Built with Next.js · press{" "}
+            <kbd className="rounded-[6px] border border-border bg-surface px-1.5 py-0.5 font-mono text-[11px] text-foreground">
+              ?
+            </kbd>{" "}
+            for shortcuts
+          </p>
         </div>
       </div>
     </footer>
