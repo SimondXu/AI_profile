@@ -90,3 +90,16 @@ src/content/music.ts / photos.ts   只读空数组 + 类型（字段按基线 ar
 - `/photos`：灯箱空态（`light-table.tsx`）：光斑跟随指针、六格未曝光胶片、三张空白相纸 hover 扇开、快门彩蛋（只闪光 + 计数）。
 - 两页仍 `noindex`、导航 `visible=false`。
 - 验收：tsc/lint/build 绿；axe 明暗 0 违规；1440/390 无横向溢出；reduced-motion 下盘面不转；页面加载不注入 YouTube 脚本（Playwright 断言）；真实播放/切歌/shuffle/深链在 Chrome 中验证；被墙场景用 route abort 模拟（脚本被拦、embed host 被拦两种）验证错误卡。未能实机验证 101/150 路径（手头没有禁止外嵌的视频）。
+
+### 7.4 v2.5 打磨（2026-09-20，用户要求"更互动、动画更好看、审美更高级"）
+- **换片编排**：`select()` 走 lift(420ms) → 旧片下滑淡出(220) → 新片升入(320) → drop(520) 的状态机（`phase` / `swap`），YouTube 在 swap 点开始 load，唱臂落下时正好开播；reduced-motion 下全部时长为 0。
+- **唱臂 = 进度**：针落后角度从外圈 14° 随进度走到内圈 24°，250ms 轮询间用 400ms linear 过渡；拖唱臂 seek（pointer 角度反推 progress，`setPointerCapture`）；细进度条保留给键盘/读屏。
+- **盘面物理**：rAF 驱动 `rotate()`，指数逼近目标转速（起转 τ=0.4s、减速 τ=0.6s）；盘边频闪点 33⅓ 静止、45 缓慢漂移。
+- **封套调色板收敛**：`sleeve-art.ts` 只用 6 组站点材质双色（纸/钴蓝、黑胶/木、钴蓝/黑胶、纸/墨、氧化红/纸、芥末/黑胶），图案与角度按 id 播种；`sleeveGlow(id)` 给出代表色。
+- **环境光**：播放时 `html[data-record-playing]` + `--record-glow` 让 `.atmosphere` 极光换成该唱片颜色并调亮（opacity 1.6s 过渡）。
+- **Monitor**：播放器创建前显示该唱片的大封套 + "via YouTube" chip；创建后**替换**为播放器（不覆盖）；出错时播放器 `visibility:hidden`，错误卡占位——满足"不得遮挡播放器"。
+- **底板**：明暗两套都是炭黑底板 + 木色包边，`.deck` 内重定义语义 token（foreground/surface/border/accent…），Tailwind utilities 自动继承。
+- **UI 音效**：`needle-sound.ts` 合成的针落/抬针（thump + 爆豆），`sfx on/off` 开关持久化到 localStorage；不是假音乐。
+- **Crate 翻箱**：封套重叠只露 3.4rem 书脊（竖排标题/艺人），hover/focus 抬起并把后面的推开 5.4rem（两个缺口可同时存在，用 CSS 变量相加）；当前唱片常驻抬起；鼠标可按住拖动（超过 6px 才接管 pointer capture，点击不受影响）；触屏原生滚动。
+- 移动端唱盘缩到 12rem，标签文字隐藏只留封套图。
+- 验收：tsc/lint/build 绿；axe 明暗 0 违规；1440/390 无溢出；headless Chromium 实测：落针→播放、从 crate 换片全程 phase 序列正确、盘面减速/加速数值正确、拖唱臂 seek、抬针；reduced-motion 下盘面无动画。

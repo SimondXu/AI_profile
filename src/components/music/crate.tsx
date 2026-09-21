@@ -3,6 +3,7 @@
 import { ChevronLeft, ChevronRight, Search, X } from "lucide-react";
 import {
   type KeyboardEvent,
+  type PointerEvent as ReactPointerEvent,
   useEffect,
   useMemo,
   useRef,
@@ -24,16 +25,19 @@ interface CrateProps {
 }
 
 const MIN_CHIP_COUNT = 3;
+const DRAG_THRESHOLD_PX = 6;
 
 function primaryArtist(artist: string): string {
   return artist.split(/,|\/|&| feat\. /i)[0].trim();
 }
 
 /**
- * The crate: every record in the playlist as a sleeve you flip through.
- * Horizontal, snap-scrolled, keyboard-navigable (←/→ moves between sleeves,
- * Enter puts one on the deck). Filter by text or by the artists that show up
- * most — both derived from the data, nothing hand-written.
+ * The crate: every record in the playlist as a sleeve standing in a box,
+ * overlapping the way records do so only the spine shows until you flip to
+ * it. Hover or focus pulls a sleeve up and pushes the ones behind it open;
+ * click puts it on the deck. Mouse users can grab and drag the row; touch
+ * scrolls natively; ←/→ walks the sleeves. Filters (text, top artists) are
+ * derived from the data, nothing hand-written.
  */
 export function Crate({
   name,
@@ -46,6 +50,9 @@ export function Crate({
   const [query, setQuery] = useState("");
   const [artistFilter, setArtistFilter] = useState<string | null>(null);
   const listRef = useRef<HTMLUListElement | null>(null);
+  const dragRef = useRef<{ x: number; scroll: number; moved: boolean } | null>(
+    null,
+  );
 
   const artistChips = useMemo(() => {
     const counts = new Map<string, number>();
@@ -95,7 +102,7 @@ export function Crate({
     const list = listRef.current;
     if (!list) return;
     list.scrollBy({
-      left: direction * list.clientWidth * 0.8,
+      left: direction * list.clientWidth * 0.7,
       behavior: "smooth",
     });
   };
@@ -121,6 +128,45 @@ export function Crate({
       block: "nearest",
       behavior: "smooth",
     });
+  };
+
+  // Grab-to-scroll for mouse. Pointer capture is only taken once the drag
+  // passes the threshold, so a plain click still reaches the sleeve button.
+  const onPointerDown = (event: ReactPointerEvent<HTMLUListElement>) => {
+    if (event.pointerType !== "mouse" || event.button !== 0) return;
+    const list = listRef.current;
+    if (!list) return;
+    dragRef.current = {
+      x: event.clientX,
+      scroll: list.scrollLeft,
+      moved: false,
+    };
+  };
+  const onPointerMove = (event: ReactPointerEvent<HTMLUListElement>) => {
+    const drag = dragRef.current;
+    const list = listRef.current;
+    if (!drag || !list) return;
+    const dx = event.clientX - drag.x;
+    if (!drag.moved) {
+      if (Math.abs(dx) < DRAG_THRESHOLD_PX) return;
+      drag.moved = true;
+      list.dataset.dragging = "";
+      list.setPointerCapture(event.pointerId);
+    }
+    list.scrollLeft = drag.scroll - dx;
+  };
+  const onPointerUp = (event: ReactPointerEvent<HTMLUListElement>) => {
+    const list = listRef.current;
+    const drag = dragRef.current;
+    dragRef.current = null;
+    if (!drag || !list || !drag.moved) return;
+    list.releasePointerCapture(event.pointerId);
+    // Leave the flag through the click event so the sleeve ignores it.
+    requestAnimationFrame(() => delete list.dataset.dragging);
+  };
+  const onSleeveClick = (id: string) => {
+    if (listRef.current?.dataset.dragging !== undefined) return;
+    onSelect(id);
   };
 
   return (
@@ -158,81 +204,93 @@ export function Crate({
         </label>
       </div>
 
-      {artistChips.length ? (
-        <div
-          className="flex flex-wrap items-center gap-2"
-          role="group"
-          aria-label="Filter by artist"
-        >
-          {artistChips.map(([artist, count]) => {
-            const active = artistFilter === artist;
-            return (
-              <button
-                key={artist}
-                type="button"
-                aria-pressed={active}
-                onClick={() => setArtistFilter(active ? null : artist)}
-                className={cn(
-                  "inline-flex items-center gap-1.5 rounded-full border px-3 py-1 text-[13px] transition-colors focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-ring",
-                  active
-                    ? "border-accent bg-accent-soft text-foreground"
-                    : "border-border bg-surface text-muted-foreground hover:border-input hover:text-foreground",
-                )}
-              >
-                {artist}
-                <span className="font-mono text-[11px]">×{count}</span>
-                {active ? <X className="h-3 w-3" aria-hidden="true" /> : null}
-              </button>
-            );
-          })}
+      <div className="flex flex-wrap items-center justify-between gap-3">
+        {artistChips.length ? (
+          <div
+            className="flex flex-wrap items-center gap-2"
+            role="group"
+            aria-label="Filter by artist"
+          >
+            {artistChips.map(([artist, count]) => {
+              const active = artistFilter === artist;
+              return (
+                <button
+                  key={artist}
+                  type="button"
+                  aria-pressed={active}
+                  onClick={() => setArtistFilter(active ? null : artist)}
+                  className={cn(
+                    "inline-flex items-center gap-1.5 rounded-full border px-3 py-1 text-[13px] transition-colors focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-ring",
+                    active
+                      ? "border-accent bg-accent-soft text-foreground"
+                      : "border-border bg-surface text-muted-foreground hover:border-input hover:text-foreground",
+                  )}
+                >
+                  {artist}
+                  <span className="font-mono text-[11px]">×{count}</span>
+                  {active ? <X className="h-3 w-3" aria-hidden="true" /> : null}
+                </button>
+              );
+            })}
+          </div>
+        ) : (
+          <span />
+        )}
+        <div className="hidden items-center gap-2 sm:flex">
+          <span className="mr-1 font-mono text-[11px] uppercase tracking-[0.18em] text-muted-foreground">
+            flip
+          </span>
+          <button
+            type="button"
+            onClick={() => nudge(-1)}
+            aria-label="Flip back through the crate"
+            className={styles.nudge}
+          >
+            <ChevronLeft className="h-4 w-4" aria-hidden="true" />
+          </button>
+          <button
+            type="button"
+            onClick={() => nudge(1)}
+            aria-label="Flip forward through the crate"
+            className={styles.nudge}
+          >
+            <ChevronRight className="h-4 w-4" aria-hidden="true" />
+          </button>
         </div>
-      ) : null}
+      </div>
 
       {visible.length === 0 ? (
         <p className="py-10 text-center font-mono text-sm text-muted-foreground">
           Nothing in the crate matches “{query}”.
         </p>
       ) : (
-        <div className="relative">
-          <div className="pointer-events-none absolute -top-12 right-0 hidden items-center gap-2 sm:flex">
-            <button
-              type="button"
-              onClick={() => nudge(-1)}
-              aria-label="Flip back through the crate"
-              className={`${styles.nudge} pointer-events-auto`}
-            >
-              <ChevronLeft className="h-4 w-4" aria-hidden="true" />
-            </button>
-            <button
-              type="button"
-              onClick={() => nudge(1)}
-              aria-label="Flip forward through the crate"
-              className={`${styles.nudge} pointer-events-auto`}
-            >
-              <ChevronRight className="h-4 w-4" aria-hidden="true" />
-            </button>
-          </div>
+        <div className={styles.box}>
           <ul
             ref={listRef}
             onKeyDown={onListKeyDown}
+            onPointerDown={onPointerDown}
+            onPointerMove={onPointerMove}
+            onPointerUp={onPointerUp}
+            onPointerCancel={onPointerUp}
             className={styles.strip}
             aria-label="Records"
           >
-            {visible.map((record) => {
+            {visible.map((record, index) => {
               const current = record.id === currentId;
               const playable = isPlayable(record);
               return (
-                <li key={record.id} className={styles.slot}>
+                <li
+                  key={record.id}
+                  className={cn(styles.slot, current && styles.slotCurrent)}
+                  style={{ ["--i" as string]: index }}
+                >
                   <button
                     type="button"
                     data-id={record.id}
                     disabled={!playable}
                     aria-current={current ? "true" : undefined}
-                    onClick={() => onSelect(record.id)}
-                    className={cn(
-                      styles.sleeve,
-                      current && styles.sleeveCurrent,
-                    )}
+                    onClick={() => onSleeveClick(record.id)}
+                    className={styles.sleeve}
                     title={
                       playable
                         ? `Put “${record.title}” on the deck`
@@ -244,6 +302,12 @@ export function Crate({
                       style={sleeveArt(record.id)}
                       aria-hidden="true"
                     />
+                    <span className={styles.spine} aria-hidden="true">
+                      <span className={styles.spineTitle}>{record.title}</span>
+                      <span className={styles.spineArtist}>
+                        {primaryArtist(record.artist)}
+                      </span>
+                    </span>
                     <span className={styles.band}>
                       <span className="line-clamp-2 font-display text-[13px] font-semibold leading-tight">
                         {record.title}

@@ -13,11 +13,19 @@ import {
   Volume2,
   VolumeX,
 } from "lucide-react";
-import { useCallback, useEffect, useMemo, useRef, useState } from "react";
+import {
+  type PointerEvent as ReactPointerEvent,
+  useCallback,
+  useEffect,
+  useMemo,
+  useRef,
+  useState,
+} from "react";
 import { isPlayable, type MusicSelection } from "@/content/music";
 import { cn } from "@/lib/utils";
 import { Crate } from "./crate";
-import { sleeveArt } from "./sleeve-art";
+import { playNeedle } from "./needle-sound";
+import { sleeveArt, sleeveGlow } from "./sleeve-art";
 import {
   createSurfaceNoise,
   type Rpm,
@@ -40,10 +48,22 @@ interface TurntableProps {
 }
 
 type RepeatMode = "off" | "all" | "one";
+/** Tonearm choreography. `idle` means the arm follows `playing`. */
+type Phase = "idle" | "lifting" | "swapping" | "dropping";
+type Swap = "out" | "in" | null;
 
 const BAR_COUNT = 12;
 const IDLE_LEVEL = 0.06;
 const SKIP_AFTER_ERROR_S = 5;
+/** Arm angle over the outer groove and the run-out groove, degrees. */
+const ARM_OUTER = 14;
+const ARM_INNER = 24;
+/** Choreography timings, ms (collapsed to 0 under reduced motion). */
+const T_LIFT = 420;
+const T_OUT = 220;
+const T_IN = 320;
+const T_DROP = 520;
+const SFX_KEY = "deck-sfx";
 
 function formatTime(seconds: number): string {
   if (!Number.isFinite(seconds) || seconds < 0) return "0:00";
@@ -68,6 +88,13 @@ function isTextInput(element: Element | null): boolean {
     tag === "TEXTAREA" ||
     tag === "SELECT" ||
     (element as HTMLElement).isContentEditable
+  );
+}
+
+function prefersReducedMotion(): boolean {
+  return (
+    typeof window !== "undefined" &&
+    window.matchMedia("(prefers-reduced-motion: reduce)").matches
   );
 }
 
@@ -101,9 +128,13 @@ function errorCopy(error: DeckError): { title: string; body: string } {
  *  - empty: no playable records → dropping the needle plays synthesised
  *    surface noise (nothing is fetched) and the meter reads it;
  *  - file: a local /audio/ file through <audio> + Web Audio (meter on);
- *  - youtube: the IFrame Player API in a visible frame (no audio data, so
+ *  - youtube: the IFrame Player API in a visible monitor (no audio data, so
  *    the meter is hidden rather than faked; 45 rpm is disabled).
- * Errors from the source are shown in words, with the reason, never hidden.
+ *
+ * The tonearm is the progress control: it tracks inward as the record plays
+ * and can be dragged to seek. Changing records is a choreographed sequence
+ * (lift → swap → drop) rather than a re-render. Errors from the source are
+ * shown in words, with the reason, in place of the player — never over it.
  */
 export function Turntable({
   crateName,
@@ -126,13 +157,18 @@ export function Turntable({
   const [repeat, setRepeat] = useState<RepeatMode>("off");
   const [playing, setPlaying] = useState(false);
   const [buffering, setBuffering] = useState(false);
+  const [phase, setPhase] = useState<Phase>("idle");
+  const [swap, setSwap] = useState<Swap>(null);
   const [rpm, setRpm] = useState<Rpm>(33);
   const [volume, setVolume] = useState(0.5);
   const [progress, setProgress] = useState(0);
+  const [dragProgress, setDragProgress] = useState<number | null>(null);
   const [duration, setDuration] = useState(0);
   const [error, setError] = useState<DeckError | null>(null);
   const [skipIn, setSkipIn] = useState<number | null>(null);
+  const [engineCreated, setEngineCreated] = useState(false);
   const [engineReady, setEngineReady] = useState(false);
+  const [sfx, setSfx] = useState(true);
 
   const current = currentId ? (byId.get(currentId) ?? null) : null;
   const mode: "empty" | "file" | "youtube" = !current
@@ -144,13 +180,58 @@ export function Turntable({
   const ytRef = useRef<YouTubeEngine | null>(null);
   const audioRef = useRef<HTMLAudioElement | null>(null);
   const frameRef = useRef<HTMLDivElement | null>(null);
+  const recordRef = useRef<HTMLDivElement | null>(null);
+  const armSvgRef = useRef<SVGSVGElement | null>(null);
   const barRefs = useRef<Array<HTMLSpanElement | null>>([]);
   const rafRef = useRef(0);
+  const meterRaf = useRef(0);
+  const timersRef = useRef<number[]>([]);
   /** Whether the next record change should start playing right away. */
   const chainRef = useRef(false);
   // Latest-callback refs so engine events and key handlers never go stale.
   const togglePlayRef = useRef<() => Promise<void>>(async () => {});
   const onEndedRef = useRef<() => void>(() => {});
+  const sfxRef = useRef(true);
+  const volumeRef = useRef(0.5);
+  sfxRef.current = sfx;
+  volumeRef.current = volume;
+
+  // ── UI sound preference ──────────────────────────────────────────────
+  useEffect(() => {
+    try {
+      if (window.localStorage.getItem(SFX_KEY) === "off") setSfx(false);
+    } catch {
+      // Storage may be unavailable; default stays on.
+    }
+  }, []);
+
+  const toggleSfx = () => {
+    setSfx((on) => {
+      try {
+        window.localStorage.setItem(SFX_KEY, on ? "off" : "on");
+      } catch {
+        // Ignore.
+      }
+      return !on;
+    });
+  };
+
+  const cue = useCallback((kind: "drop" | "lift") => {
+    if (sfxRef.current) playNeedle(kind, volumeRef.current);
+  }, []);
+
+  // ── Timers ───────────────────────────────────────────────────────────
+  const clearTimers = () => {
+    timersRef.current.forEach((id) => window.clearTimeout(id));
+    timersRef.current = [];
+  };
+  const after = (ms: number, fn: () => void) => {
+    if (ms <= 0) {
+      fn();
+      return;
+    }
+    timersRef.current.push(window.setTimeout(fn, ms));
+  };
 
   // ── Ordering ─────────────────────────────────────────────────────────
   const neighbour = useCallback(
@@ -199,6 +280,7 @@ export function Turntable({
     if (ytRef.current) return ytRef.current;
     if (!frameRef.current) return null;
     setEngineReady(false);
+    setEngineCreated(true);
     const engine = createYouTubeEngine(frameRef.current, {
       onReady: () => setEngineReady(true),
       onPlaying: () => {
@@ -227,6 +309,15 @@ export function Turntable({
     return engine;
   }, []);
 
+  const pauseEngines = () => {
+    ytRef.current?.pause();
+    audioRef.current?.pause();
+    if (mode === "empty" && noiseRef.current) {
+      noiseRef.current.stop();
+      setPlaying(false);
+    }
+  };
+
   // Load the current record into its engine whenever it changes.
   useEffect(() => {
     if (!current) return;
@@ -241,7 +332,7 @@ export function Turntable({
       // The YouTube script is only injected once someone drops the needle;
       // a cued record on page load stays a static sleeve until then.
       const engine = ytRef.current ?? (autoplay ? ensureYouTube() : null);
-      engine?.setVolume(volume);
+      engine?.setVolume(volumeRef.current);
       engine?.load(current.source.videoId, autoplay);
       if (!autoplay) setPlaying(false);
     } else {
@@ -257,8 +348,6 @@ export function Turntable({
         setPlaying(false);
       }
     }
-    // volume is applied through its own effect; only the record matters here.
-    // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [current, ensureYouTube]);
 
   // Keep the URL shareable without a navigation.
@@ -269,6 +358,12 @@ export function Turntable({
     window.history.replaceState(window.history.state, "", url);
   }, [currentId]);
 
+  // ── Choreography ─────────────────────────────────────────────────────
+  /**
+   * lift (if the needle is down) → slide the old record out → new record in
+   * → drop (if we should play). Engine loading starts at the swap so YouTube
+   * buffers while the arm comes down.
+   */
   const select = useCallback(
     (id: string, autoplay: boolean) => {
       if (!byId.has(id)) return;
@@ -276,11 +371,42 @@ export function Turntable({
         if (autoplay) void togglePlayRef.current();
         return;
       }
-      // chainRef is read by the load effect after the state update lands.
-      chainRef.current = autoplay;
-      setCurrentId(id);
+      clearTimers();
+      const reduced = prefersReducedMotion();
+      const needleDown = playing || phase === "dropping";
+      const lift = needleDown ? (reduced ? 0 : T_LIFT) : 0;
+      const out = reduced ? 0 : T_OUT;
+      const inn = reduced ? 0 : T_IN;
+      const drop = reduced ? 0 : T_DROP;
+
+      if (needleDown) {
+        cue("lift");
+        setPhase("lifting");
+        pauseEngines();
+      }
+      after(lift, () => {
+        setSwap("out");
+        setPhase("swapping");
+        after(out, () => {
+          chainRef.current = autoplay;
+          setCurrentId(id);
+          setSwap("in");
+          after(inn, () => {
+            setSwap(null);
+            if (autoplay) {
+              cue("drop");
+              setPhase("dropping");
+              after(drop, () => setPhase("idle"));
+            } else {
+              setPhase("idle");
+            }
+          });
+        });
+      });
     },
-    [byId, currentId],
+    // pauseEngines / after / clearTimers only touch refs and `mode`.
+    // eslint-disable-next-line react-hooks/exhaustive-deps
+    [byId, currentId, playing, phase, cue],
   );
 
   const step = useCallback(
@@ -306,7 +432,6 @@ export function Turntable({
       }
       return;
     }
-    // A source error mid-chain also lands here via the countdown.
     step(1, true);
   };
 
@@ -326,27 +451,20 @@ export function Turntable({
   }, [skipIn, step]);
 
   // ── Transport ────────────────────────────────────────────────────────
-  const togglePlay = async () => {
+  const startEngine = async () => {
     if (mode === "empty") {
       noiseRef.current ??= createSurfaceNoise();
-      const noise = noiseRef.current;
-      if (playing) {
-        noise.stop();
-        setPlaying(false);
-        return;
-      }
-      noise.setVolume(volume);
-      noise.setRpm(rpm);
-      await noise.start();
+      noiseRef.current.setVolume(volume);
+      noiseRef.current.setRpm(rpm);
+      await noiseRef.current.start();
       setPlaying(true);
       return;
     }
-
     if (mode === "youtube" && current?.source.kind === "youtube") {
       if (error?.code === "blocked") {
-        // Retry from scratch: the script may load this time.
         ytRef.current?.dispose();
         ytRef.current = null;
+        setEngineCreated(false);
         setError(null);
         const engine = ensureYouTube();
         engine?.setVolume(volume);
@@ -355,31 +473,21 @@ export function Turntable({
       }
       const engine = ensureYouTube();
       if (!engine) return;
-      if (playing) {
-        engine.pause();
+      setError(null);
+      setSkipIn(null);
+      if (!engineReady) {
+        engine.load(current.source.videoId, true);
+        setBuffering(true);
       } else {
-        setError(null);
-        setSkipIn(null);
-        if (!engineReady) {
-          // First interaction: the player is still loading; queue autoplay.
-          engine.load(current.source.videoId, true);
-          setBuffering(true);
-        } else {
-          engine.play();
-        }
+        engine.play();
       }
       return;
     }
-
     const audio = audioRef.current;
     if (!audio) return;
     fileRef.current ??= createTrackEngine(audio);
     fileRef.current.setVolume(volume);
     await fileRef.current.resume();
-    if (playing) {
-      audio.pause();
-      return;
-    }
     audio.playbackRate = rpm / 33.333;
     try {
       await audio.play();
@@ -387,21 +495,105 @@ export function Turntable({
       setPlaying(false);
     }
   };
+
+  const togglePlay = async () => {
+    clearTimers();
+    const reduced = prefersReducedMotion();
+    if (playing || phase === "dropping") {
+      cue("lift");
+      setPhase("lifting");
+      pauseEngines();
+      after(reduced ? 0 : T_LIFT, () => setPhase("idle"));
+      return;
+    }
+    cue("drop");
+    setPhase("dropping");
+    await startEngine();
+    after(reduced ? 0 : T_DROP, () => setPhase("idle"));
+  };
   togglePlayRef.current = togglePlay;
 
-  const onSeek = (value: number) => {
+  const seekTo = (value: number) => {
     if (!duration) return;
     if (mode === "youtube") ytRef.current?.seek(value * duration);
     else if (audioRef.current) audioRef.current.currentTime = value * duration;
     setProgress(value);
   };
 
+  // ── Tonearm drag → seek ──────────────────────────────────────────────
+  const armAngleFromPointer = (
+    event: ReactPointerEvent<SVGElement>,
+  ): number => {
+    const svg = armSvgRef.current;
+    if (!svg) return ARM_OUTER;
+    const rect = svg.getBoundingClientRect();
+    const x = ((event.clientX - rect.left) / rect.width) * 100;
+    const y = ((event.clientY - rect.top) / rect.height) * 100;
+    // Signed angle (clockwise positive) from the arm's rest vector to the pointer.
+    const vx = x - 88;
+    const vy = y - 12;
+    const rx = 4;
+    const ry = 50;
+    return (Math.atan2(rx * vy - ry * vx, rx * vx + ry * vy) * 180) / Math.PI;
+  };
+  const progressFromAngle = (angle: number) =>
+    Math.min(1, Math.max(0, (angle - ARM_OUTER) / (ARM_INNER - ARM_OUTER)));
+
+  const needleDown = phase === "dropping" || (phase === "idle" && playing);
+  const canDragArm = needleDown && duration > 0 && mode !== "empty";
+
+  const onArmPointerDown = (event: ReactPointerEvent<SVGElement>) => {
+    if (!canDragArm) return;
+    event.currentTarget.setPointerCapture(event.pointerId);
+    setDragProgress(progressFromAngle(armAngleFromPointer(event)));
+  };
+  const onArmPointerMove = (event: ReactPointerEvent<SVGElement>) => {
+    if (dragProgress === null) return;
+    setDragProgress(progressFromAngle(armAngleFromPointer(event)));
+  };
+  const onArmPointerUp = (event: ReactPointerEvent<SVGElement>) => {
+    if (dragProgress === null) return;
+    event.currentTarget.releasePointerCapture(event.pointerId);
+    seekTo(dragProgress);
+    setDragProgress(null);
+  };
+
+  // ── Platter physics (rAF: spins up, coasts down) ─────────────────────
+  useEffect(() => {
+    const record = recordRef.current;
+    if (!record) return;
+    if (prefersReducedMotion()) {
+      record.style.transform = "";
+      return;
+    }
+    const target = playing ? (rpm / 60) * 360 : 0;
+    let velocity = Number(record.dataset.velocity ?? 0);
+    let angle = Number(record.dataset.angle ?? 0);
+    let last = performance.now();
+    const tick = (now: number) => {
+      const dt = Math.min(0.05, (now - last) / 1000);
+      last = now;
+      // Exponential approach: ~1.2 s to spin up, ~1.8 s to coast down.
+      const tau = target > velocity ? 0.4 : 0.6;
+      velocity += (target - velocity) * (1 - Math.exp(-dt / tau));
+      if (target === 0 && velocity < 1) velocity = 0;
+      angle = (angle + velocity * dt) % 360;
+      record.style.transform = `rotate(${angle.toFixed(2)}deg)`;
+      record.dataset.velocity = String(velocity);
+      record.dataset.angle = String(angle);
+      if (velocity > 0 || target > 0)
+        rafRef.current = requestAnimationFrame(tick);
+    };
+    rafRef.current = requestAnimationFrame(tick);
+    return () => cancelAnimationFrame(rafRef.current);
+  }, [playing, rpm]);
+
   // ── Meter / progress loops ───────────────────────────────────────────
   useEffect(() => {
     const node = analyser();
     const bars = barRefs.current;
     if (!playing || !node) {
-      cancelAnimationFrame(rafRef.current);
+      cancelAnimationFrame(meterRaf.current);
       bars.forEach((bar) =>
         bar?.style.setProperty("--level", String(IDLE_LEVEL)),
       );
@@ -415,10 +607,10 @@ export function Turntable({
         const level = Math.min(1, Math.max(IDLE_LEVEL, raw * (1 + i * 0.1)));
         bars[i]?.style.setProperty("--level", level.toFixed(3));
       }
-      rafRef.current = requestAnimationFrame(tick);
+      meterRaf.current = requestAnimationFrame(tick);
     };
-    rafRef.current = requestAnimationFrame(tick);
-    return () => cancelAnimationFrame(rafRef.current);
+    meterRaf.current = requestAnimationFrame(tick);
+    return () => cancelAnimationFrame(meterRaf.current);
   }, [playing, analyser]);
 
   useEffect(() => {
@@ -442,6 +634,21 @@ export function Turntable({
     setProgress(total ? audio.currentTime / total : 0);
   };
 
+  // ── Ambient light: the page glows in the record's colour while it plays ─
+  useEffect(() => {
+    const root = document.documentElement;
+    if (playing && current) {
+      root.style.setProperty("--record-glow", sleeveGlow(current.id));
+      root.setAttribute("data-record-playing", "");
+    } else {
+      root.removeAttribute("data-record-playing");
+    }
+    return () => {
+      root.removeAttribute("data-record-playing");
+      root.style.removeProperty("--record-glow");
+    };
+  }, [playing, current]);
+
   // ── Parameter sync ───────────────────────────────────────────────────
   useEffect(() => {
     noiseRef.current?.setVolume(volume);
@@ -458,16 +665,18 @@ export function Turntable({
     if (mode === "youtube" && rpm !== 33) setRpm(33);
   }, [mode, rpm]);
 
-  // The frame unmounts outside youtube mode; the player must go with it.
+  // The monitor unmounts outside youtube mode; the player must go with it.
   useEffect(() => {
     if (mode === "youtube" || !ytRef.current) return;
     ytRef.current.dispose();
     ytRef.current = null;
     setEngineReady(false);
+    setEngineCreated(false);
   }, [mode]);
 
   useEffect(() => {
     return () => {
+      clearTimers();
       noiseRef.current?.dispose();
       fileRef.current?.dispose();
       ytRef.current?.dispose();
@@ -502,6 +711,9 @@ export function Turntable({
   // ── Render ───────────────────────────────────────────────────────────
   const status = (() => {
     if (error) return "Source error";
+    if (phase === "lifting") return "Lifting";
+    if (phase === "swapping") return "Changing record";
+    if (phase === "dropping") return "Dropping the needle";
     if (mode === "empty")
       return playing ? "Empty deck · surface noise" : "Empty deck";
     if (buffering) return "Buffering";
@@ -517,42 +729,63 @@ export function Turntable({
   const showMeter = mode !== "youtube";
   const canStep = playable.length > 1;
   const copy = error ? errorCopy(error) : null;
+  const shownProgress = dragProgress ?? progress;
+  const armAngle = needleDown
+    ? ARM_OUTER + shownProgress * (ARM_INNER - ARM_OUTER)
+    : 0;
+  const armMotion =
+    dragProgress !== null
+      ? "drag"
+      : phase === "lifting" || phase === "dropping" || !needleDown
+        ? "swing"
+        : "track";
+  const showMonitorVideo = engineCreated && !error;
+  const needleLabel =
+    playing || phase === "dropping" ? "Lift the needle" : "Drop the needle";
 
   return (
     <div className="flex flex-col gap-16">
       <section
         aria-label="Record deck"
         data-playing={playing}
-        className={cn(styles.deck, "p-5 sm:p-8")}
-        style={{ ["--rev" as string]: `${(60 / rpm).toFixed(3)}s` }}
+        data-phase={phase}
+        className={cn(styles.deck, "p-5 sm:p-7 lg:p-8")}
       >
-        <div className="relative grid gap-8 lg:grid-cols-[minmax(0,1fr)_minmax(0,1.1fr)] lg:items-center">
+        <div className="relative grid gap-6 lg:grid-cols-[minmax(0,1fr)_minmax(0,1.05fr)] lg:items-center lg:gap-10">
           {/* Platter */}
           <div className={styles.stage} aria-hidden="true">
             <div className={styles.mat} />
-            <div className={styles.record}>
+            <div className={styles.strobe} data-rpm={rpm} />
+            <div
+              ref={recordRef}
+              className={cn(
+                styles.record,
+                swap === "out" && styles.recordOut,
+                swap === "in" && styles.recordIn,
+              )}
+            >
               <div
                 className={styles.label}
                 style={current ? sleeveArt(current.id) : undefined}
               >
-                <div className={styles.labelInk}>
+                <div className={cn(styles.labelInk, "max-lg:opacity-0")}>
                   {current ? (
                     <>
-                      <p className="line-clamp-2 px-3 font-display text-[13px] font-semibold leading-tight tracking-tight sm:text-sm">
+                      <p className="line-clamp-2 px-3 font-display text-[12px] font-semibold leading-tight tracking-tight lg:text-sm">
                         {current.title}
                       </p>
-                      <p className="line-clamp-1 px-3 font-mono text-[9px] uppercase tracking-[0.2em] opacity-80 sm:text-[10px]">
+                      <p className="line-clamp-1 px-3 font-mono text-[8px] uppercase tracking-[0.2em] opacity-80 lg:text-[10px]">
                         {current.artist}
                       </p>
                     </>
                   ) : (
                     <>
-                      <p className="font-mono text-[9px] uppercase leading-relaxed tracking-[0.2em] sm:text-[10px]">
+                      <p className="font-mono text-[8px] uppercase leading-relaxed tracking-[0.2em] lg:text-[10px]">
                         No record
                         <br />
                         loaded
                       </p>
-                      <p className="font-mono text-[9px] uppercase tracking-[0.2em] opacity-70 sm:text-[10px]">
+                      <p className="font-mono text-[8px] uppercase tracking-[0.2em] opacity-70 lg:text-[10px]">
                         side —
                       </p>
                     </>
@@ -562,11 +795,19 @@ export function Turntable({
             </div>
             <div className={styles.spindle} />
             <svg
+              ref={armSvgRef}
               className={styles.arm}
               viewBox="0 0 100 100"
-              aria-hidden="true"
+              data-motion={armMotion}
+              style={{ ["--arm-angle" as string]: `${armAngle.toFixed(2)}deg` }}
             >
-              <g className={styles.armPivot}>
+              <g
+                className={cn(styles.armPivot, canDragArm && styles.armGrab)}
+                onPointerDown={onArmPointerDown}
+                onPointerMove={onArmPointerMove}
+                onPointerUp={onArmPointerUp}
+                onPointerCancel={onArmPointerUp}
+              >
                 <line
                   x1="88"
                   y1="12"
@@ -600,14 +841,22 @@ export function Turntable({
                 </g>
                 <circle cx="88" cy="12" r="6.5" className={styles.pivotBase} />
                 <circle cx="88" cy="12" r="3.2" className={styles.pivotCap} />
+                {/* Generous invisible hit area for dragging. */}
+                <line
+                  x1="88"
+                  y1="12"
+                  x2="92"
+                  y2="66"
+                  className={styles.armHit}
+                />
               </g>
             </svg>
           </div>
 
           {/* Controls */}
           <div className="flex min-w-0 flex-col gap-5">
-            <div className="flex flex-wrap items-center gap-3 font-mono text-[11px] uppercase tracking-[0.18em] text-muted-foreground">
-              <span className={styles.strobe} aria-hidden="true" />
+            <div className="flex flex-wrap items-center gap-x-3 gap-y-1 font-mono text-[11px] uppercase tracking-[0.18em] text-muted-foreground">
+              <span className={styles.lamp} aria-hidden="true" />
               <span aria-live="polite">{status}</span>
               <span aria-hidden="true">·</span>
               <span>{rpm === 33 ? "33⅓" : "45"} rpm</span>
@@ -617,12 +866,36 @@ export function Turntable({
                   <span>via YouTube</span>
                 </>
               ) : null}
+              <button
+                type="button"
+                onClick={toggleSfx}
+                aria-pressed={sfx}
+                className="ml-auto rounded-[6px] px-1.5 py-0.5 font-mono text-[11px] uppercase tracking-[0.18em] text-muted-foreground hover:text-foreground focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-ring"
+              >
+                sfx {sfx ? "on" : "off"}
+              </button>
             </div>
 
-            {/* The visible YouTube frame doubles as the record sleeve. */}
-            {mode === "youtube" ? (
-              <div className={styles.sleeveFrame}>
-                <div ref={frameRef} className={styles.video} />
+            {/* Monitor: the record's sleeve until the player exists, then the
+                visible YouTube frame; an error takes the frame's place. */}
+            {mode === "youtube" && current ? (
+              <div className={styles.monitor}>
+                <div
+                  ref={frameRef}
+                  className={cn(
+                    styles.video,
+                    !showMonitorVideo && styles.videoHidden,
+                  )}
+                />
+                {!engineCreated && !error ? (
+                  <div
+                    className={styles.monitorArt}
+                    style={sleeveArt(current.id)}
+                    aria-hidden="true"
+                  >
+                    <span className={styles.monitorChip}>via YouTube</span>
+                  </div>
+                ) : null}
                 {copy && error ? (
                   <div className={styles.errorCard} role="alert">
                     <p className="font-display text-base font-semibold leading-tight text-foreground">
@@ -665,32 +938,24 @@ export function Turntable({
                       ) : null}
                     </div>
                   </div>
-                ) : !engineReady ? (
-                  <div className={styles.frameHint} aria-hidden="true">
-                    <span className="font-mono text-[11px] uppercase tracking-[0.18em]">
-                      {playing || buffering
-                        ? "Loading YouTube…"
-                        : "Drop the needle to load the player"}
-                    </span>
-                  </div>
                 ) : null}
               </div>
             ) : null}
 
-            <div>
+            <div className={cn(styles.title, swap && styles.titleSwap)}>
               {current ? (
                 <>
-                  <h2 className="font-display text-[26px] font-semibold leading-tight tracking-tight text-foreground">
+                  <h2 className="font-display text-[26px] font-semibold leading-[1.1] tracking-tight text-foreground lg:text-[30px]">
                     {current.title}
                   </h2>
-                  <p className="mt-1 text-base text-muted-foreground">
+                  <p className="mt-1.5 text-base text-muted-foreground">
                     {current.artist}
                     {current.album ? (
                       <span className="opacity-70"> · {current.album}</span>
                     ) : null}
                   </p>
                   {current.note ? (
-                    <p className="mt-3 max-w-prose text-[15px] leading-relaxed text-foreground/85">
+                    <p className="mt-3 max-w-prose text-[14px] leading-relaxed text-foreground/80">
                       {current.note}
                     </p>
                   ) : null}
@@ -724,7 +989,7 @@ export function Turntable({
             ) : null}
 
             {/* Transport */}
-            <div className="flex flex-wrap items-center gap-3">
+            <div className="flex flex-wrap items-center gap-2.5">
               {canStep ? (
                 <button
                   type="button"
@@ -740,14 +1005,14 @@ export function Turntable({
                 type="button"
                 onClick={() => void togglePlay()}
                 aria-pressed={playing}
-                className="inline-flex h-12 items-center gap-2.5 rounded-full bg-foreground px-5 font-medium text-background shadow-[0_10px_24px_-12px_rgba(0,0,0,0.6)] transition hover:-translate-y-0.5 focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-ring motion-reduce:hover:translate-y-0"
+                className={styles.needleButton}
               >
-                {playing ? (
+                {playing || phase === "dropping" ? (
                   <Pause className="h-4 w-4" aria-hidden="true" />
                 ) : (
                   <Play className="h-4 w-4" aria-hidden="true" />
                 )}
-                {playing ? "Lift the needle" : "Drop the needle"}
+                {needleLabel}
               </button>
 
               {canStep ? (
@@ -760,6 +1025,7 @@ export function Turntable({
                   >
                     <SkipForward className="h-4 w-4" aria-hidden="true" />
                   </button>
+                  <span className={styles.divider} aria-hidden="true" />
                   <button
                     type="button"
                     onClick={toggleShuffle}
@@ -794,31 +1060,31 @@ export function Turntable({
               ) : null}
             </div>
 
+            {/* Position: the tonearm is the visual control; this is the accessible one. */}
             {hasRecords ? (
-              <label className="flex flex-col gap-2">
-                <span className="flex justify-between font-mono text-[11px] tabular-nums text-muted-foreground">
-                  <span>{formatTime(progress * duration)}</span>
-                  <span className="sr-only">Position</span>
-                  <span>{formatTime(duration)}</span>
+              <label className="flex items-center gap-3 font-mono text-[11px] tabular-nums text-muted-foreground">
+                <span className="w-9">
+                  {formatTime(shownProgress * duration)}
                 </span>
                 <input
                   type="range"
                   min={0}
                   max={1000}
-                  value={Math.round(progress * 1000)}
+                  value={Math.round(shownProgress * 1000)}
                   disabled={!duration}
                   onChange={(event) =>
-                    onSeek(Number(event.target.value) / 1000)
+                    seekTo(Number(event.target.value) / 1000)
                   }
-                  className={styles.range}
-                  style={{ ["--fill" as string]: `${progress * 100}%` }}
+                  className={cn(styles.range, styles.rangeThin)}
+                  style={{ ["--fill" as string]: `${shownProgress * 100}%` }}
                   aria-label="Position"
                 />
+                <span className="w-9 text-right">{formatTime(duration)}</span>
               </label>
             ) : null}
 
-            <div className="grid gap-5 sm:grid-cols-[minmax(0,1fr)_auto] sm:items-center">
-              <label className="flex items-center gap-3">
+            <div className="flex flex-wrap items-center gap-4">
+              <label className="flex min-w-[10rem] flex-1 items-center gap-3">
                 <VolumeIcon
                   className="h-4 w-4 shrink-0 text-muted-foreground"
                   aria-hidden="true"
@@ -840,7 +1106,7 @@ export function Turntable({
               <div
                 role="radiogroup"
                 aria-label="Platter speed"
-                className="inline-flex justify-self-start rounded-[10px] border border-border bg-surface p-1 font-mono text-xs"
+                className="inline-flex rounded-[10px] border border-border bg-surface p-1 font-mono text-xs"
               >
                 {([33, 45] as const).map((speed) => {
                   const disabled = speed === 45 && mode === "youtube";
@@ -870,12 +1136,6 @@ export function Turntable({
                 })}
               </div>
             </div>
-
-            {hasRecords ? (
-              <p className="font-mono text-[11px] uppercase tracking-[0.18em] text-muted-foreground">
-                keys · space play · n next · p prev · s shuffle
-              </p>
-            ) : null}
           </div>
         </div>
 

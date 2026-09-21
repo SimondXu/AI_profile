@@ -4,6 +4,11 @@ import type { CSSProperties } from "react";
  * Procedural record-sleeve art, seeded by the record id so every sleeve in
  * the crate is distinct and stable across renders. No images are fetched:
  * this deliberately avoids pulling YouTube thumbnails for decoration.
+ *
+ * Colour is *not* random: sleeves draw from six duotones built on the
+ * studio's own materials (paper, cobalt, wood, vinyl) plus two inks that
+ * sit inside that palette, so a crate of 116 reads as one collection.
+ * Only the pattern and its angle are seeded.
  */
 
 function hash(input: string): number {
@@ -15,39 +20,62 @@ function hash(input: string): number {
   return h >>> 0;
 }
 
-const VARIANTS = 4;
+interface Duotone {
+  /** Field colour. */
+  a: string;
+  /** Figure colour. */
+  b: string;
+  /** Representative colour for ambient lighting while this record plays. */
+  glow: string;
+}
+
+const DUOTONES: Duotone[] = [
+  { a: "var(--material-paper)", b: "var(--accent)", glow: "#2e52d4" },
+  { a: "var(--material-vinyl)", b: "var(--material-wood)", glow: "#c9a27a" },
+  { a: "var(--accent)", b: "var(--material-vinyl)", glow: "#2e52d4" },
+  { a: "var(--material-paper)", b: "#1c1c1e", glow: "#8a8f9a" },
+  { a: "#8f3a2f", b: "var(--material-paper)", glow: "#8f3a2f" },
+  { a: "#d3a82a", b: "var(--material-vinyl)", glow: "#d3a82a" },
+];
+
+const PATTERNS = 5;
+
+export function sleeveGlow(id: string): string {
+  return DUOTONES[hash(id) % DUOTONES.length].glow;
+}
 
 export function sleeveArt(id: string): CSSProperties {
   const h = hash(id);
-  const hue = h % 360;
-  const hue2 = (hue + 36 + ((h >>> 8) % 60)) % 360;
-  const variant = (h >>> 16) % VARIANTS;
-  const angle = (h >>> 20) % 180;
+  const { a, b } = DUOTONES[h % DUOTONES.length];
+  const pattern = (h >>> 8) % PATTERNS;
+  const angle = (h >>> 16) % 180;
+  const offset = 30 + ((h >>> 24) % 40);
 
-  const a = `hsl(${hue} 58% 58%)`;
-  const b = `hsl(${hue2} 62% 30%)`;
-  const ink = `hsl(${hue} 30% 14%)`;
-
-  switch (variant) {
+  switch (pattern) {
     case 0:
-      // Rings, like a label seen through the sleeve cut-out.
+      // Concentric rings, off-centre — a label seen through the cut-out.
       return {
-        background: `repeating-radial-gradient(circle at 62% 42%, ${a} 0 6px, ${b} 6px 12px)`,
+        background: `repeating-radial-gradient(circle at ${offset}% 40%, ${b} 0 7px, ${a} 7px 16px)`,
       };
     case 1:
-      // Diagonal bands.
+      // Wide bands.
       return {
-        background: `repeating-linear-gradient(${angle}deg, ${a} 0 14px, ${b} 14px 28px, ${ink} 28px 30px)`,
+        background: `repeating-linear-gradient(${angle}deg, ${a} 0 18px, ${b} 18px 34px)`,
       };
     case 2:
-      // Halves with a sun.
+      // A sun over a horizon.
       return {
-        background: `radial-gradient(circle at 70% 30%, ${a} 0 22%, transparent 23%), linear-gradient(${angle}deg, ${b} 0 55%, ${ink} 55% 100%)`,
+        background: `radial-gradient(circle at ${offset}% 34%, ${b} 0 21%, transparent 22%), linear-gradient(180deg, ${a} 0 62%, ${b} 62% 100%)`,
+      };
+    case 3:
+      // Halftone dots on a field.
+      return {
+        background: `radial-gradient(circle, ${b} 0 2.2px, transparent 2.8px) 0 0 / 11px 11px, ${a}`,
       };
     default:
-      // Dot grid on a wash.
+      // A single diagonal split with a thin rule.
       return {
-        background: `radial-gradient(circle, ${ink} 0 2px, transparent 2.5px) 0 0 / 12px 12px, linear-gradient(${angle}deg, ${a}, ${b})`,
+        background: `linear-gradient(${angle}deg, ${a} 0 ${offset}%, ${b} ${offset}% calc(${offset}% + 3px), ${a} calc(${offset}% + 3px) calc(${offset}% + 9px), ${b} calc(${offset}% + 9px) 100%)`,
       };
   }
 }

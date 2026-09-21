@@ -257,6 +257,7 @@ html[data-theme-reveal]::view-transition-new(root) {
   filter: blur(80px);
   opacity: var(--aurora-opacity, 0.22);
   will-change: transform;
+  transition: opacity 1600ms ease;
 }
 
 .atmosphere::before {
@@ -264,7 +265,7 @@ html[data-theme-reveal]::view-transition-new(root) {
   right: -18vmax;
   background: radial-gradient(
     circle at 40% 40%,
-    color-mix(in srgb, var(--accent) 55%, transparent),
+    color-mix(in srgb, var(--record-glow, var(--accent)) 55%, transparent),
     transparent 62%
   );
   animation: aurora-a 44s ease-in-out infinite alternate;
@@ -283,6 +284,17 @@ html[data-theme-reveal]::view-transition-new(root) {
 
 .dark .atmosphere {
   --aurora-opacity: 0.28;
+}
+
+/* Ambient light: while a record plays, the deck sets --record-glow to that
+   record's colour and the aurora turns up. */
+html[data-record-playing] .atmosphere {
+  --aurora-opacity: 0.5;
+}
+
+.dark html[data-record-playing] .atmosphere,
+html.dark[data-record-playing] .atmosphere {
+  --aurora-opacity: 0.6;
 }
 
 @keyframes aurora-a {
@@ -333,7 +345,13 @@ html[data-theme-reveal]::view-transition-new(root) {
 .marquee {
   display: flex;
   overflow: hidden;
-  mask-image: linear-gradient(to right, transparent, black 8%, black 92%, transparent);
+  mask-image: linear-gradient(
+    to right,
+    transparent,
+    black 8%,
+    black 92%,
+    transparent
+  );
 }
 
 .marquee-track {
