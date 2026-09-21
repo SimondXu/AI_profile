@@ -21,6 +21,7 @@ import {
   useRef,
   useState,
 } from "react";
+import { trackEvent } from "@/components/tracking/track-event";
 import { isPlayable, type MusicSelection } from "@/content/music";
 import { cn } from "@/lib/utils";
 import { Crate } from "./crate";
@@ -197,6 +198,23 @@ export function Turntable({
   const volumeRef = useRef(0.5);
   sfxRef.current = sfx;
   volumeRef.current = volume;
+  /** Record id whose first play this page load has already been reported. */
+  const playReportedRef = useRef<string | null>(null);
+
+  // Analytics: one `music_play` per record until the record changes, and a
+  // `music_complete` when it runs to the end. Pauses and scrubbing don't count.
+  useEffect(() => {
+    playReportedRef.current = null;
+  }, [currentId]);
+  useEffect(() => {
+    if (!playing || !current?.source || playReportedRef.current === current.id) return;
+    playReportedRef.current = current.id;
+    trackEvent({
+      type: "music_play",
+      target: current.id,
+      detail: { title: current.title, artist: current.artist, source: current.source.kind },
+    });
+  }, [playing, current]);
 
   // ── UI sound preference ──────────────────────────────────────────────
   useEffect(() => {
@@ -424,6 +442,13 @@ export function Turntable({
   );
 
   onEndedRef.current = () => {
+    if (current?.source) {
+      trackEvent({
+        type: "music_complete",
+        target: current.id,
+        detail: { title: current.title, artist: current.artist, source: current.source.kind },
+      });
+    }
     if (repeat === "one") {
       if (mode === "youtube") {
         ytRef.current?.seek(0);

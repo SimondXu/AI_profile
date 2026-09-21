@@ -1,5 +1,5 @@
 import Link from "next/link";
-import { Activity, ArrowUpRight, Globe2, LogOut, MessageSquareText, MousePointer2, Users } from "lucide-react";
+import { Activity, ArrowUpRight, Disc3, ExternalLink, Globe2, LogOut, MessageSquareText, MousePointer2, Users } from "lucide-react";
 import { logoutTracking } from "@/app/tracking/actions";
 import type { TrackingFilters } from "@/lib/tracking/repository";
 
@@ -67,7 +67,7 @@ function FilterBar({ filters, countries, networks }: { filters: TrackingFilters;
     <label>Range<select name="range" defaultValue={filters.range}><option value="24h">24 hours</option><option value="7d">7 days</option><option value="30d">30 days</option><option value="90d">90 days</option></select></label>
     <label>Country<select name="country" defaultValue={filters.country ?? ""}><option value="">All countries</option>{countries.filter((item) => item.code).map((item) => <option key={item.code} value={item.code ?? ""}>{item.label}</option>)}</select></label>
     <label>Network<select name="network" defaultValue={filters.network ?? ""}><option value="">All networks</option>{networks.filter((item) => item.domain).map((item) => <option key={item.domain} value={item.domain ?? ""}>{item.label}</option>)}</select></label>
-    <label>Activity<select name="event" defaultValue={filters.eventType ?? "all"}><option value="all">All activity</option><option value="page_view">Page views</option><option value="chat_prompt">Prompts</option><option value="resume_download">Resume downloads</option></select></label>
+    <label>Activity<select name="event" defaultValue={filters.eventType ?? "all"}><option value="all">All activity</option><option value="page_view">Page views</option><option value="chat_prompt">Prompts</option><option value="resume_download">Resume downloads</option><option value="music_play">Music plays</option><option value="music_complete">Music completes</option><option value="outbound_click">Outbound clicks</option></select></label>
     <label className="tracking-filter-search">Question search<input name="q" defaultValue={filters.search ?? ""} placeholder="Search decrypted prompts" maxLength={120} /></label>
     <button type="submit" className="tracking-filter-button">Apply</button>
   </form>;
@@ -85,6 +85,8 @@ export function TrackingDashboard({ data, filters }: { data: DashboardData; filt
       <MetricCard label="Sessions" value={data.kpis.uniqueSessions} detail={`${formatNumber(data.kpis.uniqueIps)} unique IPs`} icon={Users} />
       <MetricCard label="Chat sessions" value={data.kpis.chatSessions} detail={`${data.kpis.chatUseRate}% of sessions`} icon={MessageSquareText} />
       <MetricCard label="Questions" value={data.kpis.promptCount} detail="User prompts only" icon={Activity} />
+      <MetricCard label="Music plays" value={data.kpis.playCount} detail={`${data.kpis.musicUseRate}% of sessions · ${formatNumber(data.kpis.completeCount)} finished`} icon={Disc3} />
+      <MetricCard label="Outbound clicks" value={data.kpis.clickCount} detail="Links leaving the site" icon={ExternalLink} />
     </section>
     <section className="tracking-panel tracking-trend-panel">
       <div className="tracking-panel-head"><div><p className="tracking-section-label">VOLUME</p><h2>Activity trend</h2></div><span>{filters.range}</span></div>
@@ -95,10 +97,12 @@ export function TrackingDashboard({ data, filters }: { data: DashboardData; filt
       <section className="tracking-panel"><div className="tracking-panel-head"><div><p className="tracking-section-label">ACQUISITION</p><h2>Sources</h2></div></div><DistributionList items={data.sources} label="sources" /></section>
       <section className="tracking-panel"><div className="tracking-panel-head"><div><p className="tracking-section-label">LOCATION</p><h2>Countries</h2></div><Globe2 size={16} strokeWidth={1.6} /></div><DistributionList items={data.countries} label="countries" /></section>
       <section className="tracking-panel"><div className="tracking-panel-head"><div><p className="tracking-section-label">NETWORK</p><h2>Possible organizations</h2></div><span className="tracking-estimate">Estimated</span></div><DistributionList items={data.networks} label="networks" /></section>
+      <section className="tracking-panel"><div className="tracking-panel-head"><div><p className="tracking-section-label">MUSIC</p><h2>Top records</h2></div><span>Plays · finished</span></div><DistributionList items={data.topTracks.map((track) => ({ label: `${track.label} (${track.completes} finished)`, count: track.count }))} label="plays" /></section>
+      <section className="tracking-panel"><div className="tracking-panel-head"><div><p className="tracking-section-label">EXIT</p><h2>Outbound links</h2></div></div><DistributionList items={data.topLinks} label="outbound clicks" /></section>
     </section>
     <section className="tracking-panel tracking-table-panel">
       <div className="tracking-panel-head"><div><p className="tracking-section-label">VISITORS</p><h2>Recent sessions</h2></div><span>{formatNumber(data.sessions.length)} shown</span></div>
-      {data.sessions.length ? <div className="tracking-table-scroll"><table><thead><tr><th>Visitor</th><th>Location / network</th><th>Device</th><th>Last activity</th><th>Views</th><th>Prompts</th><th>Downloads</th><th><span className="sr-only">Detail</span></th></tr></thead><tbody>{data.sessions.map((session) => <tr key={session.id}><td><strong>{session.ip}</strong><small>First {formatDate(session.firstSeenAt)}</small></td><td><strong>{session.country}</strong><small>{session.network}</small></td><td>{session.device}</td><td>{formatDate(session.lastSeenAt)}</td><td>{session.pages}</td><td>{session.prompts}</td><td>{session.downloads}</td><td><Link href={`/tracking/session/${session.id}`} className="tracking-detail-link" aria-label={`Open details for ${session.ip}`}><ArrowUpRight size={16} strokeWidth={1.7} /></Link></td></tr>)}</tbody></table></div> : <p className="tracking-empty">No visitor sessions match these filters.</p>}
+      {data.sessions.length ? <div className="tracking-table-scroll"><table><thead><tr><th>Visitor</th><th>Location / network</th><th>Device</th><th>Last activity</th><th>Views</th><th>Prompts</th><th>Downloads</th><th>Plays</th><th>Clicks</th><th><span className="sr-only">Detail</span></th></tr></thead><tbody>{data.sessions.map((session) => <tr key={session.id}><td><strong>{session.ip}</strong><small>First {formatDate(session.firstSeenAt)}</small></td><td><strong>{session.country}</strong><small>{session.network}</small></td><td>{session.device}</td><td>{formatDate(session.lastSeenAt)}</td><td>{session.pages}</td><td>{session.prompts}</td><td>{session.downloads}</td><td>{session.plays}</td><td>{session.clicks}</td><td><Link href={`/tracking/session/${session.id}`} className="tracking-detail-link" aria-label={`Open details for ${session.ip}`}><ArrowUpRight size={16} strokeWidth={1.7} /></Link></td></tr>)}</tbody></table></div> : <p className="tracking-empty">No visitor sessions match these filters.</p>}
     </section>
     <section className="tracking-panel tracking-table-panel">
       <div className="tracking-panel-head"><div><p className="tracking-section-label">CONVERSATION</p><h2>Questions</h2></div><span>User input only</span></div>

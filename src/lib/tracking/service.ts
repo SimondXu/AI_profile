@@ -3,15 +3,13 @@ import "server-only";
 import { getDeviceDetails, getTrustedClientIp, isBotRequest } from "./client-ip";
 import { encryptTrackingValue, hashIp } from "./crypto";
 import { getRetentionDays, isTrackingEnabled } from "./config";
+import type { InteractionEventType, TrackingEventType } from "./events";
 import { enrichSessionFromIpinfo } from "./ip-enrichment";
 import { cleanupExpiredTracking, writeTrackingEvent } from "./repository";
 import { hasValidTrackingAdminRequest } from "./auth";
 
 const CLEANUP_INTERVAL_MS = 24 * 60 * 60 * 1000;
 let lastCleanupAt = 0;
-const pageViewRateLimits = new Map<string, { count: number; resetAt: number }>();
-const PAGE_VIEW_RATE_LIMIT_WINDOW_MS = 60_000;
-const PAGE_VIEW_RATE_LIMIT_MAX = 120;
 
 type PageViewInput = {
   sessionId: string;
@@ -22,15 +20,19 @@ type PageViewInput = {
   utmCampaign: string | null;
 };
 
+export type InteractionDetail = Record<string, string | number | boolean | null>;
+
 function record(input: Omit<PageViewInput, "referrerHost" | "utmSource" | "utmMedium" | "utmCampaign"> & {
   request: Request;
-  eventType: "page_view" | "chat_prompt" | "resume_download";
+  eventType: TrackingEventType;
   referrerHost?: string | null;
   utmSource?: string | null;
   utmMedium?: string | null;
   utmCampaign?: string | null;
   prompt?: string;
   chatOutcome?: string;
+  target?: string | null;
+  detail?: InteractionDetail | null;
 }) {
   if (
     !isTrackingEnabled() ||
@@ -61,6 +63,8 @@ function record(input: Omit<PageViewInput, "referrerHost" | "utmSource" | "utmMe
       promptCiphertext: input.prompt ? encryptTrackingValue(input.prompt) : null,
       promptLength: input.prompt?.length ?? null,
       chatOutcome: input.chatOutcome ?? "accepted",
+      target: input.target ?? null,
+      detail: input.detail ?? null,
     });
     if (result.isNewSession && !result.hasCachedEnrichment && ip !== "unknown") {
       void enrichSessionFromIpinfo(input.sessionId, ip);
@@ -74,25 +78,33 @@ function record(input: Omit<PageViewInput, "referrerHost" | "utmSource" | "utmMe
   }
 }
 
-function isPageViewRateLimited(request: Request) {
-  const now = Date.now();
-  let key: string | null = null;
-  try {
-    const ip = getTrustedClientIp(request);
-    key = ip === "unknown" ? null : hashIp(ip);
-  } catch {
-    // If configuration is broken, fail closed for collection but never for the page.
-  }
-  if (!key) return false;
-  const existing = pageViewRateLimits.get(key);
-  if (!existing || existing.resetAt <= now) {
-    if (pageViewRateLimits.size > 10_000) pageViewRateLimits.clear();
-    pageViewRateLimits.set(key, { count: 1, resetAt: now + PAGE_VIEW_RATE_LIMIT_WINDOW_MS });
-    return false;
-  }
-  existing.count += 1;
-  return existing.count > PAGE_VIEW_RATE_LIMIT_MAX;
+/** Per-IP sliding window for browser-originated writes. Fails open when the IP is unknown. */
+function createRateLimiter(windowMs: number, max: number) {
+  const buckets = new Map<string, { count: number; resetAt: number }>();
+  return (request: Request) => {
+    let key: string | null = null;
+    try {
+      const ip = getTrustedClientIp(request);
+      key = ip === "unknown" ? null : hashIp(ip);
+    } catch {
+      // If configuration is broken, fail closed for collection but never for the page.
+    }
+    if (!key) return false;
+    const now = Date.now();
+    const existing = buckets.get(key);
+    if (!existing || existing.resetAt <= now) {
+      if (buckets.size > 10_000) buckets.clear();
+      buckets.set(key, { count: 1, resetAt: now + windowMs });
+      return false;
+    }
+    existing.count += 1;
+    return existing.count > max;
+  };
 }
+
+const isPageViewRateLimited = createRateLimiter(60_000, 120);
+const isResumeDownloadRateLimited = createRateLimiter(60_000, 20);
+const isInteractionRateLimited = createRateLimiter(60_000, 60);
 
 export function recordPageView(request: Request, input: PageViewInput) {
   if (hasValidTrackingAdminRequest(request) || isPageViewRateLimited(request)) return;
@@ -114,26 +126,16 @@ export function recordResumeDownload(
   record({ request, eventType: "resume_download", ...input });
 }
 
-const resumeDownloadRateLimits = new Map<string, { count: number; resetAt: number }>();
-const RESUME_DOWNLOAD_RATE_LIMIT_WINDOW_MS = 60_000;
-const RESUME_DOWNLOAD_RATE_LIMIT_MAX = 20;
-
-function isResumeDownloadRateLimited(request: Request) {
-  let key: string | null = null;
-  try {
-    const ip = getTrustedClientIp(request);
-    key = ip === "unknown" ? null : hashIp(ip);
-  } catch {
-    return false;
-  }
-  if (!key) return false;
-  const now = Date.now();
-  const existing = resumeDownloadRateLimits.get(key);
-  if (!existing || existing.resetAt <= now) {
-    if (resumeDownloadRateLimits.size > 10_000) resumeDownloadRateLimits.clear();
-    resumeDownloadRateLimits.set(key, { count: 1, resetAt: now + RESUME_DOWNLOAD_RATE_LIMIT_WINDOW_MS });
-    return false;
-  }
-  existing.count += 1;
-  return existing.count > RESUME_DOWNLOAD_RATE_LIMIT_MAX;
+export function recordInteraction(
+  request: Request,
+  input: {
+    sessionId: string;
+    pathname: string;
+    eventType: InteractionEventType;
+    target: string;
+    detail?: InteractionDetail | null;
+  },
+) {
+  if (hasValidTrackingAdminRequest(request) || isInteractionRateLimited(request)) return;
+  record({ request, ...input });
 }

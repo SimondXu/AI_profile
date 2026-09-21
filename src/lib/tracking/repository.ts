@@ -2,6 +2,7 @@ import "server-only";
 
 import { decryptTrackingValue, maskIp } from "./crypto";
 import { getTrackingDatabase } from "./db";
+import type { TrackingEventType } from "./events";
 
 export type TrackingRange = "24h" | "7d" | "30d" | "90d";
 export const RANGE_MS: Record<TrackingRange, number> = {
@@ -15,7 +16,7 @@ export type TrackingFilters = {
   range: TrackingRange;
   country?: string;
   network?: string;
-  eventType?: "all" | "page_view" | "chat_prompt" | "resume_download";
+  eventType?: "all" | TrackingEventType;
   search?: string;
 };
 
@@ -34,6 +35,8 @@ type SessionRow = {
   pages: number;
   prompts: number;
   downloads: number;
+  plays: number;
+  clicks: number;
 };
 
 function startFor(range: TrackingRange) {
@@ -66,7 +69,7 @@ export function writeTrackingEvent(input: {
   browserFamily: string;
   isBot: boolean;
   isInternal: boolean;
-  eventType: "page_view" | "chat_prompt" | "resume_download";
+  eventType: TrackingEventType;
   pathname: string;
   referrerHost?: string | null;
   utmSource?: string | null;
@@ -75,6 +78,8 @@ export function writeTrackingEvent(input: {
   promptCiphertext?: string | null;
   promptLength?: number | null;
   chatOutcome?: string | null;
+  target?: string | null;
+  detail?: Record<string, string | number | boolean | null> | null;
 }) {
   const database = getTrackingDatabase();
   const now = Date.now();
@@ -137,8 +142,8 @@ export function writeTrackingEvent(input: {
       .prepare(
         `INSERT INTO tracking_events (
           session_id, event_type, pathname, referrer_host, utm_source, utm_medium,
-          utm_campaign, prompt_ciphertext, prompt_length, chat_outcome, occurred_at
-        ) VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?)` ,
+          utm_campaign, prompt_ciphertext, prompt_length, chat_outcome, target, detail, occurred_at
+        ) VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?)`,
       )
       .run(
         input.sessionId,
@@ -151,6 +156,8 @@ export function writeTrackingEvent(input: {
         input.promptCiphertext ?? null,
         input.promptLength ?? null,
         input.chatOutcome ?? null,
+        input.target ?? null,
+        input.detail ? JSON.stringify(input.detail) : null,
         now,
       );
     return { isNewSession, hasCachedEnrichment: Boolean(cachedEnrichment) };
@@ -171,6 +178,26 @@ export function cleanupExpiredTracking(retentionDays: number) {
   })();
 }
 
+function parseDetail(raw: string | null): Record<string, unknown> | null {
+  if (!raw) return null;
+  try {
+    const parsed: unknown = JSON.parse(raw);
+    return parsed && typeof parsed === "object" && !Array.isArray(parsed)
+      ? (parsed as Record<string, unknown>)
+      : null;
+  } catch {
+    return null;
+  }
+}
+
+/** `raw` is "<occurred_at>|<detail json>" from the MAX() trick, or the bare id. */
+function trackLabel(raw: string | null, id: string) {
+  const detail = parseDetail(raw?.slice(raw.indexOf("|") + 1) ?? null);
+  const title = typeof detail?.title === "string" ? detail.title : null;
+  const artist = typeof detail?.artist === "string" ? detail.artist : null;
+  return title ? (artist ? `${title} — ${artist}` : title) : id;
+}
+
 export function getDashboardData(filters: TrackingFilters) {
   const database = getTrackingDatabase();
   const { clause, values } = whereFor(filters);
@@ -182,7 +209,11 @@ export function getDashboardData(filters: TrackingFilters) {
         COUNT(DISTINCT s.ip_hash) AS uniqueIps,
         COUNT(DISTINCT CASE WHEN e.event_type = 'chat_prompt' THEN e.session_id END) AS chatSessions,
         COUNT(CASE WHEN e.event_type = 'chat_prompt' THEN 1 END) AS promptCount,
-        COUNT(CASE WHEN e.event_type = 'resume_download' THEN 1 END) AS downloadCount
+        COUNT(CASE WHEN e.event_type = 'resume_download' THEN 1 END) AS downloadCount,
+        COUNT(DISTINCT CASE WHEN e.event_type = 'music_play' THEN e.session_id END) AS musicSessions,
+        COUNT(CASE WHEN e.event_type = 'music_play' THEN 1 END) AS playCount,
+        COUNT(CASE WHEN e.event_type = 'music_complete' THEN 1 END) AS completeCount,
+        COUNT(CASE WHEN e.event_type = 'outbound_click' THEN 1 END) AS clickCount
        FROM tracking_events e JOIN tracking_sessions s ON s.id = e.session_id
        WHERE ${clause}`,
     )
@@ -193,11 +224,12 @@ export function getDashboardData(filters: TrackingFilters) {
       `SELECT strftime('%Y-%m-%d', e.occurred_at / 1000, 'unixepoch') AS day,
         COUNT(CASE WHEN e.event_type = 'page_view' THEN 1 END) AS pageViews,
         COUNT(CASE WHEN e.event_type = 'chat_prompt' THEN 1 END) AS prompts,
-        COUNT(CASE WHEN e.event_type = 'resume_download' THEN 1 END) AS downloads
+        COUNT(CASE WHEN e.event_type = 'resume_download' THEN 1 END) AS downloads,
+        COUNT(CASE WHEN e.event_type = 'music_play' THEN 1 END) AS plays
        FROM tracking_events e JOIN tracking_sessions s ON s.id = e.session_id
        WHERE ${clause} GROUP BY day ORDER BY day ASC`,
     )
-    .all(...values) as { day: string; pageViews: number; prompts: number; downloads: number }[];
+    .all(...values) as { day: string; pageViews: number; prompts: number; downloads: number; plays: number }[];
 
   const topPages = database
     .prepare(
@@ -228,6 +260,25 @@ export function getDashboardData(filters: TrackingFilters) {
        GROUP BY s.as_name, s.as_domain ORDER BY count DESC LIMIT 8`,
     )
     .all(...values) as { label: string; domain: string | null; count: number }[];
+  // Grouped by record id; the label comes from the most recent detail payload.
+  const topTracks = database
+    .prepare(
+      `SELECT MAX(e.occurred_at || '|' || COALESCE(e.detail, '')) AS raw, e.target AS id,
+        SUM(CASE WHEN e.event_type = 'music_play' THEN 1 ELSE 0 END) AS count,
+        SUM(CASE WHEN e.event_type = 'music_complete' THEN 1 ELSE 0 END) AS completes
+       FROM tracking_events e JOIN tracking_sessions s ON s.id = e.session_id
+       WHERE ${clause} AND e.event_type IN ('music_play', 'music_complete') AND e.target IS NOT NULL
+       GROUP BY e.target ORDER BY count DESC, completes DESC LIMIT 8`,
+    )
+    .all(...values) as { raw: string; id: string; count: number; completes: number }[];
+  const topLinks = database
+    .prepare(
+      `SELECT e.target AS label, COUNT(*) AS count FROM tracking_events e
+       JOIN tracking_sessions s ON s.id = e.session_id WHERE ${clause}
+       AND e.event_type = 'outbound_click' AND e.target IS NOT NULL
+       GROUP BY e.target ORDER BY count DESC LIMIT 8`,
+    )
+    .all(...values) as { label: string; count: number }[];
 
   const sessions = database
     .prepare(
@@ -235,7 +286,9 @@ export function getDashboardData(filters: TrackingFilters) {
         s.as_domain, s.device_type, s.browser_family, s.first_seen_at, s.last_seen_at,
         COUNT(CASE WHEN e.event_type = 'page_view' THEN 1 END) AS pages,
         COUNT(CASE WHEN e.event_type = 'chat_prompt' THEN 1 END) AS prompts,
-        COUNT(CASE WHEN e.event_type = 'resume_download' THEN 1 END) AS downloads
+        COUNT(CASE WHEN e.event_type = 'resume_download' THEN 1 END) AS downloads,
+        COUNT(CASE WHEN e.event_type = 'music_play' THEN 1 END) AS plays,
+        COUNT(CASE WHEN e.event_type = 'outbound_click' THEN 1 END) AS clicks
        FROM tracking_sessions s JOIN tracking_events e ON e.session_id = s.id
        WHERE ${clause} GROUP BY s.id ORDER BY s.last_seen_at DESC LIMIT 80`,
     )
@@ -292,6 +345,14 @@ export function getDashboardData(filters: TrackingFilters) {
       chatSessions: kpis.chatSessions ?? 0,
       promptCount: kpis.promptCount ?? 0,
       downloadCount: kpis.downloadCount ?? 0,
+      musicSessions: kpis.musicSessions ?? 0,
+      playCount: kpis.playCount ?? 0,
+      completeCount: kpis.completeCount ?? 0,
+      clickCount: kpis.clickCount ?? 0,
+      musicUseRate:
+        (kpis.uniqueSessions ?? 0) > 0
+          ? Math.round(((kpis.musicSessions ?? 0) / kpis.uniqueSessions) * 100)
+          : 0,
       chatUseRate:
         (kpis.uniqueSessions ?? 0) > 0
           ? Math.round(((kpis.chatSessions ?? 0) / kpis.uniqueSessions) * 100)
@@ -302,6 +363,13 @@ export function getDashboardData(filters: TrackingFilters) {
     sources,
     countries,
     networks,
+    topTracks: topTracks.map((row) => ({
+      id: row.id,
+      label: trackLabel(row.raw, row.id),
+      count: row.count,
+      completes: row.completes,
+    })),
+    topLinks,
     sessions: sessions.map((row) => ({
       id: row.id,
       ip: maskIp(decryptTrackingValue(row.ip_ciphertext)),
@@ -314,6 +382,8 @@ export function getDashboardData(filters: TrackingFilters) {
       pages: row.pages,
       prompts: row.prompts,
       downloads: row.downloads,
+      plays: row.plays,
+      clicks: row.clicks,
     })),
     prompts,
     downloads: downloadRows.map((row) => ({
@@ -347,14 +417,14 @@ export function getSessionDetail(sessionId: string) {
   const events = database
     .prepare(
       `SELECT id, event_type, pathname, referrer_host, utm_source, utm_medium, utm_campaign,
-        prompt_ciphertext, prompt_length, chat_outcome, occurred_at
+        prompt_ciphertext, prompt_length, chat_outcome, target, detail, occurred_at
        FROM tracking_events WHERE session_id = ? ORDER BY occurred_at DESC LIMIT 240`,
     )
     .all(sessionId) as {
-      id: number; event_type: "page_view" | "chat_prompt" | "resume_download"; pathname: string;
+      id: number; event_type: TrackingEventType; pathname: string;
       referrer_host: string | null; utm_source: string | null; utm_medium: string | null;
       utm_campaign: string | null; prompt_ciphertext: string | null; prompt_length: number | null;
-      chat_outcome: string | null; occurred_at: number;
+      chat_outcome: string | null; target: string | null; detail: string | null; occurred_at: number;
     }[];
   return {
     session: {
@@ -373,6 +443,7 @@ export function getSessionDetail(sessionId: string) {
     events: events.map((event) => ({
       ...event,
       prompt: event.event_type === "chat_prompt" ? decryptTrackingValue(event.prompt_ciphertext) : null,
+      detail: parseDetail(event.detail),
     })),
   };
 }
