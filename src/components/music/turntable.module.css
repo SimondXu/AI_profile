@@ -1,46 +1,65 @@
-/* Turntable: plinth surface, platter grooves, tonearm geometry, meters.
-   Colors come from tokens; per-element typography stays in Tailwind on the
-   JSX. Motion is CSS-only (platter spin, tonearm swing, meter bars) and
-   freezes under prefers-reduced-motion. */
+/* Turntable: plinth, platter, tonearm, monitor, meter, transport.
+   The plinth is dark charcoal with a wood rim in both themes, so the deck
+   re-scopes the semantic tokens for everything inside it; Tailwind utilities
+   (text-foreground, bg-surface, …) pick the overrides up automatically.
+   Motion: the platter is driven by rAF (spin-up / coast-down) in the
+   component; the arm and record swaps are CSS transitions keyed off data
+   attributes. All of it freezes under prefers-reduced-motion. */
 
 .deck {
+  --background: #14130f;
+  --surface: #201e1a;
+  --foreground: #f1ede4;
+  --muted-foreground: #b1aa9d;
+  --border: rgba(255, 255, 255, 0.13);
+  --input: rgba(255, 255, 255, 0.35);
+  --accent: #8fa7ff;
+  --accent-foreground: #0f1115;
+  --accent-soft: #2a3352;
+  --ring: #8fa7ff;
+
   position: relative;
-  border-radius: 24px;
-  background: linear-gradient(
-    160deg,
-    color-mix(in srgb, var(--material-wood) 34%, var(--surface)) 0%,
-    color-mix(in srgb, var(--material-wood) 18%, var(--surface)) 100%
-  );
-  border: 1px solid color-mix(in srgb, var(--material-wood) 40%, var(--border));
+  color: var(--foreground);
+  border-radius: 26px;
+  background:
+    radial-gradient(
+      120% 80% at 20% 0%,
+      rgba(255, 255, 255, 0.06),
+      transparent 55%
+    ),
+    linear-gradient(165deg, #1c1a16 0%, #14130f 60%, #100f0c 100%);
+  border: 1px solid color-mix(in srgb, var(--material-wood) 45%, #2a2622);
   box-shadow:
-    inset 0 1px 0 color-mix(in srgb, white 35%, transparent),
-    0 1px 2px color-mix(in srgb, black 10%, transparent),
-    0 30px 60px -36px color-mix(in srgb, black 55%, transparent);
-  transition: box-shadow 600ms ease;
+    inset 0 1px 0 rgba(255, 255, 255, 0.08),
+    inset 0 0 0 5px #0e0d0b,
+    inset 0 0 0 6px color-mix(in srgb, var(--material-wood) 55%, transparent),
+    0 1px 2px rgba(0, 0, 0, 0.3),
+    0 40px 80px -40px rgba(0, 0, 0, 0.8);
+  transition: box-shadow 900ms ease;
 }
 
 .deck[data-playing="true"] {
   box-shadow:
-    inset 0 1px 0 color-mix(in srgb, white 35%, transparent),
-    0 1px 2px color-mix(in srgb, black 10%, transparent),
-    0 30px 60px -36px color-mix(in srgb, black 55%, transparent),
-    0 0 80px -20px color-mix(in srgb, var(--accent) 45%, transparent);
+    inset 0 1px 0 rgba(255, 255, 255, 0.08),
+    inset 0 0 0 5px #0e0d0b,
+    inset 0 0 0 6px color-mix(in srgb, var(--material-wood) 55%, transparent),
+    0 1px 2px rgba(0, 0, 0, 0.3),
+    0 40px 80px -40px rgba(0, 0, 0, 0.8),
+    0 0 120px -30px
+      color-mix(in srgb, var(--record-glow, var(--accent)) 60%, transparent);
 }
 
-/* Wood grain, drawn from the token. */
+/* Brushed-metal grain on the plinth top. */
 .deck::before {
   content: "";
   position: absolute;
-  inset: 0;
-  border-radius: inherit;
+  inset: 6px;
+  border-radius: 20px;
   background: repeating-linear-gradient(
     100deg,
-    transparent 0 14px,
-    color-mix(in srgb, var(--material-wood) 22%, transparent) 14px 16px,
-    transparent 16px 31px,
-    color-mix(in srgb, var(--material-wood) 12%, transparent) 31px 32px
+    transparent 0 3px,
+    rgba(255, 255, 255, 0.012) 3px 4px
   );
-  opacity: 0.35;
   pointer-events: none;
 }
 
@@ -50,22 +69,64 @@
   position: relative;
   aspect-ratio: 1;
   width: 100%;
-  max-width: 26rem;
+  max-width: 12rem;
   margin-inline: auto;
+}
+
+@media (min-width: 1024px) {
+  .stage {
+    max-width: 26rem;
+  }
 }
 
 .mat {
   position: absolute;
-  inset: 4%;
+  inset: 3%;
   border-radius: 50%;
-  background: color-mix(
-    in srgb,
-    var(--material-vinyl) 70%,
-    var(--material-wood)
+  background: radial-gradient(
+    circle at 50% 50%,
+    #1a1917 0 58%,
+    #141311 59% 100%
   );
   box-shadow:
-    inset 0 2px 8px color-mix(in srgb, black 45%, transparent),
-    0 12px 30px -16px color-mix(in srgb, black 70%, transparent);
+    inset 0 2px 10px rgba(0, 0, 0, 0.7),
+    inset 0 0 0 1px rgba(255, 255, 255, 0.05),
+    0 14px 34px -16px rgba(0, 0, 0, 0.9);
+}
+
+/* Strobe dots around the platter rim: still at 33⅓, drifting at 45. */
+.strobe {
+  position: absolute;
+  inset: 3%;
+  border-radius: 50%;
+  background: repeating-conic-gradient(
+    from 0deg,
+    transparent 0deg 1.9deg,
+    rgba(255, 255, 255, 0.28) 1.9deg 2.5deg
+  );
+  -webkit-mask: radial-gradient(
+    circle,
+    transparent 0 94.5%,
+    black 95% 97.5%,
+    transparent 98%
+  );
+  mask: radial-gradient(
+    circle,
+    transparent 0 94.5%,
+    black 95% 97.5%,
+    transparent 98%
+  );
+  pointer-events: none;
+}
+
+.deck[data-playing="true"] .strobe[data-rpm="45"] {
+  animation: strobe-drift 6s linear infinite;
+}
+
+@keyframes strobe-drift {
+  to {
+    transform: rotate(10deg);
+  }
 }
 
 .record {
@@ -78,10 +139,13 @@
     var(--material-vinyl) 1.5px 3.5px
   );
   box-shadow:
-    inset 0 0 0 1px color-mix(in srgb, white 8%, transparent),
-    0 2px 4px color-mix(in srgb, black 40%, transparent);
-  animation: platter-spin var(--rev, 1.8s) linear infinite;
-  animation-play-state: paused;
+    inset 0 0 0 1px rgba(255, 255, 255, 0.08),
+    0 2px 4px rgba(0, 0, 0, 0.5);
+  will-change: transform;
+  transition:
+    translate 260ms cubic-bezier(0.3, 0.8, 0.3, 1),
+    scale 260ms cubic-bezier(0.3, 0.8, 0.3, 1),
+    opacity 220ms ease;
 }
 
 /* Light sheen across the grooves so the spin reads even at rest. */
@@ -93,17 +157,32 @@
   background: conic-gradient(
     from 210deg,
     transparent 0deg,
-    color-mix(in srgb, white 14%, transparent) 30deg,
+    rgba(255, 255, 255, 0.14) 30deg,
     transparent 60deg,
     transparent 200deg,
-    color-mix(in srgb, white 9%, transparent) 225deg,
+    rgba(255, 255, 255, 0.09) 225deg,
     transparent 250deg
   );
   mix-blend-mode: screen;
 }
 
-.deck[data-playing="true"] .record {
-  animation-play-state: running;
+/* Record swap: the old one slides down and out, the new one rises in. */
+.recordOut {
+  translate: 0 42%;
+  scale: 0.94;
+  opacity: 0;
+}
+
+.recordIn {
+  animation: record-in 320ms cubic-bezier(0.2, 0.8, 0.2, 1) both;
+}
+
+@keyframes record-in {
+  from {
+    translate: 0 42%;
+    scale: 0.94;
+    opacity: 0;
+  }
 }
 
 .label {
@@ -116,7 +195,7 @@
     color-mix(in srgb, white 25%, var(--accent)),
     var(--accent) 65%
   );
-  box-shadow: inset 0 0 0 1px color-mix(in srgb, black 20%, transparent);
+  box-shadow: inset 0 0 0 1px rgba(0, 0, 0, 0.25);
 }
 
 /* Text layer over the label art: a dark wash keeps any seed legible. */
@@ -127,15 +206,21 @@
   flex-direction: column;
   align-items: center;
   justify-content: space-between;
-  padding: 0.85rem 0;
+  padding: 0.6rem 0;
   color: #fff;
   text-align: center;
   background: radial-gradient(
     circle,
-    color-mix(in srgb, black 30%, transparent) 0 30%,
-    color-mix(in srgb, black 46%, transparent) 100%
+    rgba(0, 0, 0, 0.32) 0 30%,
+    rgba(0, 0, 0, 0.5) 100%
   );
-  text-shadow: 0 1px 2px color-mix(in srgb, black 50%, transparent);
+  text-shadow: 0 1px 2px rgba(0, 0, 0, 0.55);
+}
+
+@media (min-width: 1024px) {
+  .labelInk {
+    padding: 0.85rem 0;
+  }
 }
 
 .spindle {
@@ -147,17 +232,11 @@
   transform: translate(-50%, -50%);
   border-radius: 50%;
   background: #d9d9d9;
-  box-shadow: 0 0 0 2px color-mix(in srgb, black 40%, transparent);
+  box-shadow: 0 0 0 2px rgba(0, 0, 0, 0.45);
   z-index: 3;
 }
 
-@keyframes platter-spin {
-  to {
-    transform: rotate(360deg);
-  }
-}
-
-/* ── Tonearm (SVG overlay on the stage) ──────────────────────────────── */
+/* ── Tonearm (SVG overlay; angle = progress while the needle is down) ── */
 
 .arm {
   position: absolute;
@@ -167,18 +246,43 @@
   overflow: visible;
   z-index: 4;
   pointer-events: none;
+  touch-action: none;
 }
 
 .armPivot {
   transform-box: view-box;
   transform-origin: 88px 12px;
-  transform: rotate(0deg);
-  transition: transform 900ms cubic-bezier(0.3, 0.9, 0.3, 1);
-  filter: drop-shadow(0 2px 2px color-mix(in srgb, black 45%, transparent));
+  transform: rotate(var(--arm-angle, 0deg));
+  filter: drop-shadow(0 2px 2px rgba(0, 0, 0, 0.5));
 }
 
-.deck[data-playing="true"] .armPivot {
-  transform: rotate(14deg);
+/* Swing (lift/drop) is a slow ease; tracking the groove is a short linear
+   step between 250 ms polls; dragging is immediate. */
+.arm[data-motion="swing"] .armPivot {
+  transition: transform 520ms cubic-bezier(0.3, 0.9, 0.3, 1);
+}
+
+.arm[data-motion="track"] .armPivot {
+  transition: transform 400ms linear;
+}
+
+.arm[data-motion="drag"] .armPivot {
+  transition: none;
+}
+
+.armGrab {
+  pointer-events: auto;
+  cursor: grab;
+}
+
+.armGrab:active {
+  cursor: grabbing;
+}
+
+.armHit {
+  stroke: transparent;
+  stroke-width: 12;
+  stroke-linecap: round;
 }
 
 .armTube {
@@ -214,13 +318,135 @@
   fill: #e6e6e8;
 }
 
-/* ── Meter ───────────────────────────────────────────────────────────── */
+/* ── Monitor (the visible YouTube frame, styled as a leaning sleeve) ──── */
+
+.monitor {
+  position: relative;
+  width: 100%;
+  max-width: 24rem;
+  aspect-ratio: 16 / 9;
+  min-height: 200px;
+  overflow: hidden;
+  border-radius: 10px;
+  background: #0a0a0b;
+  box-shadow:
+    0 1px 2px rgba(0, 0, 0, 0.4),
+    0 24px 50px -24px rgba(0, 0, 0, 0.9),
+    inset 0 0 0 1px rgba(255, 255, 255, 0.1);
+}
+
+/* Paper edge, like a sleeve standing against the plinth. */
+.monitor::after {
+  content: "";
+  position: absolute;
+  inset: 0;
+  border-radius: inherit;
+  box-shadow: inset 0 0 0 3px
+    color-mix(in srgb, var(--material-paper) 88%, transparent);
+  pointer-events: none;
+  z-index: 3;
+}
+
+.video,
+.video > iframe {
+  position: absolute;
+  inset: 0;
+  width: 100%;
+  height: 100%;
+  border: 0;
+}
+
+.videoHidden {
+  visibility: hidden;
+}
+
+.monitorArt {
+  position: absolute;
+  inset: 0;
+  animation: art-in 400ms ease both;
+}
+
+.monitorArt::after {
+  content: "";
+  position: absolute;
+  inset: 0;
+  background: linear-gradient(180deg, transparent 55%, rgba(0, 0, 0, 0.45));
+}
+
+@keyframes art-in {
+  from {
+    opacity: 0;
+  }
+}
+
+.monitorChip {
+  position: absolute;
+  left: 12px;
+  bottom: 12px;
+  z-index: 2;
+  padding: 3px 9px;
+  border-radius: 999px;
+  background: rgba(10, 10, 11, 0.7);
+  color: #efede6;
+  font-family: var(--font-mono);
+  font-size: 10px;
+  letter-spacing: 0.16em;
+  text-transform: uppercase;
+}
+
+.errorCard {
+  position: absolute;
+  inset: 0;
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+  padding: 1.25rem;
+  background: var(--surface);
+}
+
+.pillButton {
+  display: inline-flex;
+  align-items: center;
+  gap: 0.375rem;
+  padding: 0.375rem 0.75rem;
+  border-radius: 999px;
+  border: 1px solid var(--border);
+  background: rgba(255, 255, 255, 0.04);
+  color: var(--foreground);
+  font-size: 13px;
+  font-weight: 500;
+  transition: border-color 150ms ease;
+}
+
+.pillButton:hover {
+  border-color: var(--accent);
+}
+
+.pillButton:focus-visible {
+  outline: 2px solid var(--ring);
+  outline-offset: 2px;
+}
+
+/* ── Title block ─────────────────────────────────────────────────────── */
+
+.title {
+  transition:
+    opacity 200ms ease,
+    translate 200ms ease;
+}
+
+.titleSwap {
+  opacity: 0;
+  translate: 0 6px;
+}
+
+/* ── Meter (file / empty modes only) ─────────────────────────────────── */
 
 .meter {
   display: flex;
   align-items: flex-end;
   gap: 4px;
-  height: 3.5rem;
+  height: 3rem;
 }
 
 .bar {
@@ -239,153 +465,57 @@
 }
 
 .deck[data-playing="false"] .bar {
-  background: color-mix(in srgb, var(--foreground) 18%, transparent);
+  background: rgba(255, 255, 255, 0.16);
 }
 
-/* ── Strobe dot (on when the platter runs) ───────────────────────────── */
+/* ── Lamp (on while the platter runs) ────────────────────────────────── */
 
-.strobe {
+.lamp {
   width: 8px;
   height: 8px;
   border-radius: 50%;
-  background: color-mix(in srgb, var(--foreground) 22%, transparent);
+  background: rgba(255, 255, 255, 0.18);
   transition:
     background 300ms ease,
     box-shadow 300ms ease;
 }
 
-.deck[data-playing="true"] .strobe {
+.deck[data-playing="true"] .lamp,
+.deck[data-phase="dropping"] .lamp {
   background: #ff6b3d;
-  box-shadow: 0 0 10px 2px color-mix(in srgb, #ff6b3d 55%, transparent);
+  box-shadow: 0 0 10px 2px rgba(255, 107, 61, 0.55);
 }
 
-/* ── Range input ─────────────────────────────────────────────────────── */
+/* ── Transport ───────────────────────────────────────────────────────── */
 
-.range {
-  appearance: none;
-  width: 100%;
-  height: 4px;
-  border-radius: 999px;
-  background: linear-gradient(
-    90deg,
-    var(--accent) 0 var(--fill, 50%),
-    color-mix(in srgb, var(--foreground) 18%, transparent) var(--fill, 50%) 100%
-  );
-  outline: none;
-}
-
-.range::-webkit-slider-thumb {
-  appearance: none;
-  width: 18px;
-  height: 18px;
-  border-radius: 50%;
-  background: var(--surface);
-  border: 2px solid var(--accent);
-  box-shadow: 0 1px 3px color-mix(in srgb, black 25%, transparent);
-  cursor: pointer;
-}
-
-.range::-moz-range-thumb {
-  width: 18px;
-  height: 18px;
-  border-radius: 50%;
-  background: var(--surface);
-  border: 2px solid var(--accent);
-  cursor: pointer;
-}
-
-.range:focus-visible {
-  box-shadow: 0 0 0 3px color-mix(in srgb, var(--accent) 35%, transparent);
-}
-
-@media (prefers-reduced-motion: reduce) {
-  .record {
-    animation: none;
-  }
-  .armPivot {
-    transition: none;
-  }
-  .bar {
-    transition: none;
-  }
-}
-
-/* ── YouTube sleeve frame ────────────────────────────────────────────── */
-/* The player must stay visible (YouTube terms); it is styled as the record
-   sleeve standing beside the deck. Minimum height keeps it ≥ 200px tall. */
-
-.sleeveFrame {
-  position: relative;
-  width: 100%;
-  aspect-ratio: 16 / 9;
-  min-height: 200px;
-  overflow: hidden;
-  border-radius: 12px;
-  background: var(--material-vinyl);
-  box-shadow:
-    0 1px 2px color-mix(in srgb, black 25%, transparent),
-    0 18px 40px -22px color-mix(in srgb, black 70%, transparent),
-    inset 0 0 0 1px color-mix(in srgb, white 10%, transparent);
-}
-
-.video,
-.video > iframe {
-  position: absolute;
-  inset: 0;
-  width: 100%;
-  height: 100%;
-  border: 0;
-}
-
-.frameHint {
-  position: absolute;
-  inset: 0;
-  display: grid;
-  place-items: center;
-  color: color-mix(in srgb, white 55%, transparent);
-  background: repeating-linear-gradient(
-    -45deg,
-    transparent 0 10px,
-    color-mix(in srgb, white 3%, transparent) 10px 20px
-  );
-  pointer-events: none;
-}
-
-.errorCard {
-  position: absolute;
-  inset: 0;
-  display: flex;
-  flex-direction: column;
-  justify-content: center;
-  padding: 1.25rem;
-  background: color-mix(in srgb, var(--surface) 94%, transparent);
-  backdrop-filter: blur(6px);
-}
-
-.pillButton {
+.needleButton {
   display: inline-flex;
   align-items: center;
-  gap: 0.375rem;
-  padding: 0.375rem 0.75rem;
+  gap: 0.625rem;
+  height: 3rem;
+  padding: 0 1.25rem;
   border-radius: 999px;
-  border: 1px solid var(--border);
-  background: var(--surface);
-  color: var(--foreground);
-  font-size: 13px;
+  background: var(--foreground);
+  color: var(--background);
   font-weight: 500;
-  transition: border-color 150ms ease;
+  box-shadow: 0 12px 28px -14px rgba(0, 0, 0, 0.9);
+  transition:
+    transform 150ms ease,
+    box-shadow 150ms ease;
 }
 
-.pillButton:hover {
-  border-color: var(--accent);
+.needleButton:hover {
+  transform: translateY(-2px);
 }
 
-.pillButton:focus-visible {
+.needleButton:active {
+  transform: translateY(0) scale(0.98);
+}
+
+.needleButton:focus-visible {
   outline: 2px solid var(--ring);
-  outline-offset: 2px;
+  outline-offset: 3px;
 }
-
-/* ── Round transport buttons ─────────────────────────────────────────── */
 
 .roundButton {
   display: grid;
@@ -394,7 +524,7 @@
   height: 2.75rem;
   border-radius: 50%;
   border: 1px solid var(--border);
-  background: var(--surface);
+  background: rgba(255, 255, 255, 0.04);
   color: var(--foreground);
   transition:
     transform 150ms ease,
@@ -418,10 +548,86 @@
   color: var(--accent);
 }
 
+.divider {
+  width: 1px;
+  height: 1.5rem;
+  margin-inline: 0.25rem;
+  background: var(--border);
+}
+
+/* ── Range inputs ────────────────────────────────────────────────────── */
+
+.range {
+  appearance: none;
+  width: 100%;
+  height: 4px;
+  border-radius: 999px;
+  background: linear-gradient(
+    90deg,
+    var(--accent) 0 var(--fill, 50%),
+    rgba(255, 255, 255, 0.16) var(--fill, 50%) 100%
+  );
+  outline: none;
+}
+
+.rangeThin {
+  height: 2px;
+}
+
+.range::-webkit-slider-thumb {
+  appearance: none;
+  width: 16px;
+  height: 16px;
+  border-radius: 50%;
+  background: var(--foreground);
+  border: 2px solid var(--background);
+  box-shadow: 0 1px 3px rgba(0, 0, 0, 0.5);
+  cursor: pointer;
+}
+
+.rangeThin::-webkit-slider-thumb {
+  width: 12px;
+  height: 12px;
+}
+
+.range::-moz-range-thumb {
+  width: 16px;
+  height: 16px;
+  border-radius: 50%;
+  background: var(--foreground);
+  border: 2px solid var(--background);
+  cursor: pointer;
+}
+
+.range:disabled {
+  opacity: 0.5;
+}
+
+.range:focus-visible {
+  box-shadow: 0 0 0 3px color-mix(in srgb, var(--accent) 35%, transparent);
+}
+
 @media (prefers-reduced-motion: reduce) {
+  .deck,
+  .record,
+  .title,
+  .lamp,
+  .needleButton,
   .roundButton {
     transition: none;
   }
+  .arm[data-motion] .armPivot {
+    transition: none;
+  }
+  .recordIn,
+  .monitorArt,
+  .strobe {
+    animation: none;
+  }
+  .bar {
+    transition: none;
+  }
+  .needleButton:hover,
   .roundButton:hover {
     transform: none;
   }
