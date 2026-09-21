@@ -13,7 +13,7 @@ This file provides guidance to Claude Code (claude.ai/code) when working with co
 ### Environment Setup
 - Copy `.env.example` to `.env.local`
 - Add `OPENROUTER_API_KEY` for AI chatbot functionality
-- Optional: set `OPENROUTER_MODEL` (defaults to `openai/gpt-5.6-luna`; reasoning effort is fixed at `medium`)
+- Optional: set `OPENROUTER_MODEL` (defaults to `deepseek/deepseek-v4.1-flash`; reasoning effort is fixed at `low`) and `OPENROUTER_PROVIDER_ORDER` (defaults to `fireworks`)
 - Optional: `NEXT_PUBLIC_SITE_URL` for custom domain
 
 ## Architecture Overview

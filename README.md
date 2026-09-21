@@ -68,8 +68,8 @@ Update content by editing `portfolio-config.json`. Example excerpts from this re
 
 **AI Chatbot**
 - API: `src/app/api/chat/route.ts`
-  - Model: `openrouter.chat('openai/gpt-5.6-luna')` via `@ai-sdk/openai`
-  - Reasoning effort: explicitly set to `medium` via AI SDK provider options
+  - Model: `openrouter.chat('deepseek/deepseek-v4.1-flash')` via `@ai-sdk/openai`, pinned to the `fireworks` provider (`OPENROUTER_PROVIDER_ORDER`)
+  - Reasoning effort: explicitly set to `low` via AI SDK provider options
   - System prompt: generated from `portfolio-config.json`
   - Tools: structured data fetchers mapped to UI renderers
     - `getProjects`, `getPresentation`, `getResume`, `getContact`, `getSkills`, `getEntryLevel`
@@ -114,7 +114,8 @@ Behavior:
 - Install: `pnpm install` or `npm install` or `yarn install`
 - Env vars: copy `.env.example` → `.env.local` and set:
   - `OPENROUTER_API_KEY` (required for chat)
-  - `OPENROUTER_MODEL` (optional, defaults to `openai/gpt-5.6-luna`)
+  - `OPENROUTER_MODEL` (optional, defaults to `deepseek/deepseek-v4.1-flash`)
+  - `OPENROUTER_PROVIDER_ORDER` (optional, defaults to `fireworks`; empty disables provider pinning)
   - `NEXT_PUBLIC_SITE_URL` (optional)
 - Docker env: copy `.env.docker.example` → `.env.docker` on the server and set real values there
 - Dev: `npm run dev` then open `http://localhost:3000`
