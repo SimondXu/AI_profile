@@ -41,7 +41,13 @@ interface CollectionDeskProps {
 
 type DeskObjectId = "projects" | "resume" | "ask" | "music" | "photos";
 
-const OBJECT_ORDER: DeskObjectId[] = ["projects", "resume", "ask", "music", "photos"];
+const OBJECT_ORDER: DeskObjectId[] = [
+  "projects",
+  "resume",
+  "ask",
+  "music",
+  "photos",
+];
 
 const OBJECT_DEPTH: Record<DeskObjectId, number> = {
   projects: 0.6,
@@ -80,7 +86,10 @@ const SHADOW_HOVER =
   "group-hover:shadow-[0_2px_4px_rgba(0,0,0,0.16),0_18px_36px_-14px_rgba(0,0,0,0.38)] group-focus-visible:shadow-[0_2px_4px_rgba(0,0,0,0.16),0_18px_36px_-14px_rgba(0,0,0,0.38)]";
 
 function canTilt(): boolean {
-  if (typeof window === "undefined" || typeof window.matchMedia !== "function") {
+  if (
+    typeof window === "undefined" ||
+    typeof window.matchMedia !== "function"
+  ) {
     return false;
   }
   const fine = window.matchMedia("(hover: hover) and (pointer: fine)").matches;
@@ -89,7 +98,13 @@ function canTilt(): boolean {
 }
 
 /** Object visuals — decorative markup only; the real link + label carry semantics. */
-function ObjectVisual({ id, terminalQuestion }: { id: DeskObjectId; terminalQuestion: string }) {
+function ObjectVisual({
+  id,
+  terminalQuestion,
+}: {
+  id: DeskObjectId;
+  terminalQuestion: string;
+}) {
   switch (id) {
     case "projects":
       return (
@@ -149,19 +164,30 @@ function ObjectVisual({ id, terminalQuestion }: { id: DeskObjectId; terminalQues
             <span className="h-2 w-2 rounded-full bg-[#ff5f57]" />
             <span className="h-2 w-2 rounded-full bg-[#febc2e]" />
             <span className="h-2 w-2 rounded-full bg-[#28c840]" />
-            <span className="ml-auto font-mono text-[9px] text-white/40">simon — ask</span>
+            <span className="ml-auto font-mono text-[9px] text-white/40">
+              simon — ask
+            </span>
           </div>
           <p className="px-2.5 py-2 font-mono">
             <span className="text-[#7ee787]">$</span> ask{" "}
-            <span className="text-[#a5d6ff]">&quot;{terminalQuestion}&quot;</span>
+            <span className="text-[#a5d6ff]">
+              &quot;{terminalQuestion}&quot;
+            </span>
             <span className={styles.caret} />
           </p>
         </div>
       );
     case "music":
+      // A record half out of its paper sleeve; it slides further out on hover.
       return (
-        <div className="relative h-20 w-full overflow-hidden rounded-[10px] bg-material-wood" aria-hidden="true">
-          <div className="absolute left-1/2 top-1/2 -ml-8 -mt-8 h-16 w-16 rounded-full bg-material-vinyl transition-transform duration-200 group-hover:translate-x-3 group-focus-visible:translate-x-3" />
+        <div className="relative aspect-square w-full" aria-hidden="true">
+          <div className="absolute inset-[6%] -translate-y-[18%] rounded-full bg-material-vinyl shadow-[0_0_0_1px_rgba(255,255,255,0.14),0_6px_14px_-8px_rgba(0,0,0,0.6)] transition-transform duration-300 ease-out group-hover:-translate-y-[40%] group-focus-visible:-translate-y-[40%] motion-reduce:group-hover:-translate-y-[18%]">
+            <div className="absolute inset-[36%] rounded-full bg-accent" />
+            <div className="absolute inset-0 rounded-full [background:repeating-radial-gradient(circle,transparent_0_2px,rgba(255,255,255,0.08)_2px_3px)]" />
+          </div>
+          <div className="absolute inset-0 rounded-[6px] border border-black/10 bg-material-paper shadow-[0_1px_2px_rgba(0,0,0,0.12),0_10px_20px_-14px_rgba(0,0,0,0.5)]">
+            <div className="absolute inset-y-0 left-0 w-[8%] rounded-l-[6px] bg-black/[0.06]" />
+          </div>
         </div>
       );
     case "photos":
@@ -230,22 +256,73 @@ export function CollectionDesk({
   const deskRotateX = useTransform(springY, [-1, 1], [3, -3]);
   const deskRotateY = useTransform(springX, [-1, 1], [-3, 3]);
 
-  const projectsX = useTransform(springX, [-1, 1], [-6 * OBJECT_DEPTH.projects, 6 * OBJECT_DEPTH.projects]);
-  const projectsY = useTransform(springY, [-1, 1], [-6 * OBJECT_DEPTH.projects, 6 * OBJECT_DEPTH.projects]);
-  const resumeX = useTransform(springX, [-1, 1], [-6 * OBJECT_DEPTH.resume, 6 * OBJECT_DEPTH.resume]);
-  const resumeY = useTransform(springY, [-1, 1], [-6 * OBJECT_DEPTH.resume, 6 * OBJECT_DEPTH.resume]);
-  const askX = useTransform(springX, [-1, 1], [-6 * OBJECT_DEPTH.ask, 6 * OBJECT_DEPTH.ask]);
-  const askY = useTransform(springY, [-1, 1], [-6 * OBJECT_DEPTH.ask, 6 * OBJECT_DEPTH.ask]);
-  const musicX = useTransform(springX, [-1, 1], [-6 * OBJECT_DEPTH.music, 6 * OBJECT_DEPTH.music]);
-  const musicY = useTransform(springY, [-1, 1], [-6 * OBJECT_DEPTH.music, 6 * OBJECT_DEPTH.music]);
-  const photosX = useTransform(springX, [-1, 1], [-6 * OBJECT_DEPTH.photos, 6 * OBJECT_DEPTH.photos]);
-  const photosY = useTransform(springY, [-1, 1], [-6 * OBJECT_DEPTH.photos, 6 * OBJECT_DEPTH.photos]);
-  const avatarX = useTransform(springX, [-1, 1], [-6 * AVATAR_DEPTH, 6 * AVATAR_DEPTH]);
-  const avatarY = useTransform(springY, [-1, 1], [-6 * AVATAR_DEPTH, 6 * AVATAR_DEPTH]);
+  const projectsX = useTransform(
+    springX,
+    [-1, 1],
+    [-6 * OBJECT_DEPTH.projects, 6 * OBJECT_DEPTH.projects],
+  );
+  const projectsY = useTransform(
+    springY,
+    [-1, 1],
+    [-6 * OBJECT_DEPTH.projects, 6 * OBJECT_DEPTH.projects],
+  );
+  const resumeX = useTransform(
+    springX,
+    [-1, 1],
+    [-6 * OBJECT_DEPTH.resume, 6 * OBJECT_DEPTH.resume],
+  );
+  const resumeY = useTransform(
+    springY,
+    [-1, 1],
+    [-6 * OBJECT_DEPTH.resume, 6 * OBJECT_DEPTH.resume],
+  );
+  const askX = useTransform(
+    springX,
+    [-1, 1],
+    [-6 * OBJECT_DEPTH.ask, 6 * OBJECT_DEPTH.ask],
+  );
+  const askY = useTransform(
+    springY,
+    [-1, 1],
+    [-6 * OBJECT_DEPTH.ask, 6 * OBJECT_DEPTH.ask],
+  );
+  const musicX = useTransform(
+    springX,
+    [-1, 1],
+    [-6 * OBJECT_DEPTH.music, 6 * OBJECT_DEPTH.music],
+  );
+  const musicY = useTransform(
+    springY,
+    [-1, 1],
+    [-6 * OBJECT_DEPTH.music, 6 * OBJECT_DEPTH.music],
+  );
+  const photosX = useTransform(
+    springX,
+    [-1, 1],
+    [-6 * OBJECT_DEPTH.photos, 6 * OBJECT_DEPTH.photos],
+  );
+  const photosY = useTransform(
+    springY,
+    [-1, 1],
+    [-6 * OBJECT_DEPTH.photos, 6 * OBJECT_DEPTH.photos],
+  );
+  const avatarX = useTransform(
+    springX,
+    [-1, 1],
+    [-6 * AVATAR_DEPTH, 6 * AVATAR_DEPTH],
+  );
+  const avatarY = useTransform(
+    springY,
+    [-1, 1],
+    [-6 * AVATAR_DEPTH, 6 * AVATAR_DEPTH],
+  );
   const decorX = useTransform(springX, [-1, 1], [-3, 3]);
   const decorY = useTransform(springY, [-1, 1], [-3, 3]);
 
-  const objectTranslate: Record<DeskObjectId, { x: typeof projectsX; y: typeof projectsY }> = {
+  const objectTranslate: Record<
+    DeskObjectId,
+    { x: typeof projectsX; y: typeof projectsY }
+  > = {
     projects: { x: projectsX, y: projectsY },
     resume: { x: resumeX, y: resumeY },
     ask: { x: askX, y: askY },
@@ -270,18 +347,31 @@ export function CollectionDesk({
   return (
     <div className={styles.scene}>
       <motion.div
-        className={cn(styles.desk, "rounded-[26px] border border-border bg-surface")}
-        style={reducedMotion ? undefined : { rotateX: deskRotateX, rotateY: deskRotateY }}
+        className={cn(
+          styles.desk,
+          "rounded-[26px] border border-border bg-surface",
+        )}
+        style={
+          reducedMotion
+            ? undefined
+            : { rotateX: deskRotateX, rotateY: deskRotateY }
+        }
         onPointerMove={handlePointerMove}
         onPointerLeave={handlePointerLeave}
       >
         {/* Avatar (talks) */}
         <div className={cn(styles.decor, styles.avatarSlot, "reveal")}>
-          <motion.div style={reducedMotion ? undefined : { x: avatarX, y: avatarY }}>
+          <motion.div
+            style={reducedMotion ? undefined : { x: avatarX, y: avatarY }}
+          >
             <button
               type="button"
               onClick={sayNextLine}
-              aria-label={lines.length ? "Tap for a fun fact about Simon" : "Simon's avatar"}
+              aria-label={
+                lines.length
+                  ? "Tap for a fun fact about Simon"
+                  : "Simon's avatar"
+              }
               title={lines.length ? "Tap for a fun fact" : undefined}
               className={cn(
                 styles.avatarCard,
@@ -343,7 +433,12 @@ export function CollectionDesk({
                   {note.text}
                 </a>
               ) : (
-                <p className={cn(styles.note, "whitespace-pre-line rounded-[6px] px-3 py-2.5 font-mono text-[10px] leading-snug")}>
+                <p
+                  className={cn(
+                    styles.note,
+                    "whitespace-pre-line rounded-[6px] px-3 py-2.5 font-mono text-[10px] leading-snug",
+                  )}
+                >
                   {note.text}
                 </p>
               )}
@@ -372,14 +467,24 @@ export function CollectionDesk({
               className={cn(styles.slot, OBJECT_SLOT_CLASS[id], "reveal")}
               style={{ animationDelay: `${(index + 1) * 40}ms` }}
             >
-              <motion.div style={reducedMotion ? undefined : { x: translate.x, y: translate.y }}>
+              <motion.div
+                style={
+                  reducedMotion ? undefined : { x: translate.x, y: translate.y }
+                }
+              >
                 <Link
                   href={meta.href}
                   className={cn(linkClass, waving && "wave")}
-                  style={waving ? { ["--wave-delay" as string]: `${index * 90}ms` } : undefined}
+                  style={
+                    waving
+                      ? { ["--wave-delay" as string]: `${index * 90}ms` }
+                      : undefined
+                  }
                 >
                   <ObjectVisual id={id} terminalQuestion={terminalQuestion} />
-                  <span className="text-sm font-medium text-foreground">{meta.label}</span>
+                  <span className="text-sm font-medium text-foreground">
+                    {meta.label}
+                  </span>
                 </Link>
               </motion.div>
             </div>
