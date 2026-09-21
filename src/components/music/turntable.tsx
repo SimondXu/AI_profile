@@ -33,7 +33,6 @@ import {
   type SurfaceNoise,
 } from "./surface-noise";
 import { createTrackEngine, type TrackEngine } from "./track-engine";
-import { useBeat } from "./use-beat";
 import {
   createYouTubeEngine,
   type DeckError,
@@ -177,7 +176,6 @@ export function Turntable({
     ? "empty"
     : current.source.kind;
   const deckRef = useRef<HTMLElement | null>(null);
-  const syncBeat = useBeat(deckRef, current?.bpm, playing);
 
   const noiseRef = useRef<SurfaceNoise | null>(null);
   const fileRef = useRef<TrackEngine | null>(null);
@@ -623,22 +621,19 @@ export function Turntable({
       const engine = ytRef.current;
       if (!engine) return;
       const total = engine.duration();
-      const seconds = engine.currentTime();
       setDuration(total);
-      setProgress(total ? seconds / total : 0);
-      syncBeat(seconds);
+      setProgress(total ? engine.currentTime() / total : 0);
     };
     poll();
     if (!playing) return;
     const timer = window.setInterval(poll, 250);
     return () => window.clearInterval(timer);
-  }, [mode, playing, currentId, engineReady, syncBeat]);
+  }, [mode, playing, currentId, engineReady]);
 
   const syncTime = (audio: HTMLAudioElement) => {
     const total = Number.isFinite(audio.duration) ? audio.duration : 0;
     setDuration(total);
     setProgress(total ? audio.currentTime / total : 0);
-    syncBeat(audio.currentTime);
   };
 
   // ── Ambient light: the page glows in the record's colour while it plays ─
@@ -762,8 +757,9 @@ export function Turntable({
         data-phase={phase}
         className={cn(styles.deck, "p-5 sm:p-7 lg:p-8")}
       >
-        {/* Beat lamp: a soft halo around the deck that pulses to the tempo. */}
-        <div className={styles.halo} aria-hidden="true" />
+        {/* Mood lamp: two soft pools of the record's colour behind the deck,
+            breathing slowly while it plays. Ambience, not a visualiser. */}
+        <div className={styles.lampLight} aria-hidden="true" />
         <div className="relative grid gap-6 lg:grid-cols-[minmax(0,1fr)_minmax(0,1.05fr)] lg:items-center lg:gap-10">
           {/* Platter */}
           <div className={styles.stage} aria-hidden="true">
@@ -877,14 +873,6 @@ export function Turntable({
               <span aria-live="polite">{status}</span>
               <span aria-hidden="true">·</span>
               <span>{rpm === 33 ? "33⅓" : "45"} rpm</span>
-              {current?.bpm ? (
-                <>
-                  <span aria-hidden="true">·</span>
-                  <span className={styles.bpm}>
-                    ≈ {Math.round(current.bpm)} bpm
-                  </span>
-                </>
-              ) : null}
               {mode === "youtube" ? (
                 <>
                   <span aria-hidden="true">·</span>

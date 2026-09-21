@@ -50,26 +50,74 @@
       color-mix(in srgb, var(--record-glow, var(--accent)) 60%, transparent);
 }
 
-/* Beat halo: sits behind the plinth, tinted by the record, opacity driven
-   by --beat (compositor-only, so 60fps costs nothing). */
-.halo {
+/* Mood lamp: sits behind the plinth (the deck isolates its stacking
+   context, so only the spill outside the edges shows). Two pools of the
+   record's colour breathe on different periods; everything is opacity /
+   transform so it stays on the compositor. Off when nothing plays. */
+.lampLight {
   position: absolute;
-  inset: -28px;
+  inset: -12%;
   z-index: -1;
-  border-radius: 40px;
-  background: radial-gradient(
-    60% 60% at 50% 50%,
-    color-mix(in srgb, var(--record-glow, var(--accent)) 55%, transparent),
-    transparent 75%
-  );
-  filter: blur(36px);
-  opacity: calc(var(--beat, 0) * 0.7);
-  will-change: opacity;
   pointer-events: none;
+  opacity: 0;
+  transition: opacity 1400ms ease;
 }
 
-.bpm {
-  opacity: calc(0.55 + var(--beat, 0) * 0.45);
+.deck[data-playing="true"] .lampLight {
+  opacity: 1;
+}
+
+.lampLight::before,
+.lampLight::after {
+  content: "";
+  position: absolute;
+  width: 70%;
+  height: 80%;
+  border-radius: 50%;
+  background: radial-gradient(
+    circle at 50% 50%,
+    color-mix(in srgb, var(--record-glow, var(--accent)) 70%, transparent),
+    transparent 68%
+  );
+  filter: blur(48px);
+  will-change: transform, opacity;
+}
+
+.lampLight::before {
+  left: -6%;
+  bottom: -10%;
+  animation: lamp-breathe-a 5.6s ease-in-out infinite;
+}
+
+.lampLight::after {
+  right: -8%;
+  top: -12%;
+  animation: lamp-breathe-b 7.4s ease-in-out infinite;
+  animation-delay: -2.3s;
+}
+
+@keyframes lamp-breathe-a {
+  0%,
+  100% {
+    opacity: 0.38;
+    transform: scale(0.96);
+  }
+  50% {
+    opacity: 0.8;
+    transform: scale(1.06);
+  }
+}
+
+@keyframes lamp-breathe-b {
+  0%,
+  100% {
+    opacity: 0.3;
+    transform: scale(1.04);
+  }
+  50% {
+    opacity: 0.72;
+    transform: scale(0.95);
+  }
 }
 
 /* Brushed-metal grain on the plinth top. */
@@ -347,8 +395,6 @@
   position: relative;
   width: 100%;
   max-width: 24rem;
-  transform: scale(calc(1 + var(--beat, 0) * 0.01));
-  will-change: transform;
   aspect-ratio: 16 / 9;
   min-height: 200px;
   overflow: hidden;
@@ -526,8 +572,7 @@
 .deck[data-playing="true"] .lamp,
 .deck[data-phase="dropping"] .lamp {
   background: #ff6b3d;
-  box-shadow: 0 0 calc(10px + var(--beat, 0) * 8px)
-    calc(2px + var(--beat, 0) * 2px) rgba(255, 107, 61, 0.55);
+  box-shadow: 0 0 10px 2px rgba(255, 107, 61, 0.55);
 }
 
 /* ── Transport ───────────────────────────────────────────────────────── */
@@ -667,6 +712,11 @@
   .monitorArt,
   .strobe {
     animation: none;
+  }
+  .lampLight::before,
+  .lampLight::after {
+    animation: none;
+    opacity: 0.5;
   }
   .bar {
     transition: none;
