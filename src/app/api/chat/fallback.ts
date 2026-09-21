@@ -130,8 +130,21 @@ function findGroundedAnswers(question: string) {
     .join("\n\n");
 }
 
+function describeIdentity() {
+  const config = getConfig();
+
+  return `I'm ${config.personal.name}'s portfolio AI, answering from his resume and public profile. ${config.aiProfile.positioning}\n\nYou can ask about his Highmark work, featured projects, technical decisions, role fit, or contact details.`;
+}
+
+const IDENTITY_PATTERN =
+  /\b(your|ur|his) name\b|\bwho (are you|is this|am i (talking|speaking|chatting) (to|with))\b|\bare you (simon|a bot|an ai|human|real)\b|\bwhat are you\b/i;
+
 export function getFallbackAnswer(question: string) {
   const normalized = question.toLowerCase();
+
+  if (IDENTITY_PATTERN.test(question)) {
+    return describeIdentity();
+  }
 
   const groundedAnswers = findGroundedAnswers(question);
   if (groundedAnswers) {
@@ -152,14 +165,6 @@ export function getFallbackAnswer(question: string) {
     normalized.includes("figjam")
   ) {
     return describeProject("figbrain");
-  }
-
-  if (
-    normalized.includes("hobby") ||
-    normalized.includes("weekend") ||
-    normalized.includes("outside of work")
-  ) {
-    return "My public resume and LinkedIn profile do not include enough detail about hobbies or life outside work, so I would rather not invent an answer. You can ask about how I work, what motivates my engineering decisions, or the systems I have built.";
   }
 
   if (normalized.includes("project") || normalized.includes("proud of")) {
@@ -200,7 +205,7 @@ export function getFallbackAnswer(question: string) {
   const config = getConfig();
 
   if (/^\s*(hi|hello|hey|good (morning|afternoon|evening))\b/i.test(question)) {
-    return `Hi - I'm ${config.personal.name}'s portfolio AI. ${config.aiProfile.positioning}\n\nYou can ask about his Highmark work, featured projects, technical decisions, role fit, or contact details.`;
+    return `Hi - ${describeIdentity()}`;
   }
 
   const featuredProjects = config.projects

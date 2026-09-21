@@ -13,6 +13,7 @@ import { SimplifiedChatView } from "@/components/chat/simple-chat-view";
 import { ChatBubble, ChatBubbleMessage } from "@/components/ui/chat/chat-bubble";
 import MessageLoading from "@/components/ui/chat/message-loading";
 import { getTrackingSessionId } from "@/components/tracking/session-id";
+import { getConfig } from "@/lib/config-loader";
 
 const SCROLL_BOTTOM_THRESHOLD = 80;
 const SCROLL_UP_TOLERANCE = 1;
@@ -58,18 +59,23 @@ export default function Chat() {
       ) * 3,
     [messages],
   );
+  // Only a tool call that is still streaming can block the composer. A tool
+  // that errored, or one abandoned by Stop, keeps a non-"output-available"
+  // state forever and must not lock the input.
   const isToolInProgress = useMemo(
     () =>
+      isLoading &&
       messages.some(
         (message) =>
           message.role === "assistant" &&
           message.parts?.some(
             (part) =>
               isToolOrDynamicToolUIPart(part) &&
-              part.state !== "output-available",
+              (part.state === "input-streaming" ||
+                part.state === "input-available"),
           ),
       ),
-    [messages],
+    [isLoading, messages],
   );
 
   const submitQuery = useCallback(
@@ -207,7 +213,7 @@ export default function Chat() {
                     View resume
                   </Link>
                   <a
-                    href="mailto:edisonapply@gmail.com"
+                    href={`mailto:${getConfig().personal.email}`}
                     className="text-accent underline-offset-4 hover:underline"
                   >
                     Email Simon

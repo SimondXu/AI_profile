@@ -35,7 +35,6 @@ const DEFAULT_OPENROUTER_MODEL = "deepseek/deepseek-v4.1-flash";
 // when checked (2026-09-21). Avoids OpenRouter routing across fp4/fp8 endpoints
 // with inconsistent tool_choice support.
 const DEFAULT_OPENROUTER_PROVIDER_ORDER = "fireworks";
-const UNTRUSTED_CLIENT_ID = "untrusted";
 
 type RateLimitEntry = { count: number; resetAt: number };
 
@@ -121,9 +120,15 @@ const openrouter = createOpenAI({
 
 const openrouterModel = process.env.OPENROUTER_MODEL || DEFAULT_OPENROUTER_MODEL;
 
+/**
+ * Per-client key, or null when the client IP is not trustworthy (no proxy
+ * trust configured). Returning a shared key here would make every visitor
+ * share one 20/min bucket, so unidentifiable clients only fall under the
+ * global caps.
+ */
 function getClientIdentifier(req: Request) {
   const ip = getTrustedClientIp(req);
-  if (ip === "unknown") return UNTRUSTED_CLIENT_ID;
+  if (ip === "unknown") return null;
   return createHash("sha256").update(ip).digest("hex");
 }
 
@@ -152,12 +157,13 @@ function consumeWindow(
   return current.count > max;
 }
 
-function getRateLimitReason(clientId: string) {
+function getRateLimitReason(clientId: string | null) {
   const now = Date.now();
   pruneExpired(rateLimitStore, now);
   pruneExpired(globalRateLimitStore, now);
 
   if (
+    clientId !== null &&
     consumeWindow(
       rateLimitStore,
       clientId,
@@ -227,8 +233,8 @@ function getLastUserText(
   );
 }
 
-function createFallbackResponse(question: string) {
-  const answer = getFallbackAnswer(question);
+function createFallbackResponse(question: string, reason: string) {
+  const answer = `${getFallbackAnswer(question)}\n\n_Live AI answers are paused right now (${reason}), so this reply came from a scripted profile lookup._`;
   const textPartId = "fallback-answer";
   const stream = createUIMessageStream({
     execute: ({ writer }) => {
@@ -251,8 +257,6 @@ export async function POST(req: Request) {
   }
 
   try {
-    const rateLimitReason = getRateLimitReason(getClientIdentifier(req));
-
     const body = await req.json();
     const parsedBody = chatRequestSchema.safeParse(body);
 
@@ -272,6 +276,10 @@ export async function POST(req: Request) {
       );
     }
 
+    // Count only requests that passed validation so malformed payloads cannot
+    // burn the budget.
+    const rateLimitReason = getRateLimitReason(getClientIdentifier(req));
+
     const lastUserText = getLastUserText(messages).trim();
     if (trackingSessionId && lastUserText) {
       recordChatPrompt(req, {
@@ -283,15 +291,15 @@ export async function POST(req: Request) {
 
     if (rateLimitReason) {
       console.warn(`[CHAT-API] Rate limited (${rateLimitReason}), serving local fallback`);
-      return createFallbackResponse(lastUserText);
+      return createFallbackResponse(lastUserText, "usage limit reached");
     }
 
     if (!process.env.OPENROUTER_API_KEY) {
-      console.info("[CHAT-API] Using local portfolio fallback", {
+      console.warn("[CHAT-API] OPENROUTER_API_KEY is not set, serving local fallback", {
         messageCount: messages.length,
         totalTextLength,
       });
-      return createFallbackResponse(lastUserText);
+      return createFallbackResponse(lastUserText, "model not configured");
     }
 
     console.info("[CHAT-API] Request accepted", {
