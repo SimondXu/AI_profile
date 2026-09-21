@@ -116,9 +116,7 @@ src/content/music.ts / photos.ts   只读空数组 + 类型（字段按基线 ar
 - `site-sections.ts` 的 music `visible: true`：桌面/移动导航、页脚、收藏台同时露出；`/music` 去掉 `noindex`，加入 `public/sitemap.xml`。
 - 收藏台的唱片物件重画为"半抽出封套的唱片"（hover 抽出更多），slot 移到气泡下方 `top 36% / left 36%`，马克杯右移到 `top 40% / left 60%`；1024 / 1440 复核无重叠。Photos 仍隐藏。
 
-### 7.7 节拍脉冲（2026-09-21）
-- 用户想要"播放时的心跳感"。YouTube 模式拿不到音频，固定节奏的假脉冲会和歌对不上，所以用**真实 BPM**：Deezer track 接口（33 首）+ AcousticBrainz（经 MusicBrainz 检索，再补 30 首），112 首中 63 首有 `bpm`；>135 的按倍速处理减半（150 bpm 的脉冲视觉上是糊的）。没有 BPM 的歌不脉冲、不显示数字。
-- `use-beat.ts`：引擎每 ~250ms 给一次位置样本，rAF 在样本间外推，`--beat = exp(-phase × 5.5)`（快起慢落，像鼓点）写在 deck 元素上；reduced-motion 下完全不写。
-- 消费者只用 compositor 属性：`.halo`（deck 外圈光晕，opacity）、`.monitor` scale 1→1.01、状态灯 box-shadow、状态行 "≈ 85 bpm" 读数明暗。
-- 环境光颜色改为从真实封面算出的 `glow`（饱和度加权均值，105 首），无封面时回落到程序化调色板。
-- 验证：headless Chromium 中 Cruel Summer（85 bpm）`--beat` 采样峰值间隔 ≈ 0.7s，与 60/85 一致。
+### 7.7 氛围灯（2026-09-21，替代先前的节拍脉冲方案）
+- 用户明确：要的是播放器**外围**的氛围灯慢速跳动，不是播放器内部按节拍的脉冲。节拍方案（BPM 数据、`use-beat`、读数）已整体移除，`bpm` 字段从 schema 与数据中删除。
+- `.lampLight`：deck 背后两团该唱片颜色的光（`--record-glow`，来自真实封面主色 `glow`），分别以 5.6s / 7.4s 的周期缓慢呼吸（opacity 0.3–0.8 + 轻微 scale），错相；deck 用 `isolation: isolate`，只有溢出边缘的部分可见，所以是"唱机放在一盏灯下"，不是可视化。停止播放 1.4s 淡出。reduced-motion 下静态 0.5 不呼吸。
+- 页面级极光继续按唱片颜色染色（§7.4）。
