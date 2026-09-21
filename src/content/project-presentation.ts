@@ -10,6 +10,7 @@ export type ProjectPresentation = {
 export const projectPresentationBySlug: Readonly<
   Record<string, ProjectPresentation>
 > = {
+  "proxy-loop": { shortTitle: "Proxy Loop" },
   conductor: { shortTitle: "Conductor", coverKind: "conductor" },
   engram: { shortTitle: "Engram", coverKind: "engram" },
   figbrain: { shortTitle: "FigBrain", coverKind: "figbrain" },

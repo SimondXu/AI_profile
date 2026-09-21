@@ -88,7 +88,7 @@ export function Resume({ embedded = false }: ResumeProps) {
           </a>
           <ResumeDownloadLink
             href={pdfUrl}
-            download="Edison-resume-2026.pdf"
+            download="SimonXu-resume-2026.pdf"
             className="inline-flex h-9 items-center gap-1.5 rounded-[10px] bg-accent px-3 text-accent-foreground transition-opacity hover:opacity-90 focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-ring"
           >
             Download <Download aria-hidden="true" className="h-3.5 w-3.5" />

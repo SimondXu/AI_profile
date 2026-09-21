@@ -34,7 +34,6 @@ export function AboutSection({ config }: AboutSectionProps) {
   const availability = config.entryLevel?.availability || null;
   const relocation = Boolean(config.personal.location?.relocation);
   const focus = config.entryLevel?.focusAreas ?? [];
-  const traits = config.personality?.traits ?? [];
   const interests = config.personality?.interests ?? [];
   const funFacts = config.personality?.funFacts ?? [];
 
@@ -63,18 +62,6 @@ export function AboutSection({ config }: AboutSectionProps) {
               {paragraph}
             </p>
           ))}
-          {traits.length ? (
-            <ul className="flex flex-wrap gap-2" aria-label="Traits">
-              {traits.map((trait) => (
-                <li
-                  key={trait}
-                  className="rounded-full border border-border bg-surface/70 px-3 py-1 font-mono text-[12px] text-muted-foreground"
-                >
-                  {trait}
-                </li>
-              ))}
-            </ul>
-          ) : null}
         </ScrollReveal>
 
         <ScrollReveal delay={140}>

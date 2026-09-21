@@ -2,23 +2,23 @@
   "personal": {
     "name": "Simon Xu",
     "location": {
-      "current": "Atlanta, GA, USA",
+      "current": "Los Angeles, CA, USA",
       "remote": true,
       "relocation": true,
       "preferredLocations": [
+        "Los Angeles, CA",
         "San Francisco, CA",
         "Seattle, WA",
-        "Atlanta, GA",
         "Austin, TX",
         "Remote"
       ],
-      "timezone": "EST (UTC-5)"
+      "timezone": "PST (UTC-8)"
     },
     "title": "Software Engineer, AI/ML",
-    "email": "edisonapply@gmail.com",
-    "phone": "626-552-1696",
+    "email": "simondxu@gmail.com",
+    "phone": "626-621-7720",
     "handle": "@SimondXu",
-    "bio": "I'm a software engineer on Highmark's AI/ML team. I build production AI systems for real-time voice training, agent evaluation, and enterprise knowledge retrieval, including the multimodal assistant and internal LLM gateway behind a GenAI platform that serves 6M+ prompts a year.\n\nMy work spans full-stack AI development, distributed systems, multi-agent orchestration, and RAG pipelines, plus the infrastructure underneath: LLM gateways, agent registries with policy gates and promotion controls, durable execution, and the evaluation and observability needed to ship reliable AI products.",
+    "bio": "Software engineer on Highmark's AI/ML team, building AI tools employees actually use: a call-center training platform where an LLM plays the customer on a live call and a rubric-based judge, tuned against coach-scored transcripts, grades the roleplay; the internal LLM gateway; and a multimodal assistant serving 30K users and 6M+ prompts a year.\n\nOutside work: Proxy Loop (fine-tuned Qwen3-8B, held-out task completion 58%\u219267%) and Conductor (a Go runtime for agent workflows that crash and resume without redoing side effects).",
     "avatar": "/avatar.png",
     "fallbackAvatar": "/avatar.png",
     "workAuthorization": {
@@ -52,13 +52,13 @@
       "type": "Full-time",
       "duration": "Aug 2024 - Present",
       "location": "Remote, USA",
-      "description": "Build production AI systems spanning real-time training, agent lifecycle management, evaluation, and enterprise retrieval.",
+      "description": "Call-center voice training with an LLM on the other end of the line, the judge that grades it, and the registry and evals that decide which agents reach production.",
       "highlights": [
-        "Shipped a real-time AI call-center training platform with configurable voice roleplays, reducing new-hire ramp-up time by 28%.",
-        "Designed an LLM-as-judge system calibrated on human-scored transcripts for reliable coaching feedback.",
-        "Built an AI-agent lifecycle control plane with versioned registry metadata, policy gates, durable evaluation runs, GitLab promotion, and production observability.",
-        "Architected a planner-executor-judge evaluation harness with holdout suites for quality, safety, latency, and cost regressions.",
-        "Engineered a Vertex AI Search workspace with metadata-filtered retrieval, configurable chunking, and citation-linked answers for private datastores."
+        "Shipped a real-time AI call-center training platform (React/FastAPI/WebSockets) where an LLM plays trainer-configured customer personas over the phone, replacing $1M+/year of consultant-led training.",
+        "Designed the rubric-based LLM-as-judge that scores each completed roleplay, tuning it against coach-scored transcripts until its scores tracked the coaches' before trainees saw any feedback.",
+        "Built an enterprise AI-agent lifecycle control plane governing versioned releases from staging to production via a centralized registry, durable evaluation runs, policy-gated GitLab promotions, and cross-environment observability.",
+        "Architected a multi-agent evaluation harness combining specialized reviewers, deterministic checks, and owner-defined and hidden tests to catch quality, safety, latency, and cost regressions before promotion.",
+        "Created a team-shared, access-controlled knowledge workspace on Vertex AI Search, implementing a RAG pipeline with metadata-filtered retrieval, configurable chunking, and citation-grounded answers over user-uploaded documents."
       ],
       "technologies": [
         "React",
@@ -77,11 +77,11 @@
       "type": "Internship",
       "duration": "May 2024 - Aug 2024",
       "location": "Remote, USA",
-      "description": "Built retrieval, model access, and multimodal capabilities for internal enterprise AI products.",
+      "description": "The internal LLM gateway, a policy Q&A bot that cites its sources, and the multimodal assistant that became the company's GenAI platform.",
       "highlights": [
-        "Developed a Flask RAG system with embeddings and Gemini for source-grounded policy answers and document summaries, cutting search time by 70%.",
-        "Engineered a fault-tolerant internal LLM API gateway with automatic retries and structured request logging.",
-        "Built a multimodal React and FastAPI assistant on Vertex AI for text, PDF, image, and voice workflows on a platform handling 6M+ annual prompts."
+        "Developed a Retrieval-Augmented Generation system using Flask, integrating embedding models and Gemini to answer employee queries on internal policies with cited sources; surveyed users reported 70% less search time.",
+        "Engineered the internal LLM API gateway exposing a single Gemini endpoint to engineering teams company-wide, with schema-validated JSON output, per-consumer cost attribution, and circuit-breaking on provider errors.",
+        "Built and scaled an internal multimodal AI assistant on Vertex AI (Gemini), enabling employees to process text, PDFs, images, and voice through a React and FastAPI stack; serves 30K users and processes 6M+ prompts annually."
       ],
       "technologies": [
         "React",
@@ -95,18 +95,22 @@
     }
   ],
   "skills": {
-    "programming": ["Python", "TypeScript", "JavaScript", "Java", "Go", "SQL"],
+    "programming": ["Python", "TypeScript", "JavaScript", "Java", "Go", "SQL", "Agentic AI Coding (Claude Code, Codex, Cursor)"],
     "ml_ai": [
       "RAG",
       "Multi-Agent Architecture",
       "LLM-as-Judge",
+      "Agent Evals",
       "Embedding Models",
-      "Fine-tuning",
-      "Harness Engineering",
+      "Fine-tuning (SFT, QLoRA)",
+      "Agent Harness Engineering",
       "LangChain",
       "MCP",
+      "Temporal",
       "PyTorch",
-      "Hugging Face",
+      "Hugging Face Transformers",
+      "PEFT",
+      "vLLM",
       "Vertex AI",
       "Gemini"
     ],
@@ -121,13 +125,13 @@
     ],
     "databases": ["PostgreSQL/pgvector", "Redis"],
     "devops_cloud": [
-      "Kafka",
       "Docker",
       "Kubernetes",
       "CI/CD",
       "AWS",
       "GCP",
-      "OpenTelemetry"
+      "OpenTelemetry",
+      "Prometheus"
     ],
     "big_data": ["PySpark"],
     "soft_skills": [
@@ -140,27 +144,56 @@
   },
   "projects": [
     {
+      "slug": "proxy-loop",
+      "title": "Proxy Loop: LLM Post-Training & Durable Agent Platform",
+      "category": "LLM Post-Training and Agent Platform",
+      "track": "ai-ml",
+      "summary": "A fine-tuned Qwen3-8B agent with a Fast/Slow harness and Temporal-backed durable workflows that act for the user across phone, browser, and email.",
+      "description": "An LLM post-training and durable agent platform: Qwen3-8B fine-tuned via SFT + 4-bit QLoRA on provenance-tracked agent trajectories, a Fast/Slow harness that separates low-latency voice interaction from long-horizon planning and tool use, and Temporal + PostgreSQL workflows that survive worker restarts.",
+      "techStack": [
+        "Python",
+        "Qwen3-8B",
+        "QLoRA",
+        "PEFT",
+        "vLLM",
+        "Temporal",
+        "PostgreSQL"
+      ],
+      "date": "Jul 2026 - Present",
+      "status": "In Progress",
+      "featured": true,
+      "achievements": [
+        "Fine-tuned Qwen3-8B via SFT + 4-bit QLoRA on 1.5K provenance-tracked agent trajectories synthesized and filtered by a Claude Sonnet teacher; lifted held-out task completion 58%→67% and cut false completion 6%→2%.",
+        "Architected a Fast/Slow agent harness separating low-latency voice interaction from long-horizon planning and tool use, with shared state, retries, approval gates, and completion checks across phone, browser, and email.",
+        "Implemented durable long-running agent workflows with Temporal + PostgreSQL, persisting approval waits and scheduled follow-ups while using idempotent retries and callback deduplication to recover across worker restarts."
+      ],
+      "metrics": [
+        "Held-out task completion 58% → 67%",
+        "False completion 6% → 2%"
+      ]
+    },
+    {
       "slug": "conductor",
-      "title": "Conductor: Distributed Multi-Agent Workflow Runtime",
+      "title": "Conductor: Distributed Agent Execution Runtime (Go)",
       "category": "Distributed AI Systems",
       "track": "ai-ml",
-      "summary": "A Kubernetes-native Go runtime for crash-resumable multi-agent workflows, distributed scheduling, and event-sourced observability.",
-      "description": "A Kubernetes-native Go runtime for crash-resumable, multi-agent LLM workflows with durable execution, distributed scheduling, and event-sourced observability.",
+      "summary": "A Kubernetes-native Go runtime for crash-resumable LLM workflows with event-sourced recovery, PostgreSQL leases and fencing tokens, and OpenTelemetry observability.",
+      "description": "A Go-based distributed agent runtime with event-sourced recovery and idempotent tool execution, so long-running LLM workflows resume after crashes without replaying completed side effects. A Kubernetes-native execution layer coordinates distributed workers with PostgreSQL leases and fencing tokens, and end-to-end OpenTelemetry + Prometheus observability covers every model and tool call.",
       "techStack": [
         "Go",
         "Kubernetes",
-        "Kafka",
+        "PostgreSQL",
         "Event Sourcing",
-        "DAG Orchestration",
-        "Multi-Agent Systems"
+        "OpenTelemetry",
+        "Prometheus"
       ],
       "date": "Apr 2026 - Jun 2026",
       "status": "Completed",
       "featured": true,
       "achievements": [
-        "Added per-step checkpoints so long-running workflows can resume after crashes without duplicating tool calls or model spend.",
-        "Scheduled DAG-based workflows across a scalable Kafka-backed worker pool with per-task retries.",
-        "Captured every model and tool call through event-sourced tracing, audit logs, and real-time workflow monitoring."
+        "Engineered a Go-based distributed agent runtime with event-sourced recovery and idempotent tool execution, allowing long-running LLM workflows to resume after crashes without replaying completed side effects.",
+        "Built a Kubernetes-native execution layer with PostgreSQL leases and fencing tokens to coordinate distributed workers, handling pod failures, graceful shutdowns, and rolling updates while preserving single-writer execution.",
+        "Added end-to-end OpenTelemetry + Prometheus observability across model and tool calls, validating throughput, p95/p99 latency, and failure recovery through chaos and load testing."
       ]
     },
     {
@@ -208,7 +241,7 @@
       ],
       "date": "Apr 2025 - May 2025",
       "status": "Completed",
-      "featured": true,
+      "featured": false,
       "achievements": [
         "Converted natural-language prompts into FigJam components at approximately 85% first-try accuracy.",
         "Reduced API costs by approximately 28% and lowered latency with PostgreSQL-backed memory, caching, and model routing."
@@ -343,37 +376,37 @@
     "seeking": false,
     "currentStatus": "Currently a Software Engineer on Highmark's AI/ML team and open to new software engineering opportunities.",
     "focusAreas": [
-      "AI Systems Engineering",
-      "Backend and Distributed Systems",
-      "Full-stack Product Engineering",
-      "LLM Evaluation and Retrieval"
+      "Applied AI / LLM products",
+      "Full-stack AI development",
+      "Forward deployed engineering",
+      "Post-training and evals (SFT, QLoRA, LLM-as-judge)"
     ],
     "availability": "Open to new opportunities",
-    "workStyle": "Direct, systems-oriented, and pragmatic; I like turning ambiguous AI ideas into testable, observable products.",
+    "workStyle": "I'd rather ship the small version with an eval than the big version with a demo.",
     "goals": "Build reliable AI products and agent platforms where evaluation, retrieval, infrastructure, and user experience work as one system."
   },
   "personality": {
     "traits": ["curious", "pragmatic", "systems-minded", "direct", "collaborative"],
     "interests": [
-      "Reliable AI systems",
-      "Distributed agent runtimes",
-      "Retrieval and evaluation",
-      "AI/ML infrastructure",
-      "Model training and scaling systems",
-      "Agentic reinforcement learning",
-      "Full-stack product engineering",
-      "Developer tools"
+      "Post-training small models (Qwen3-8B, QLoRA)",
+      "Temporal workflows that wait days for a human",
+      "Go, for runtime work",
+      "LLM-as-judge calibration",
+      "Agentic RL",
+      "Claude Code and Codex as daily drivers",
+      "A 112-track playlist I started in 2022"
     ],
     "funFacts": [
-      "Microsoft AI Hackathon Participant",
-      "My academic path combines Applied Economics with Computational Science and Engineering",
-      "I build both product-facing AI applications and the infrastructure underneath them"
+      "Started in economics at UCSB, ended up in computational science at Georgia Tech.",
+      "Lived in Atlanta for Georgia Tech; Los Angeles now.",
+      "One Microsoft AI Hackathon, survived.",
+      "112-track playlist running since 2022: eight Taylor Swift, five Joji, not sorry."
     ],
     "workingStyle": "I start from the user problem and the failure modes, then build the smallest testable system with clear evaluation and observability.",
     "motivation": "Turning promising AI behavior into reliable software that people can actually use and trust."
   },
   "aiProfile": {
-    "positioning": "I am an end-to-end AI systems engineer. I connect product interfaces, backend services, retrieval and evaluation, distributed agent runtimes, and production reliability instead of treating the model as the whole product.",
+    "positioning": "I build AI products end to end, from the model to the interface. I fine-tune and evaluate models, then ship them inside systems people can trust: evals that block a bad release, a gateway other teams can call without thinking, retrieval that cites its sources, runtimes that pick up where they crashed, and a UI that gets used every day.",
     "voice": {
       "traits": ["first-person", "direct", "calm", "technical", "evidence-led"],
       "defaultLength": "Answer in two to four short paragraphs. Lead with the direct answer, then use one concrete example or metric.",
@@ -427,7 +460,7 @@
       "Lead with what I built, why it mattered, and how I know it worked.",
       "Use concrete systems and trade-offs before listing technologies.",
       "Connect AI behavior to retrieval quality, evaluation, observability, latency, cost, and failure recovery.",
-      "Distinguish Highmark professional work from personal projects such as Conductor, Engram, and FigBrain.",
+      "Distinguish Highmark professional work from personal projects such as Proxy Loop, Conductor, Engram, and FigBrain.",
       "For broad questions, choose the single strongest relevant example and offer more depth only when useful."
     ],
     "evidenceBoundaries": [
@@ -443,10 +476,11 @@
       "How do you make LLM systems reliable?"
     ],
     "followUpQuestions": [
+      "How did you fine-tune Qwen3-8B for Proxy Loop?",
       "How does Conductor recover failed workflows?",
       "How does Engram evaluate memory retrieval?",
       "What did you learn building FigBrain?",
-      "Why did you choose event sourcing and Kafka for Conductor?",
+      "Why does Conductor use PostgreSQL leases and fencing tokens?",
       "How does Engram handle stale or conflicting memories?",
       "What trade-offs did FigBrain make around cost and latency?",
       "How does your full-stack background shape your AI work?",
@@ -465,7 +499,7 @@
           "who are you",
           "your background"
         ],
-        "answer": "I am an end-to-end AI systems engineer. I work across product interfaces, backend services, retrieval and evaluation, and the infrastructure that makes agent workflows reliable. The common thread in my work is turning model behavior into software that is grounded, observable, and maintainable."
+        "answer": "I build AI products end to end: I fine-tune and evaluate models, and I ship them inside real systems with the gateway, retrieval, agent runtime, and UI around them. At Highmark that meant a call-center training platform with an LLM-as-judge tuned against coach-scored transcripts; on my own time it meant post-training Qwen3-8B and building a Go agent runtime. The common thread is turning model behavior into software people can trust and use."
       },
       {
         "question": "What problems do you solve best?",
@@ -545,7 +579,7 @@
           "holdout suites",
           "agent regression"
         ],
-        "answer": "I use structured evaluation rather than relying on a few successful demos. My Highmark work includes planner-executor-judge evaluation loops, owner-defined and holdout suites, and checks for quality, safety, latency, and cost regressions. For judge-based feedback, I calibrate against human-scored examples so the evaluator itself has an evidence baseline."
+        "answer": "I use structured evaluation rather than relying on a few successful demos. My Highmark work includes a multi-agent evaluation harness that combines specialized reviewers, deterministic checks, and owner-defined and hidden tests to catch quality, safety, latency, and cost regressions before an agent is promoted. For judge-based feedback, I tune the rubric-based judge against coach-scored transcripts so the evaluator itself has an evidence baseline."
       },
       {
         "question": "What is something interesting about your background?",
@@ -564,12 +598,12 @@
           "current role",
           "where are you working"
         ],
-        "answer": "At Highmark, I have worked on production AI systems across real-time voice training, LLM evaluation, agent lifecycle controls, and enterprise retrieval. Examples include a React/FastAPI/WebSocket call-center training platform, an LLM-as-judge system calibrated on human-scored transcripts, a multi-agent evaluation harness, and a citation-linked knowledge workspace on Vertex AI Search. During my internship, I also built a policy RAG system, an internal Gemini gateway, and a multimodal assistant."
+        "answer": "At Highmark, I have worked on production AI systems across real-time voice training, LLM evaluation, agent lifecycle controls, and enterprise retrieval. Examples include a React/FastAPI/WebSocket call-center training platform, a rubric-based LLM-as-judge tuned against coach-scored transcripts, an agent lifecycle control plane with policy-gated promotions, a multi-agent evaluation harness, and a citation-grounded knowledge workspace on Vertex AI Search. During my internship, I also built a policy RAG system, the internal Gemini gateway, and a multimodal assistant that serves 30K users and 6M+ prompts a year."
       },
       {
         "question": "How do you make LLM systems reliable?",
         "matchTerms": ["llm systems reliable", "ai reliability", "evaluate llm", "evaluation approach"],
-        "answer": "I treat reliability as a system property, not a prompt tweak. In my work that has meant calibrating LLM-as-judge feedback against human-scored transcripts, running owner-defined and holdout suites for quality, safety, latency, and cost, grounding answers with filtered retrieval and citations, and tracing model and tool calls so regressions are diagnosable."
+        "answer": "I treat reliability as a system property, not a prompt tweak. In my work that has meant tuning LLM-as-judge feedback against coach-scored transcripts, running specialized reviewers, deterministic checks, and hidden tests for quality, safety, latency, and cost before promotion, grounding answers with filtered retrieval and citations, and tracing model and tool calls so regressions are diagnosable."
       },
       {
         "question": "How does your LLM-as-judge evaluation work?",
@@ -580,7 +614,7 @@
           "human-scored transcripts",
           "human scored transcripts"
         ],
-        "answer": "The documented design calibrates the LLM judge against human-scored transcripts instead of assuming the model is a reliable evaluator by default. That gives the coaching feedback an external reference point, while broader owner-defined and holdout suites check quality, safety, latency, and cost regressions. The public profile does not specify the dataset size, scoring thresholds, or agreement statistics, so I would not invent those details."
+        "answer": "The judge is rubric-based and scores each completed roleplay. Rather than assuming the model is a reliable evaluator by default, I tuned it against coach-scored transcripts until its scores tracked the coaches' before any trainee saw feedback. A broader evaluation harness with specialized reviewers, deterministic checks, and owner-defined and hidden tests covers quality, safety, latency, and cost regressions. The public profile does not specify the dataset size, scoring thresholds, or agreement statistics, so I would not invent those details."
       },
       {
         "question": "How do you approach enterprise RAG and grounded retrieval?",
@@ -602,20 +636,36 @@
       {
         "question": "How does Conductor recover failed workflows?",
         "matchTerms": ["conductor recover", "failed workflows", "crash resumable"],
-        "answer": "Conductor uses event-sourced durable execution and per-step checkpoints. A failed worker can replay the workflow state and retry the failed task without restarting the entire DAG, duplicating completed tool calls, or paying for the same model work again. Kafka-backed scheduling distributes those tasks across the worker pool."
+        "answer": "Conductor uses event-sourced recovery and idempotent tool execution. After a crash, a worker rebuilds workflow state from the event log and resumes without replaying side effects that already completed, so no tool call runs twice and no model work is paid for again. PostgreSQL leases and fencing tokens make sure only one worker owns a workflow at a time, even across pod failures, graceful shutdowns, and rolling updates."
       },
       {
-        "question": "Why does Conductor use event sourcing and Kafka?",
+        "question": "Why does Conductor use PostgreSQL leases and fencing tokens?",
         "matchTerms": [
           "conductor architecture",
           "conductor design",
           "why event sourcing",
-          "event sourcing and kafka",
-          "kafka-backed",
-          "kafka backed",
-          "dag scheduler"
+          "fencing token",
+          "fencing tokens",
+          "postgresql leases",
+          "single-writer",
+          "single writer"
         ],
-        "answer": "Event sourcing and per-step checkpoints give Conductor a durable history that can be replayed after a crash, while Kafka-backed scheduling distributes DAG tasks across a worker pool and supports per-task retries. The combination is meant to avoid restarting an entire workflow or duplicating completed model and tool work. The public project description does not specify partitioning, consistency guarantees, or the checkpoint store, so those implementation details remain intentionally unclaimed."
+        "answer": "Event sourcing gives Conductor a durable history it can rebuild state from after a crash, and idempotent tool execution keeps that replay from repeating side effects. The Kubernetes execution layer coordinates workers through PostgreSQL leases with fencing tokens so a stale worker that wakes up after a pod failure or rolling update cannot write over a newer owner; that is what preserves single-writer execution. I validated throughput, p95/p99 latency, and failure recovery with OpenTelemetry + Prometheus under chaos and load testing, but the public profile does not publish those numbers, so I keep them unclaimed."
+      },
+      {
+        "question": "How did you fine-tune Qwen3-8B for Proxy Loop?",
+        "matchTerms": [
+          "proxy loop",
+          "proxyloop",
+          "qwen",
+          "qlora",
+          "fine-tune",
+          "fine tune",
+          "post-training",
+          "post training",
+          "sft"
+        ],
+        "answer": "Proxy Loop is my post-training and durable-agent project. I fine-tuned Qwen3-8B with SFT plus 4-bit QLoRA on about 1.5K provenance-tracked agent trajectories that a Claude Sonnet teacher synthesized and filtered. On a held-out set that lifted task completion from 58% to 67% and cut false completion, where the agent claims it finished but did not, from 6% to 2%. The model runs inside a Fast/Slow harness that separates low-latency voice interaction from long-horizon planning and tool use, and Temporal + PostgreSQL keep approval waits and scheduled follow-ups durable across worker restarts. The held-out set size and the trajectory filter rule are not in the public profile, so I would not quote them."
       },
       {
         "question": "How does Engram evaluate memory retrieval?",
@@ -661,7 +711,7 @@
           "role would be a strong fit",
           "strong fit role"
         ],
-        "answer": "I am most interested in software engineering roles where I can build reliable AI products end to end: AI systems, backend and distributed systems, full-stack product engineering, or LLM evaluation and retrieval. I am currently employed, open to new opportunities, and especially interested in teams that care about both product usefulness and production reliability."
+        "answer": "Applied AI Engineer, Full-Stack AI Engineer, or Forward Deployed Engineer roles, where I own an AI product from model to interface: fine-tuning and evaluation on one side, the gateway, retrieval, agent runtime, and UI on the other. I am currently employed, open to new opportunities, and especially interested in teams that ship to real users and care about production reliability."
       },
       {
         "question": "Why are you considering a new opportunity?",
@@ -677,7 +727,7 @@
       {
         "question": "Do you need sponsorship or relocation support?",
         "matchTerms": ["sponsorship", "visa", "relocation", "work authorization"],
-        "answer": "I am a U.S. citizen and do not require visa sponsorship. I am currently based in Atlanta and open to relocation nationwide, as well as remote opportunities."
+        "answer": "I am a U.S. citizen and do not require visa sponsorship. I am currently based in Los Angeles and open to relocation nationwide, as well as remote opportunities."
       },
       {
         "question": "What work location or schedule do you prefer?",
@@ -691,7 +741,7 @@
           "where are you located",
           "based in"
         ],
-        "answer": "I am currently based in Atlanta, open to remote opportunities, and open to relocation nationwide. The public profile does not state a fixed preference between hybrid and on-site work, so I would treat that as a role-specific conversation rather than inventing a constraint."
+        "answer": "I am currently based in Los Angeles, open to remote opportunities, and open to relocation nationwide. The public profile does not state a fixed preference between hybrid and on-site work, so I would treat that as a role-specific conversation rather than inventing a constraint."
       },
       {
         "question": "When can you start, and what compensation are you looking for?",
@@ -716,10 +766,10 @@
     "title": "Simon Xu - Resume",
     "description": "Software Engineer (AI/ML) | Production AI Systems | MS CSE Georgia Tech | Highmark Inc.",
     "fileType": "PDF",
-    "lastUpdated": "August 2026",
-    "fileSize": "146 KB",
+    "lastUpdated": "September 2026",
+    "fileSize": "42 KB",
     "downloadUrl": "/resume",
-    "pdfUrl": "/Edison-resume-2026.pdf"
+    "pdfUrl": "/SimonXu-resume-2026.pdf"
   },
   "chatbot": {
     "name": "Simon",
@@ -777,10 +827,11 @@
       "What projects are you most proud of?",
       "What are your projects?",
       "Tell me about your best project",
+      "How did you fine-tune Qwen3-8B for Proxy Loop?",
       "How does Conductor recover failed workflows?",
       "How does Engram evaluate memory retrieval?",
       "What did you learn building FigBrain?",
-      "Why did you choose event sourcing and Kafka for Conductor?",
+      "Why does Conductor use PostgreSQL leases and fencing tokens?",
       "How does Engram handle stale or conflicting memories?",
       "What trade-offs did FigBrain make around cost and latency?",
       "How do you balance AI quality, latency, and cost?"
@@ -801,8 +852,8 @@
     ]
   },
   "meta": {
-    "configVersion": "1.2",
-    "lastUpdated": "2026-08-09",
+    "configVersion": "1.3",
+    "lastUpdated": "2026-09-21",
     "generatedBy": "Simon Xu",
     "description": "Complete portfolio configuration for AI-powered portfolio website"
   }
