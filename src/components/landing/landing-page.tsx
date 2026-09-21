@@ -2,7 +2,13 @@ import { MapPin } from "lucide-react";
 import Link from "next/link";
 import { ScrollReveal } from "@/components/motion/scroll-reveal";
 import { ProjectCover } from "@/components/projects/covers/project-cover";
-import { CollectionDesk, type DeskNote } from "@/components/studio/collection-desk";
+import {
+  CollectionDesk,
+  type DeskNote,
+  type DeskProject,
+  type DeskRecord,
+} from "@/components/studio/collection-desk";
+import { musicCrate } from "@/content/music";
 import { projectPresentationBySlug } from "@/content/project-presentation";
 import { getConfig } from "@/lib/config-loader";
 import { AboutSection } from "./about-section";
@@ -20,6 +26,35 @@ const pillClass =
 export function firstSentence(text: string): string {
   const match = text.match(/^[^.!?]*[.!?]/);
   return (match ? match[0] : text).trim();
+}
+
+/** Days since Jan 1 (UTC) — the desk's record rotates once a day. */
+function dayOfYear(date: Date): number {
+  const start = Date.UTC(date.getUTCFullYear(), 0, 1);
+  const today = Date.UTC(
+    date.getUTCFullYear(),
+    date.getUTCMonth(),
+    date.getUTCDate(),
+  );
+  return Math.floor((today - start) / 86_400_000);
+}
+
+/**
+ * One record out of the crate for the desk. The pick is a pure function of the
+ * date, so it is stable for a whole day and identical on the server and in the
+ * hydrated client; only records that actually have artwork are eligible.
+ */
+function deskRecordOfTheDay(): DeskRecord | null {
+  const withArtwork = musicCrate.records.filter((record) => record.artwork);
+  if (withArtwork.length === 0) return null;
+  const pick = withArtwork[dayOfYear(new Date()) % withArtwork.length];
+  return {
+    id: pick.id,
+    title: pick.title,
+    artist: pick.artist,
+    artwork: pick.artwork,
+    glow: pick.glow,
+  };
 }
 
 export default async function LandingPage() {
@@ -49,6 +84,21 @@ export default async function LandingPage() {
   ];
 
   const featuredProjects = config.projects.filter((project) => project.featured);
+  const deskProjects: DeskProject[] = featuredProjects
+    .slice(0, 3)
+    .map((project) => {
+      const presentation = projectPresentationBySlug[project.slug];
+      return {
+        slug: project.slug,
+        shortTitle:
+          presentation?.shortTitle ??
+          (project.title.length > 16
+            ? `${project.title.slice(0, 15).trimEnd()}…`
+            : project.title),
+        coverKind: presentation?.coverKind,
+      };
+    });
+  const deskRecord = deskRecordOfTheDay();
   const location = config.personal.location?.current;
   const availability = config.entryLevel?.availability;
 
@@ -116,7 +166,10 @@ export default async function LandingPage() {
             askQuestion={deskAskQuestion}
             lines={avatarLines}
             terminalQuestion={terminalQuestion}
+            terminalQuestions={config.aiProfile.featuredQuestions}
             note={note}
+            record={deskRecord}
+            projects={deskProjects}
           />
         </div>
       </section>

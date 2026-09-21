@@ -1,10 +1,11 @@
 /* Collection Desk: surface material + object geometry. Per-object colors,
    radii and typography stay in Tailwind utility classes on the JSX; this
    file carries the desk's paper/cloth surface treatment (dot grid, "mat",
-   inner top highlight — CSS-only, built from tokens) plus the absolute
-   positioning that turns the desk into a composed scene at `md`. Mobile-first:
-   link objects sit in a plain 2-column grid until `md`; purely decorative
-   pieces (avatar, speech bubble, sticky note, mug) only exist on the scene. */
+   inner top highlight, pointer light — CSS-only, built from tokens) plus the
+   absolute positioning that turns the desk into a composed scene at `md`.
+   Mobile-first: link objects sit in a plain 2-column grid until `md`; purely
+   decorative pieces (speech bubble, sticky note, rubber duck) only exist on
+   the scene. */
 
 .scene {
   perspective: 1000px;
@@ -23,8 +24,12 @@
 @media (min-width: 768px) {
   .desk {
     display: block;
-    aspect-ratio: 4 / 3;
-    min-height: 320px;
+    aspect-ratio: 7 / 6;
+    min-height: 360px;
+    /* The scene is composed for a ~450–540px desk; between `md` and `lg` the
+       hero is one column, so cap the width instead of letting it balloon. */
+    max-width: 34rem;
+    margin-inline: auto;
     padding: 0;
     background-image: radial-gradient(
       circle,
@@ -35,6 +40,16 @@
     box-shadow: inset 0 1px 0 color-mix(in srgb, white 10%, transparent);
   }
 
+  /* The dark desk is graphite on graphite: the grid and the mat need more
+     contrast there or the surface reads as a flat void. */
+  :global(.dark) .desk {
+    background-image: radial-gradient(
+      circle,
+      color-mix(in srgb, var(--foreground) 12%, transparent) 1px,
+      transparent 1px
+    );
+  }
+
   .desk::before {
     content: "";
     position: absolute;
@@ -43,6 +58,50 @@
     border-radius: 18px;
     background: color-mix(in srgb, var(--material-wood) 14%, transparent);
     pointer-events: none;
+  }
+
+  :global(.dark) .desk::before {
+    background: color-mix(in srgb, var(--material-wood) 20%, transparent);
+  }
+
+  /* Warm pool of light under the pointer. The handler only sets --desk-light
+     when canTilt() says the pointer is fine and motion is allowed, so coarse
+     pointers and reduced motion never see it. */
+  .desk::after {
+    content: "";
+    position: absolute;
+    inset: 0;
+    z-index: 1;
+    border-radius: inherit;
+    pointer-events: none;
+    opacity: var(--desk-light, 0);
+    transition: opacity 420ms ease-out;
+    background: radial-gradient(
+      50% 42% at var(--desk-lx, 50%) var(--desk-ly, 50%),
+      color-mix(in srgb, var(--material-wood) 28%, transparent),
+      transparent 72%
+    );
+  }
+
+  :global(.dark) .desk::after {
+    background: radial-gradient(
+      52% 44% at var(--desk-lx, 50%) var(--desk-ly, 50%),
+      color-mix(in srgb, var(--material-wood) 34%, transparent),
+      color-mix(in srgb, var(--accent) 8%, transparent) 45%,
+      transparent 74%
+    );
+  }
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .desk::after {
+    display: none;
+  }
+}
+
+@media (hover: none) {
+  .desk::after {
+    display: none;
   }
 }
 
@@ -58,29 +117,32 @@
     z-index: 15;
   }
 
+  /* Left column shares a 7% left edge: avatar → note → projects.
+     Right column shares a 6% right edge: resume → record → terminal. */
+
   .avatarSlot {
-    top: 6%;
-    left: 6%;
+    top: 4%;
+    left: 7%;
     z-index: 20;
   }
 
   .bubbleSlot {
-    top: 11%;
-    left: 37%;
-    width: clamp(7rem, 27%, 10.5rem);
+    top: 13%;
+    left: 35%;
+    width: clamp(9rem, 38%, 13rem);
   }
 
   .noteSlot {
-    bottom: 13%;
-    left: 40%;
-    width: clamp(5rem, 16%, 6rem);
+    top: 45%;
+    left: 8%;
+    width: clamp(5rem, 17%, 6.5rem);
     z-index: 12;
   }
 
-  .mugSlot {
-    top: 40%;
-    left: 60%;
-    z-index: 5;
+  .duckSlot {
+    top: 49%;
+    left: 29%;
+    z-index: 14;
   }
 }
 
@@ -93,6 +155,24 @@
     0 10px 24px -14px color-mix(in srgb, black 32%, transparent);
 }
 
+/* Avatar squash-and-bounce when it is tapped for a line. */
+.squash {
+  transform-origin: 50% 100%;
+  animation: desk-squash 340ms cubic-bezier(0.34, 1.56, 0.64, 1);
+}
+
+@keyframes desk-squash {
+  30% {
+    transform: scale(1.08, 0.88);
+  }
+  60% {
+    transform: scale(0.97, 1.05);
+  }
+  100% {
+    transform: none;
+  }
+}
+
 .slot {
   position: static;
 }
@@ -103,39 +183,35 @@
     z-index: 10;
   }
 
-  /* Scene (desk width ≈ 440–620px): avatar top-left, bubble beside it,
-     resume top-right, projects bottom-left, terminal bottom-right, sticky
-     note under the avatar, mug in the bottom gap. Music/Photos keep slots
-     for when those sections go live. */
-
   .slotResume {
-    top: 8%;
+    top: 4%;
     right: 6%;
-    width: clamp(6.5rem, 19%, 7.5rem);
+    width: clamp(5.5rem, 17%, 7rem);
+  }
+
+  .slotMusic {
+    top: 40%;
+    right: 6%;
+    width: clamp(4.5rem, 15%, 6rem);
   }
 
   .slotAsk {
-    bottom: 8%;
-    right: 5%;
+    bottom: 5%;
+    right: 6%;
     width: clamp(8.5rem, 36%, 12.5rem);
   }
 
   .slotProjects {
-    bottom: 8%;
+    bottom: 5%;
     left: 7%;
-    width: clamp(8rem, 30%, 11rem);
+    width: clamp(8rem, 29%, 10.5rem);
   }
 
-  .slotMusic {
-    top: 36%;
-    left: 36%;
-    width: clamp(3.75rem, 12%, 5rem);
-  }
-
+  /* Kept warm for when the Photos section goes visible. */
   .slotPhotos {
-    top: 46%;
-    left: 40%;
-    width: clamp(5rem, 15%, 6rem);
+    top: 52%;
+    left: 42%;
+    width: clamp(4.5rem, 14%, 5.5rem);
   }
 }
 
@@ -177,31 +253,165 @@
   border-bottom-right-radius: 6px;
 }
 
-/* Mug: a circle with a handle, drawn from tokens. */
-.mug {
-  position: relative;
-  width: 2.6rem;
-  height: 2.6rem;
-  border-radius: 50%;
-  background: var(--material-paper);
-  border: 1px solid color-mix(in srgb, black 12%, transparent);
-  box-shadow:
-    inset 0 0 0 5px color-mix(in srgb, black 8%, transparent),
-    inset 0 0 0 9px #4a2f1f,
-    0 6px 14px -8px color-mix(in srgb, black 40%, transparent);
+/* Ink on a paper object — dark in both themes, built from the materials. */
+.paperInk {
+  color: color-mix(in srgb, var(--material-vinyl) 78%, var(--material-paper));
 }
 
-.mug::after {
+/* Rubber duck: an inline SVG silhouette (tail + body + head, wing, bill, eye)
+   drawn from two colour custom properties so nothing hard-codes a value in the
+   JSX. It is a real button that fires the same "hi" wave as typing `hi`, so it
+   gets a 44px hit area and its own focus ring. */
+.duckButton {
+  position: relative;
+  -webkit-tap-highlight-color: transparent;
+
+  /* The one place the duck's colours are defined. Dark mode is desaturated a
+     step so a bright yellow does not glow on the graphite desk. */
+  --duck-body: #f0bf33;
+  --duck-bill: #ea8a32;
+  --duck-wing: color-mix(in srgb, var(--duck-body) 86%, black);
+  --duck-eye: var(--material-vinyl);
+  --duck-shadow: color-mix(in srgb, black 20%, transparent);
+}
+
+:global(.dark) .duckButton {
+  --duck-body: #d4ab3c;
+  --duck-bill: #c67c35;
+  --duck-shadow: color-mix(in srgb, black 48%, transparent);
+}
+
+/* Contact shadow: it sits on the button, not on the duck, so it stays put on
+   the desk while the duck bobs and squashes above it. */
+.duckButton::after {
   content: "";
   position: absolute;
-  top: 50%;
-  right: -0.7rem;
-  width: 0.9rem;
-  height: 1.1rem;
-  transform: translateY(-50%);
-  border: 4px solid var(--material-paper);
-  border-left: 0;
-  border-radius: 0 0.6rem 0.6rem 0;
+  left: 50%;
+  bottom: 0.12rem;
+  width: 2.3rem;
+  height: 0.36rem;
+  transform: translateX(-50%);
+  border-radius: 50%;
+  background: var(--duck-shadow);
+  pointer-events: none;
+}
+
+.duck {
+  display: block;
+}
+
+.duckArt {
+  display: block;
+  width: 3rem;
+  height: auto;
+  transform-origin: 50% 100%;
+}
+
+/* Gentle bob on hover/focus — on the wrapper, so it never fights the squeak. */
+.duckButton:hover .duck,
+.duckButton:focus-visible .duck {
+  animation: desk-duck-bob 1.2s ease-in-out infinite;
+}
+
+@keyframes desk-duck-bob {
+  0%,
+  100% {
+    transform: translateY(0);
+  }
+  50% {
+    transform: translateY(-4px);
+  }
+}
+
+/* "Squeak": squash and stretch on press, cleared on animationend. */
+.squeak {
+  animation: desk-duck-squeak 360ms cubic-bezier(0.34, 1.56, 0.64, 1);
+}
+
+@keyframes desk-duck-squeak {
+  0% {
+    transform: scale(1, 1);
+  }
+  25% {
+    transform: scale(1.15, 0.85);
+  }
+  55% {
+    transform: scale(0.94, 1.08);
+  }
+  80% {
+    transform: scale(1.04, 0.97);
+  }
+  100% {
+    transform: scale(1, 1);
+  }
+}
+
+/* The record: a disc peeking out of its sleeve, spinning while hovered. */
+.discHolder {
+  pointer-events: none;
+}
+
+.disc {
+  position: relative;
+  display: block;
+  width: 100%;
+  height: 100%;
+  border-radius: 50%;
+  background:
+    repeating-radial-gradient(
+      circle,
+      transparent 0 2px,
+      color-mix(in srgb, white 9%, transparent) 2px 3px
+    ),
+    var(--material-vinyl);
+  box-shadow:
+    0 0 0 1px color-mix(in srgb, white 16%, transparent),
+    0 6px 14px -8px color-mix(in srgb, black 60%, transparent);
+}
+
+/* Label, tinted with the record's own dominant colour. */
+.disc::before {
+  content: "";
+  position: absolute;
+  inset: 33%;
+  border-radius: 50%;
+  background: var(--disc-glow, var(--accent));
+}
+
+/* Spindle hole. */
+.disc::after {
+  content: "";
+  position: absolute;
+  inset: 47%;
+  border-radius: 50%;
+  background: color-mix(in srgb, black 60%, var(--disc-glow, var(--accent)));
+}
+
+:global(.group):hover .disc,
+:global(.group):focus-visible .disc {
+  animation: desk-disc-spin 4s linear infinite;
+}
+
+@keyframes desk-disc-spin {
+  to {
+    transform: rotate(360deg);
+  }
+}
+
+/* Terminal typewriter: each character holds at opacity 0 through its own
+   delay, so the server renders the whole question and the "typing" is pure
+   CSS — no hydration gap and nothing to flash. */
+.typedChar {
+  animation: desk-typed-in 80ms ease-out both;
+}
+
+@keyframes desk-typed-in {
+  from {
+    opacity: 0;
+  }
+  to {
+    opacity: 1;
+  }
 }
 
 /* Terminal caret. */
@@ -223,7 +433,21 @@
 }
 
 @media (prefers-reduced-motion: reduce) {
-  .caret::after {
+  .caret::after,
+  .squash,
+  .squeak,
+  .typedChar {
+    animation: none;
+  }
+
+  /* Same selectors as the hover rules above, or they out-specify this. */
+  .duckButton:hover .duck,
+  .duckButton:focus-visible .duck {
+    animation: none;
+  }
+
+  :global(.group):hover .disc,
+  :global(.group):focus-visible .disc {
     animation: none;
   }
 }
