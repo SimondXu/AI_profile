@@ -119,6 +119,11 @@ const PROJECT_CARD_CLASS = [
 
 const AVATAR_DEPTH = 0.4;
 const WAVE_MS = 900;
+/** How far across the desk the duck waddles, as a fraction of the desk width. */
+const DUCK_WALK_RATIO = 0.27;
+/** Clamp, so the walk stays in the free lane on both the narrow and wide desk. */
+const DUCK_WALK_MIN = 132;
+const DUCK_WALK_MAX = 170;
 const WAVE_LINE = "Hi! Ask me anything.";
 /** Typewriter: per character, plus the head start that lets `.reveal` finish. */
 const TYPE_MS = 35;
@@ -386,8 +391,11 @@ export function CollectionDesk({
   const [waving, setWaving] = useState(false);
   const [squashing, setSquashing] = useState(false);
   const [squeaking, setSqueaking] = useState(false);
+  /** Walk distance in px while the duck is out; null means it is home. */
+  const [walkX, setWalkX] = useState<number | null>(null);
   const lineIndex = useRef(-1);
   const waveTimer = useRef<number | null>(null);
+  const duckSlotRef = useRef<HTMLDivElement>(null);
 
   const sayNextLine = useCallback(() => {
     setSquashing(true);
@@ -396,10 +404,27 @@ export function CollectionDesk({
     setBubble(lines[lineIndex.current]);
   }, [lines]);
 
+  const walking = walkX !== null;
+
   const sayHi = useCallback(() => {
+    // One trip at a time: while the duck is out, the button is inert.
+    if (walking) return;
     setSqueaking(true);
     window.dispatchEvent(new CustomEvent(WAVE_EVENT));
-  }, []);
+    if (reducedMotion) return;
+    // The slot is positioned against the desk, so its offsetParent is the desk.
+    const desk = duckSlotRef.current?.offsetParent;
+    const deskWidth = desk instanceof HTMLElement ? desk.offsetWidth : 0;
+    if (deskWidth === 0) return;
+    setWalkX(
+      Math.round(
+        Math.min(
+          DUCK_WALK_MAX,
+          Math.max(DUCK_WALK_MIN, deskWidth * DUCK_WALK_RATIO),
+        ),
+      ),
+    );
+  }, [reducedMotion, walking]);
 
   useEffect(() => {
     const handleWave = () => {
@@ -582,6 +607,7 @@ export function CollectionDesk({
 
         {/* Rubber duck — the visible way into the "hi" wave. */}
         <div
+          ref={duckSlotRef}
           className={cn(styles.decor, styles.duckSlot, "reveal")}
           style={{ animationDelay: "240ms" }}
         >
@@ -591,8 +617,20 @@ export function CollectionDesk({
               onClick={sayHi}
               aria-label="Say hi"
               title="Say hi"
+              aria-busy={walking || undefined}
+              onAnimationEnd={(event) => {
+                if (event.animationName.includes("desk-duck-walk")) {
+                  setWalkX(null);
+                }
+              }}
+              style={
+                walking
+                  ? ({ "--duck-walk-x": `${walkX}px` } as CSSProperties)
+                  : undefined
+              }
               className={cn(
                 styles.duckButton,
+                walking && styles.walking,
                 "flex min-h-11 min-w-11 items-center justify-center rounded-[12px] p-1 focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-ring",
               )}
             >

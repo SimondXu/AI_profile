@@ -1,4 +1,4 @@
-import { MapPin } from "lucide-react";
+import { Github, Linkedin, Mail, MapPin } from "lucide-react";
 import Link from "next/link";
 import { ScrollReveal } from "@/components/motion/scroll-reveal";
 import { ProjectCover } from "@/components/projects/covers/project-cover";
@@ -13,6 +13,7 @@ import { projectPresentationBySlug } from "@/content/project-presentation";
 import { getConfig } from "@/lib/config-loader";
 import { AboutSection } from "./about-section";
 import { AiStatusPill } from "./ai-status-pill";
+import { CardRail } from "./card-rail";
 import { ExperienceTimeline } from "./experience-timeline";
 import { HeroAskForm } from "./hero-ask-form";
 import { getLastPush } from "./now-strip";
@@ -21,6 +22,10 @@ import { SectionHeader } from "./section-header";
 
 const pillClass =
   "inline-flex items-center gap-2 rounded-full border border-border bg-surface/70 px-3 py-1 font-mono text-[12px] text-muted-foreground backdrop-blur";
+
+/** Icon links under the Ask form; hrefs come from the config, never from JSX. */
+const socialIconClass =
+  "inline-flex h-11 w-11 items-center justify-center rounded-[10px] text-muted-foreground transition-colors hover:bg-surface/70 hover:text-foreground focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-ring";
 
 /** First sentence of a paragraph — the hero says one thing, About says the rest. */
 export function firstSentence(text: string): string {
@@ -156,7 +161,44 @@ export default async function LandingPage() {
             </div>
           </Reveal>
           <Reveal delay={180}>
-            <HeroAskForm suggestions={askSuggestions} label="Ask my portfolio AI" />
+            <div className="flex w-full max-w-md flex-col gap-1">
+              <HeroAskForm suggestions={askSuggestions} label="Ask my portfolio AI" />
+              {/* Outbound clicks are already reported by the delegated listener
+                  in PageViewTracker, so these links stay plain anchors. */}
+              <ul className="-ml-2.5 flex items-center gap-1">
+                <li>
+                  <a
+                    href={config.social.github}
+                    target="_blank"
+                    rel="noopener noreferrer"
+                    aria-label="GitHub profile"
+                    className={socialIconClass}
+                  >
+                    <Github className="h-[18px] w-[18px]" aria-hidden="true" />
+                  </a>
+                </li>
+                <li>
+                  <a
+                    href={config.social.linkedin}
+                    target="_blank"
+                    rel="noopener noreferrer"
+                    aria-label="LinkedIn profile"
+                    className={socialIconClass}
+                  >
+                    <Linkedin className="h-[18px] w-[18px]" aria-hidden="true" />
+                  </a>
+                </li>
+                <li>
+                  <a
+                    href={`mailto:${config.personal.email}`}
+                    aria-label="Email Simon"
+                    className={socialIconClass}
+                  >
+                    <Mail className="h-[18px] w-[18px]" aria-hidden="true" />
+                  </a>
+                </li>
+              </ul>
+            </div>
           </Reveal>
         </div>
 
@@ -212,13 +254,20 @@ export default async function LandingPage() {
           />
         </ScrollReveal>
 
-        <div className="mt-8 grid gap-6 sm:grid-cols-2">
+        <CardRail
+          label="Featured projects, scroll horizontally"
+          className="mt-8"
+        >
           {featuredProjects.map((project, index) => {
             const shortTitle =
               projectPresentationBySlug[project.slug]?.shortTitle ?? project.title;
 
             return (
-              <ScrollReveal key={project.slug} delay={index * 90}>
+              <ScrollReveal
+                key={project.slug}
+                delay={index * 90}
+                className="w-[min(85vw,340px)] shrink-0 snap-start lg:w-[368px]"
+              >
                 <Link
                   href={`/projects/${project.slug}`}
                   className="group flex h-full flex-col gap-4 rounded-[18px] border border-border bg-surface/80 p-5 backdrop-blur transition-[transform,border-color,box-shadow] duration-300 hover:-translate-y-1 hover:border-input hover:shadow-[0_24px_48px_-32px_rgba(0,0,0,0.5)] focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-ring motion-reduce:hover:translate-y-0"
@@ -255,7 +304,7 @@ export default async function LandingPage() {
               </ScrollReveal>
             );
           })}
-        </div>
+        </CardRail>
       </section>
 
     </>

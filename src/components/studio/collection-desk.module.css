@@ -298,6 +298,7 @@
 
 .duck {
   display: block;
+  transform-origin: 50% 100%;
 }
 
 .duckArt {
@@ -320,6 +321,63 @@
   }
   50% {
     transform: translateY(-4px);
+  }
+}
+
+/* The walk. Click sends the duck across the empty middle band of the desk and
+   back: out (1.6s), a beat, a turn, back (1.6s), then a turn to face right
+   again. The distance is measured from the desk in JS and handed over as
+   --duck-walk-x, so the duck lands in the same free lane whatever the desk
+   width is. Transform is split over two elements on purpose: the journey +
+   facing live on the button, the waddle on .duck, the squeak on .duckArt, so
+   none of the three overwrite each other. */
+.walking {
+  animation: desk-duck-walk 3.9s linear both;
+}
+
+@keyframes desk-duck-walk {
+  0% {
+    transform: translateX(0) scaleX(1);
+  }
+  41% {
+    transform: translateX(var(--duck-walk-x, 150px)) scaleX(1);
+  }
+  46.2% {
+    transform: translateX(var(--duck-walk-x, 150px)) scaleX(1);
+  }
+  51.3% {
+    transform: translateX(var(--duck-walk-x, 150px)) scaleX(-1);
+  }
+  92.3% {
+    transform: translateX(0) scaleX(-1);
+  }
+  97.4% {
+    transform: translateX(0) scaleX(-1);
+  }
+  100% {
+    transform: translateX(0) scaleX(1);
+  }
+}
+
+/* Waddle: alternating tilt on top of the bob. Declared after the hover rule
+   so it wins while the duck is walking (same specificity). */
+.duckButton.walking .duck {
+  animation: desk-duck-waddle 400ms ease-in-out infinite;
+}
+
+@keyframes desk-duck-waddle {
+  0%,
+  100% {
+    transform: rotate(-6deg) translateY(0);
+  }
+  25% {
+    transform: rotate(0deg) translateY(-4px);
+  }
+  50% {
+    transform: rotate(6deg) translateY(0);
+  }
+  75% {
+    transform: rotate(0deg) translateY(-4px);
   }
 }
 
@@ -442,7 +500,12 @@
 
   /* Same selectors as the hover rules above, or they out-specify this. */
   .duckButton:hover .duck,
-  .duckButton:focus-visible .duck {
+  .duckButton:focus-visible .duck,
+  .duckButton.walking .duck {
+    animation: none;
+  }
+
+  .walking {
     animation: none;
   }
 
