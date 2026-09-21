@@ -1,6 +1,6 @@
 "use client";
 
-import { useRouter } from "next/navigation";
+import { usePathname, useRouter } from "next/navigation";
 import { useTheme } from "next-themes";
 import { useCallback, useEffect, useRef } from "react";
 import { visibleSections } from "@/content/site-sections";
@@ -39,6 +39,7 @@ const goKeyBySection: Record<string, string> = {
  */
 export function Shortcuts() {
   const router = useRouter();
+  const pathname = usePathname();
   const { resolvedTheme, setTheme } = useTheme();
   const dialogRef = useRef<HTMLDialogElement>(null);
   const pendingRef = useRef<{ key: string; at: number } | null>(null);
@@ -79,7 +80,9 @@ export function Shortcuts() {
       if (pending && now - pending.at <= SEQUENCE_WINDOW_MS) {
         pendingRef.current = null;
         if (pending.key === "g") {
-          const target = sections.find((section) => goKeyBySection[section.id] === lower);
+          const target = sections.find(
+            (section) => goKeyBySection[section.id] === lower,
+          );
           if (target) {
             event.preventDefault();
             router.push(target.href);
@@ -112,11 +115,23 @@ export function Shortcuts() {
     ["⌘ K  /  Ctrl K", "Ask the portfolio AI"],
     ["/", "Ask the portfolio AI"],
     ...sections.map(
-      (section) => [`g  ${goKeyBySection[section.id]}`, `Go to ${section.label}`] as [string, string],
+      (section) =>
+        [`g  ${goKeyBySection[section.id]}`, `Go to ${section.label}`] as [
+          string,
+          string,
+        ],
     ),
     ["t", "Toggle light / dark"],
     ["?", "This sheet"],
     ["h  i", "Say hi"],
+    // The deck owns these while /music is mounted.
+    ...(pathname === "/music"
+      ? ([
+          ["space", "Drop / lift the needle"],
+          ["n  ·  p", "Next / previous record"],
+          ["s", "Shuffle the crate"],
+        ] as Array<[string, string]>)
+      : []),
   ];
 
   return (
@@ -134,7 +149,9 @@ export function Shortcuts() {
     >
       <div className="flex flex-col gap-4 p-5">
         <div className="flex items-baseline justify-between">
-          <p className="font-display text-sm font-semibold">Keyboard shortcuts</p>
+          <p className="font-display text-sm font-semibold">
+            Keyboard shortcuts
+          </p>
           <button
             type="button"
             onClick={closeHelp}

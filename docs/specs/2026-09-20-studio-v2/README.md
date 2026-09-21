@@ -74,13 +74,19 @@ src/content/music.ts / photos.ts   只读空数组 + 类型（字段按基线 ar
 
 ## 7. Music / Photos 首版（2026-09-20 追加，覆盖基线 §9/§10）
 
-用户决定：两页先做成有氛围的 placeholder，Music 直接做成可用播放器，playlist 内容 hold。
+用户决定：Music 做成真播放器并接入自己的网易云歌单 "shadow of the sun"（116 首，2022-08-17 创建）；Photos 先做有氛围的 placeholder。
 
-- **Music `/music` — The deck**：`src/components/music/turntable.tsx` 是真播放器，双模式。
-  - 空唱片模式（`musicSelections` 里没有带 `audioSrc` 的条目）：落针后播放 Web Audio 现场合成的空唱片表面噪音（`surface-noise.ts`：低通白噪 + 随机爆豆 + 每转一次的幅度摆动，6 s 循环 buffer），标签写 "No record loaded"，**不显示进度条**（空唱片没有时长）。
-  - 曲目模式：`MusicSelection.audioSrc`（Zod 校验：必须是站内 `/audio/` 路径）驱动 `<audio>`，同一 analyser 出频谱；上一首/下一首、进度拖动、结束自动下一首。
-  - 共用：33⅓ / 45 转速（真的改 playbackRate 与盘面转速）、音量、12 段频谱（pre-fader）、唱臂落下/抬起、reduced-motion 下盘面不转。
-  - "On the shelf"：空态是三只空封套（hover 唱片从封套上抽出），有内容时列出 `musicSelections`。
-- **Photos `/photos` — The light table**：`src/components/photos/light-table.tsx`。灯箱光斑跟随指针、六格未曝光胶片、三张空白相纸 hover 扇开、快门彩蛋（只闪光 + 计数，不产生任何照片）。状态行 "Roll 01 · 0 / 36 exposed" 是诚实的空态。有内容时渲染 `photos` 网格。
-- 两页仍 `robots: noindex`，导航 `visible` 仍为 false；内容进来后翻 `src/content/site-sections.ts`。
-- 验收：axe 明暗各 0 违规；1440 / 390 无横向溢出；reduced-motion 下 `.record` 无动画；键盘 Enter 可落针；真实 `<audio>` 路径用临时 WAV 验证过播放/切歌/自动连播（fixture 已删）。
+### 7.1 音源决策：YouTube IFrame API，不用网易云
+- 网易云只有无 API 的 outchain iframe；拿直链要走非官方反向 API（已被 DMCA），且海外大量版权不可播。YouTube embed 合法、有状态事件，能真驱动唱臂/盘面/进度/切歌。
+- 代价与对策：拿不到音频数据 → 频谱在 YouTube 模式**隐藏**不伪造；45 转禁用；条款要求播放器可见 ≥200×200 → 视频框做成"正在播放的封套"放在右栏；脚本**只在第一次落针后**注入，host 用 `youtube-nocookie.com`。
+- 大陆或被墙网络：脚本加载失败 / 8 s 内 player 未 ready → 显示 "YouTube didn't load… may be blocked on your network or in your region"，给 Try again；单曲 101/150（禁止外嵌或地区限制）→ "won't play here… doesn't allow embedding or isn't available from your IP / region"，给 Open on YouTube + Next record，连播中 5 s 自动跳下一首；100 → 已删除/私有。
+
+### 7.2 数据
+- `src/content/music-crate.json`：`{ name, createdAt, records[] }`；`MusicSelection.source` 为可辨识联合 `{kind:"file",src:"/audio/…"} | {kind:"youtube",videoId}`，Zod 校验 id 唯一、videoId 11 位、file 路径必须在 `/audio/` 下。
+- 116 条中 112 条有 YouTube 源。匹配由 3 个 Sonnet 子代理完成（规则：时长 ±8 s 优先，其次官方频道 / Topic / 厂牌），主 agent 复核后把 10 条二传频道改回官方上传，4 条无法确认的（Summer Lover、SUNDAY MORNING、One Last Time (Lancer remix)、王OK Homage）**不给 source**，crate 里标 "no source"。三首翻唱条目（Let's Fall in Love for the Night、Upside Down、Mr. Forgettable）播原唱并在 note 里说明。全部 112 个 id 用 watch 页 `playableInEmbed` 复核为可外嵌（美国 IP）。
+
+### 7.3 页面
+- `/music`：唱机（`turntable.tsx`，empty / file / youtube 三引擎）+ crate（`crate.tsx`）。crate 是横向翻箱：程序化封套（`sleeve-art.ts` 按 id 播种，不拉 YouTube 缩略图）、hover 抽出、当前唱片高亮 + "on the deck" 脉冲、文字搜索、按艺人聚合 chip（≥3 首才出现）、←/→ 翻页按钮与键盘、`?track=<id>` 深链（replaceState 同步）。传输：上一首/下一首/shuffle/repeat(off→crate→one)；键盘 space / n / p / s，并列入 `?` 帮助面板（仅 /music）。
+- `/photos`：灯箱空态（`light-table.tsx`）：光斑跟随指针、六格未曝光胶片、三张空白相纸 hover 扇开、快门彩蛋（只闪光 + 计数）。
+- 两页仍 `noindex`、导航 `visible=false`。
+- 验收：tsc/lint/build 绿；axe 明暗 0 违规；1440/390 无横向溢出；reduced-motion 下盘面不转；页面加载不注入 YouTube 脚本（Playwright 断言）；真实播放/切歌/shuffle/深链在 Chrome 中验证；被墙场景用 route abort 模拟（脚本被拦、embed host 被拦两种）验证错误卡。未能实机验证 101/150 路径（手头没有禁止外嵌的视频）。

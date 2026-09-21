@@ -1,0 +1,1098 @@
+{
+  "name": "shadow of the sun",
+  "createdAt": "2022-08-17",
+  "records": [
+    {
+      "id": "001-all-too-well-10-minute-version-taylors-v",
+      "title": "All Too Well (10 Minute Version) (Taylor's Version) (From The Vault)",
+      "artist": "Taylor Swift",
+      "album": "Red (Taylor's Version)",
+      "source": {
+        "kind": "youtube",
+        "videoId": "aPnqx56V8-0"
+      }
+    },
+    {
+      "id": "002-until-i-found-you-piano-version",
+      "title": "Until I Found You (Piano Version)",
+      "artist": "Stephen Sanchez",
+      "source": {
+        "kind": "youtube",
+        "videoId": "oIKuyj2GQtY"
+      }
+    },
+    {
+      "id": "003-if-i-aint-got-you",
+      "title": "If I Ain't Got You",
+      "artist": "Brandon Victor Dixon, Maleah Joi Moon",
+      "album": "Hell's Kitchen (Original Broadway Cast Recording)",
+      "source": {
+        "kind": "youtube",
+        "videoId": "BvxjcH_tmWo"
+      }
+    },
+    {
+      "id": "004-her-feat-annika-wells",
+      "title": "her (feat. Annika Wells)",
+      "artist": "JVKE, Annika Wells",
+      "source": {
+        "kind": "youtube",
+        "videoId": "ZxE0QzE2K9o"
+      }
+    },
+    {
+      "id": "005-begging-you-guide-ver-bonus-track",
+      "title": "Begging You (Guide Ver.) (Bonus Track)",
+      "artist": "2LSON",
+      "album": "The First",
+      "source": {
+        "kind": "youtube",
+        "videoId": "r747U7NmK5g"
+      }
+    },
+    {
+      "id": "006-summer-lover",
+      "title": "Summer Lover",
+      "artist": "(credit unreadable in source)",
+      "album": "Transition",
+      "note": "The artist credit was unreadable in the source, so this record has no confirmed source yet."
+    },
+    {
+      "id": "007-memories",
+      "title": "MEMORIES!",
+      "artist": "347aidan",
+      "album": "TROUBLED MEMORIES!",
+      "source": {
+        "kind": "youtube",
+        "videoId": "-yyq-Kr06D8"
+      }
+    },
+    {
+      "id": "008-i-dont-see-nobody-but-you",
+      "title": "i don't see nobody but you",
+      "artist": "Audereus, sixxzee",
+      "source": {
+        "kind": "youtube",
+        "videoId": "K6iV1tCsPns"
+      }
+    },
+    {
+      "id": "009-girl",
+      "title": "Girl",
+      "artist": "Alexander 23",
+      "album": "I'm Sorry I Love You",
+      "source": {
+        "kind": "youtube",
+        "videoId": "Hn0F8M0iiW0"
+      }
+    },
+    {
+      "id": "010-so-low",
+      "title": "So Low",
+      "artist": "GenriX, Corbal, Shiloh Dynasty",
+      "source": {
+        "kind": "youtube",
+        "videoId": "zi87mqfaQtg"
+      }
+    },
+    {
+      "id": "011-location",
+      "title": "Location",
+      "artist": "Khalid",
+      "source": {
+        "kind": "youtube",
+        "videoId": "by3yRdlQvzs"
+      }
+    },
+    {
+      "id": "012-single-af",
+      "title": "single af",
+      "artist": "Fousheé",
+      "source": {
+        "kind": "youtube",
+        "videoId": "9CeOCcNDiBU"
+      }
+    },
+    {
+      "id": "013-what-it-is-block-boy",
+      "title": "What It Is (Block Boy)",
+      "artist": "Doechii, Kodak Black",
+      "source": {
+        "kind": "youtube",
+        "videoId": "AnWzc5M0PSY"
+      }
+    },
+    {
+      "id": "014-hot",
+      "title": "Hot",
+      "artist": "Liili",
+      "source": {
+        "kind": "youtube",
+        "videoId": "PREfuuZtlws"
+      }
+    },
+    {
+      "id": "015-drive-thru",
+      "title": "Drive Thru",
+      "artist": "Ivoris, r.e.m.edy",
+      "source": {
+        "kind": "youtube",
+        "videoId": "QjRHz3rRWaA"
+      }
+    },
+    {
+      "id": "016-aaa",
+      "title": "AAA",
+      "artist": "NYK, Shelhiel",
+      "note": "Official video; the crate's edit runs 2:39.",
+      "source": {
+        "kind": "youtube",
+        "videoId": "RS9RRjBqKS0"
+      }
+    },
+    {
+      "id": "017-money-trees",
+      "title": "Money Trees",
+      "artist": "Kendrick Lamar, Jay Rock",
+      "album": "good kid, m.A.A.d city",
+      "source": {
+        "kind": "youtube",
+        "videoId": "0nF69UTw99E"
+      }
+    },
+    {
+      "id": "018-out-of-the-woods",
+      "title": "Out Of The Woods",
+      "artist": "Taylor Swift",
+      "album": "1989 (Deluxe)",
+      "source": {
+        "kind": "youtube",
+        "videoId": "gp1MR2WAAXY"
+      }
+    },
+    {
+      "id": "019-cruel-summer",
+      "title": "Cruel Summer",
+      "artist": "Taylor Swift",
+      "album": "Lover",
+      "source": {
+        "kind": "youtube",
+        "videoId": "ic8j13piAhQ"
+      }
+    },
+    {
+      "id": "020-novocaine",
+      "title": "novocaine",
+      "artist": "GENRIX, Corbal, Shiloh Dynasty",
+      "album": "unfortunately yours,",
+      "source": {
+        "kind": "youtube",
+        "videoId": "SxEcQEYR1aE"
+      }
+    },
+    {
+      "id": "021-white-ferrari",
+      "title": "White Ferrari",
+      "artist": "Frank Ocean",
+      "album": "Blonde",
+      "source": {
+        "kind": "youtube",
+        "videoId": "Dlz_XHeUUis"
+      }
+    },
+    {
+      "id": "022-sheluvme",
+      "title": "sheluvme",
+      "artist": "Tai Verdes",
+      "source": {
+        "kind": "youtube",
+        "videoId": "vUJtxFYLVVQ"
+      }
+    },
+    {
+      "id": "023-die-for-you",
+      "title": "Die For You",
+      "artist": "Joji",
+      "album": "SMITHEREENS",
+      "source": {
+        "kind": "youtube",
+        "videoId": "kIEWJ1ljEro"
+      }
+    },
+    {
+      "id": "024-all-girls-are-the-same",
+      "title": "All Girls Are The Same",
+      "artist": "Juice WRLD",
+      "album": "Goodbye & Good Riddance (Anniversary)",
+      "source": {
+        "kind": "youtube",
+        "videoId": "AYk-yuxDZiE"
+      }
+    },
+    {
+      "id": "025-nonsense",
+      "title": "Nonsense",
+      "artist": "Sabrina Carpenter",
+      "album": "emails i can't send",
+      "source": {
+        "kind": "youtube",
+        "videoId": "ECVA6FvhdEE"
+      }
+    },
+    {
+      "id": "026-moonlight",
+      "title": "moonlight",
+      "artist": "Dhruv",
+      "album": "rapunzel",
+      "source": {
+        "kind": "youtube",
+        "videoId": "Ob0uXrhdWhk"
+      }
+    },
+    {
+      "id": "027-as-it-was",
+      "title": "As It Was",
+      "artist": "PREP",
+      "source": {
+        "kind": "youtube",
+        "videoId": "fn4JAuCfHQA"
+      }
+    },
+    {
+      "id": "028-snowman",
+      "title": "Snowman",
+      "artist": "Harryan Yoonsoan",
+      "album": "Harryan Yoonsoan Christmas Carol",
+      "source": {
+        "kind": "youtube",
+        "videoId": "oxyspxyfpNw"
+      }
+    },
+    {
+      "id": "029-why",
+      "title": "Why",
+      "artist": "Trevor Poole",
+      "source": {
+        "kind": "youtube",
+        "videoId": "eLgB-hGGpjw"
+      }
+    },
+    {
+      "id": "030-21",
+      "title": "21",
+      "artist": "Gracie Abrams",
+      "album": "minor",
+      "source": {
+        "kind": "youtube",
+        "videoId": "eyX5zUI3oq0"
+      }
+    },
+    {
+      "id": "031-sunday-morning",
+      "title": "SUNDAY MORNING",
+      "artist": "邱南灏 (unverified)",
+      "note": "Couldn't confirm the recording on YouTube, so this record has no source yet."
+    },
+    {
+      "id": "032-golden-hour",
+      "title": "golden hour",
+      "artist": "JVKE",
+      "album": "this is what ____ feels like (Vol. 1-4)",
+      "source": {
+        "kind": "youtube",
+        "videoId": "UsR08cY8k0A"
+      }
+    },
+    {
+      "id": "033-shut-up-my-moms-calling",
+      "title": "Shut up My Moms Calling",
+      "artist": "Hotel Ugly",
+      "note": "Official video; the crate's edit runs 2:44.",
+      "source": {
+        "kind": "youtube",
+        "videoId": "HVmpI3d11oM"
+      }
+    },
+    {
+      "id": "034-glimpse-of-us",
+      "title": "Glimpse of Us",
+      "artist": "Joji",
+      "source": {
+        "kind": "youtube",
+        "videoId": "NgsWGfUlwJI"
+      }
+    },
+    {
+      "id": "035-yeah-right",
+      "title": "YEAH RIGHT",
+      "artist": "Joji",
+      "source": {
+        "kind": "youtube",
+        "videoId": "tG7wLK4aAOE"
+      }
+    },
+    {
+      "id": "036-slow-dancing-in-the-dark",
+      "title": "SLOW DANCING IN THE DARK",
+      "artist": "Joji",
+      "source": {
+        "kind": "youtube",
+        "videoId": "LUXu4aTnK7E"
+      }
+    },
+    {
+      "id": "037-lalala",
+      "title": "Lalala",
+      "artist": "Y2K, bbno$",
+      "source": {
+        "kind": "youtube",
+        "videoId": "X_nJ5ksFVbg"
+      }
+    },
+    {
+      "id": "038-my-peanut-butter-chocolate-cake-with-koo",
+      "title": "my peanut butter chocolate cake with kool-aid",
+      "artist": "Alys",
+      "source": {
+        "kind": "youtube",
+        "videoId": "YBmpn-0I7N4"
+      }
+    },
+    {
+      "id": "039-burn-the-house-down",
+      "title": "Burn the House Down",
+      "artist": "AJR",
+      "source": {
+        "kind": "youtube",
+        "videoId": "UnyLfqpyi94"
+      }
+    },
+    {
+      "id": "040-die-for-you",
+      "title": "Die For You",
+      "artist": "The Weeknd",
+      "album": "Starboy",
+      "source": {
+        "kind": "youtube",
+        "videoId": "QLCpqdqeoII"
+      }
+    },
+    {
+      "id": "041-lets-fall-in-love-for-the-night",
+      "title": "Let's Fall in Love for the Night",
+      "artist": "cover · original by FINNEAS",
+      "note": "The crate lists a cover; the deck plays FINNEAS's original.",
+      "source": {
+        "kind": "youtube",
+        "videoId": "VaKzNtwPQxE"
+      }
+    },
+    {
+      "id": "042-eyes-blue-or-brown-cant-remember",
+      "title": "eyes blue or brown, can't remember",
+      "artist": "untrusted, Pretence, 11:11 Music Group",
+      "source": {
+        "kind": "youtube",
+        "videoId": "ETbaHU736Tg"
+      }
+    },
+    {
+      "id": "043-number",
+      "title": "Number",
+      "artist": "Alexander Oscar",
+      "source": {
+        "kind": "youtube",
+        "videoId": "GR9xo0IWtKc"
+      }
+    },
+    {
+      "id": "044-peanut-butter",
+      "title": "peanut butter",
+      "artist": "hard life",
+      "album": "see you later maybe never (demos)",
+      "source": {
+        "kind": "youtube",
+        "videoId": "-Mg5UwDvr5s"
+      }
+    },
+    {
+      "id": "045-sex-money-feelings-die",
+      "title": "sex money feelings die",
+      "artist": "Lykke Li",
+      "album": "so sad so sexy",
+      "source": {
+        "kind": "youtube",
+        "videoId": "BFD9Chg2Nmw"
+      }
+    },
+    {
+      "id": "046-no-lie-male-cover",
+      "title": "No Lie (MALE COVER)",
+      "artist": "Alex Shans",
+      "source": {
+        "kind": "youtube",
+        "videoId": "0-43IAO48Do"
+      }
+    },
+    {
+      "id": "047-spin-with-you",
+      "title": "Spin With You",
+      "artist": "Emma Sameth, Jeremy Zucker, WOLFE",
+      "source": {
+        "kind": "youtube",
+        "videoId": "9t5acBJgyN0"
+      }
+    },
+    {
+      "id": "048-love-in-the-dark",
+      "title": "Love In The Dark",
+      "artist": "Adele",
+      "album": "25",
+      "source": {
+        "kind": "youtube",
+        "videoId": "oytOOA9sOiE"
+      }
+    },
+    {
+      "id": "049-cold",
+      "title": "Cold",
+      "artist": "Maroon 5, Future",
+      "album": "Red Pill Blues (Deluxe)",
+      "source": {
+        "kind": "youtube",
+        "videoId": "et3MNeS1QA8"
+      }
+    },
+    {
+      "id": "050-idontwannabeyouanymore-cover",
+      "title": "idontwannabeyouanymore (cover)",
+      "artist": "Teddy Swims",
+      "source": {
+        "kind": "youtube",
+        "videoId": "sKtCP6htHqw"
+      }
+    },
+    {
+      "id": "051-gotta-have-you",
+      "title": "Gotta Have You",
+      "artist": "The Weepies",
+      "album": "Say I Am You",
+      "source": {
+        "kind": "youtube",
+        "videoId": "s830CSutPoE"
+      }
+    },
+    {
+      "id": "052-shadow-of-the-sun",
+      "title": "Shadow of the Sun",
+      "artist": "Max Elto",
+      "album": "Taped Rai",
+      "source": {
+        "kind": "youtube",
+        "videoId": "27hVYeaPHh8"
+      }
+    },
+    {
+      "id": "053-mirrors",
+      "title": "Mirrors",
+      "artist": "Justin Timberlake",
+      "album": "The 20/20 Experience (Deluxe Version)",
+      "source": {
+        "kind": "youtube",
+        "videoId": "U41KPUfOSFk"
+      }
+    },
+    {
+      "id": "054-warm-feat-mia",
+      "title": "Warm (feat. Mia)",
+      "artist": "Dre'es, Mia",
+      "source": {
+        "kind": "youtube",
+        "videoId": "Ygp8PTrUhEk"
+      }
+    },
+    {
+      "id": "055-thank-you-acoustic",
+      "title": "Thank You (Acoustic)",
+      "artist": "Dido",
+      "source": {
+        "kind": "youtube",
+        "videoId": "2Vcot4jY6LU"
+      }
+    },
+    {
+      "id": "056-demons",
+      "title": "Demons",
+      "artist": "Imagine Dragons",
+      "album": "Night Visions",
+      "source": {
+        "kind": "youtube",
+        "videoId": "pvrkfb1C4tE"
+      }
+    },
+    {
+      "id": "057-lay-me-down",
+      "title": "Lay Me Down",
+      "artist": "Sam Smith",
+      "source": {
+        "kind": "youtube",
+        "videoId": "HaMq2nn5ac0"
+      }
+    },
+    {
+      "id": "058-upside-down-acoustic",
+      "title": "Upside Down (Acoustic)",
+      "artist": "cover · original by Jack Johnson",
+      "note": "The crate lists a short acoustic cover; the deck plays Jack Johnson's original.",
+      "source": {
+        "kind": "youtube",
+        "videoId": "dqUdI4AIDF0"
+      }
+    },
+    {
+      "id": "059-its-ok",
+      "title": "it's ok!",
+      "artist": "corook",
+      "source": {
+        "kind": "youtube",
+        "videoId": "8tem27lgr1Q"
+      }
+    },
+    {
+      "id": "060-mr-forgettable-emo-slow-version",
+      "title": "Mr. Forgettable (slow version)",
+      "artist": "cover · original by David Kushner",
+      "album": "Mr. Forgettable",
+      "note": "The crate lists a slowed cover; the deck plays David Kushner's original.",
+      "source": {
+        "kind": "youtube",
+        "videoId": "ZA-0Fweuu0g"
+      }
+    },
+    {
+      "id": "061-photograph",
+      "title": "Photograph",
+      "artist": "Ed Sheeran",
+      "album": "x (Deluxe Edition)",
+      "source": {
+        "kind": "youtube",
+        "videoId": "KKQl-pIRQMY"
+      }
+    },
+    {
+      "id": "062-trip",
+      "title": "Trip",
+      "artist": "Ella Mai",
+      "album": "Ella Mai",
+      "source": {
+        "kind": "youtube",
+        "videoId": "JfGD75vHWrU"
+      }
+    },
+    {
+      "id": "063-not-even-her-feat-shiloh",
+      "title": "Not Even Her (feat. Shiloh)",
+      "artist": "Floreyyyy, Shiloh",
+      "source": {
+        "kind": "youtube",
+        "videoId": "qJez9qY0gek"
+      }
+    },
+    {
+      "id": "064-wolves",
+      "title": "Wolves",
+      "artist": "Kristian Kostov",
+      "source": {
+        "kind": "youtube",
+        "videoId": "Rlr-wDlQdRE"
+      }
+    },
+    {
+      "id": "065-in-the-end",
+      "title": "In The End",
+      "artist": "Linkin Park",
+      "album": "Hybrid Theory",
+      "source": {
+        "kind": "youtube",
+        "videoId": "gB9P0kpc1O4"
+      }
+    },
+    {
+      "id": "066-take-me-to-church",
+      "title": "Take Me To Church",
+      "artist": "Hozier",
+      "source": {
+        "kind": "youtube",
+        "videoId": "MYSVMgRr6pw"
+      }
+    },
+    {
+      "id": "067-youth",
+      "title": "YOUTH",
+      "artist": "Troye Sivan",
+      "album": "Blue Neighbourhood (Deluxe)",
+      "source": {
+        "kind": "youtube",
+        "videoId": "XYAghEq5Lfw"
+      }
+    },
+    {
+      "id": "068-red",
+      "title": "Red",
+      "artist": "Taylor Swift",
+      "source": {
+        "kind": "youtube",
+        "videoId": "R_rUYuFtNO4"
+      }
+    },
+    {
+      "id": "069-end-game",
+      "title": "End Game",
+      "artist": "Taylor Swift, Ed Sheeran, Future",
+      "album": "reputation",
+      "source": {
+        "kind": "youtube",
+        "videoId": "dfnCAmr569k"
+      }
+    },
+    {
+      "id": "070-i-love-you-baby",
+      "title": "i love you baby",
+      "artist": "Emilee",
+      "source": {
+        "kind": "youtube",
+        "videoId": "obuOPwtJEUY"
+      }
+    },
+    {
+      "id": "071-lovely",
+      "title": "lovely",
+      "artist": "Billie Eilish, Khalid",
+      "source": {
+        "kind": "youtube",
+        "videoId": "V1Pl8CzNzCw"
+      }
+    },
+    {
+      "id": "072-one-last-time-lancer-remix",
+      "title": "One Last Time (Lancer remix)",
+      "artist": "Lancer (remix) · credit unreadable",
+      "note": "Couldn't identify this remix on YouTube, so this record has no source yet."
+    },
+    {
+      "id": "073-peter-pan-was-right",
+      "title": "Peter Pan Was Right",
+      "artist": "Anson Seabra",
+      "source": {
+        "kind": "youtube",
+        "videoId": "D8rlcLH0pqk"
+      }
+    },
+    {
+      "id": "074-peter-pan",
+      "title": "Peter Pan",
+      "artist": "kidult.",
+      "source": {
+        "kind": "youtube",
+        "videoId": "cCYi9KOCc1I"
+      }
+    },
+    {
+      "id": "075-7-years",
+      "title": "7 Years",
+      "artist": "Lukas Graham",
+      "source": {
+        "kind": "youtube",
+        "videoId": "LHCob76kigA"
+      }
+    },
+    {
+      "id": "076-runaway",
+      "title": "Runaway",
+      "artist": "Sasha Alex Sloan",
+      "source": {
+        "kind": "youtube",
+        "videoId": "YAY7x1SrojE"
+      }
+    },
+    {
+      "id": "077-runaway",
+      "title": "Runaway",
+      "artist": "AURORA",
+      "album": "FOR THE HUMANS WHO TAKE LONG WALKS IN THE FOREST",
+      "source": {
+        "kind": "youtube",
+        "videoId": "mSIQ70Lfs-g"
+      }
+    },
+    {
+      "id": "078-im-so-tired-stripped-live-in-la",
+      "title": "i'm so tired... (Stripped - Live in LA)",
+      "artist": "LAUV, Troye Sivan",
+      "source": {
+        "kind": "youtube",
+        "videoId": "JvgBbpz_uvU"
+      }
+    },
+    {
+      "id": "079-2-soon",
+      "title": "2 soon",
+      "artist": "keshi",
+      "source": {
+        "kind": "youtube",
+        "videoId": "LKZyp2cSAy4"
+      }
+    },
+    {
+      "id": "080-mad-at-disney",
+      "title": "Mad at Disney",
+      "artist": "salem ilese",
+      "source": {
+        "kind": "youtube",
+        "videoId": "0VBEgFQZH-w"
+      }
+    },
+    {
+      "id": "081-stay",
+      "title": "STAY",
+      "artist": "The Kid LAROI, Justin Bieber",
+      "source": {
+        "kind": "youtube",
+        "videoId": "rkYlZnIbe2E"
+      }
+    },
+    {
+      "id": "082-wannabe",
+      "title": "Wannabe",
+      "artist": "Why Mona, Unlike Pluto, Joanna Jones",
+      "source": {
+        "kind": "youtube",
+        "videoId": "TRqPNoB7D60"
+      }
+    },
+    {
+      "id": "083-exile",
+      "title": "exile",
+      "artist": "Taylor Swift, Bon Iver",
+      "album": "folklore (deluxe version)",
+      "source": {
+        "kind": "youtube",
+        "videoId": "osdoLjUNFnA"
+      }
+    },
+    {
+      "id": "084-there-for-you",
+      "title": "There For You",
+      "artist": "Martin Garrix, Troye Sivan",
+      "source": {
+        "kind": "youtube",
+        "videoId": "pNNMr5glICM"
+      }
+    },
+    {
+      "id": "085-maps",
+      "title": "Maps",
+      "artist": "Maroon 5",
+      "album": "V",
+      "source": {
+        "kind": "youtube",
+        "videoId": "xj6fHiF8Osg"
+      }
+    },
+    {
+      "id": "086-love-story",
+      "title": "Love Story",
+      "artist": "Taylor Swift",
+      "album": "Fearless",
+      "source": {
+        "kind": "youtube",
+        "videoId": "8xg3vE8Ie_E"
+      }
+    },
+    {
+      "id": "087-normal-no-more",
+      "title": "Normal No More",
+      "artist": "TYSM",
+      "source": {
+        "kind": "youtube",
+        "videoId": "wBrgVkgeHSY"
+      }
+    },
+    {
+      "id": "088-enchanted",
+      "title": "Enchanted",
+      "artist": "Taylor Swift",
+      "album": "reputation Stadium Tour Surprise Song Playlist",
+      "source": {
+        "kind": "youtube",
+        "videoId": "fvg01l43XBc"
+      }
+    },
+    {
+      "id": "089-all-time-low",
+      "title": "All Time Low",
+      "artist": "Kurt Hugo Schneider, Sam Tsui, Casey Breves",
+      "source": {
+        "kind": "youtube",
+        "videoId": "giBppYq6GMI"
+      }
+    },
+    {
+      "id": "090-galway-girl",
+      "title": "Galway Girl",
+      "artist": "Ed Sheeran",
+      "album": "÷ (Deluxe)",
+      "source": {
+        "kind": "youtube",
+        "videoId": "XjHr-6Zl5P8"
+      }
+    },
+    {
+      "id": "091-so-far-away",
+      "title": "So Far Away",
+      "artist": "Martin Garrix, David Guetta, Jamie Scott, Romy Dya",
+      "source": {
+        "kind": "youtube",
+        "videoId": "o7iL2KzDh38"
+      }
+    },
+    {
+      "id": "092-2002",
+      "title": "2002",
+      "artist": "Anne-Marie",
+      "album": "Speak Your Mind",
+      "source": {
+        "kind": "youtube",
+        "videoId": "1tvLIhEaEKo"
+      }
+    },
+    {
+      "id": "093-yellow",
+      "title": "Yellow",
+      "artist": "Coldplay",
+      "album": "Parachutes",
+      "source": {
+        "kind": "youtube",
+        "videoId": "yKNxeF4KMsY"
+      }
+    },
+    {
+      "id": "094-let-me-down-slowly",
+      "title": "Let Me Down Slowly",
+      "artist": "Alec Benjamin, Alessia Cara",
+      "source": {
+        "kind": "youtube",
+        "videoId": "gEo8IrFbecM"
+      }
+    },
+    {
+      "id": "095-50-feet",
+      "title": "50 Feet",
+      "artist": "SoMo",
+      "source": {
+        "kind": "youtube",
+        "videoId": "yucxHQWcKyM"
+      }
+    },
+    {
+      "id": "096-if-i-aint-got-you",
+      "title": "If I Ain't Got You",
+      "artist": "Alicia Keys",
+      "album": "The Diary of Alicia Keys",
+      "source": {
+        "kind": "youtube",
+        "videoId": "twYtM7eOSdw"
+      }
+    },
+    {
+      "id": "097-paris-in-the-rain",
+      "title": "Paris in the Rain",
+      "artist": "LAUV",
+      "source": {
+        "kind": "youtube",
+        "videoId": "kOCkne-Bku4"
+      }
+    },
+    {
+      "id": "098-stitches",
+      "title": "Stitches",
+      "artist": "Shawn Mendes",
+      "album": "Handwritten (Deluxe)",
+      "source": {
+        "kind": "youtube",
+        "videoId": "QNrpYYj-iRc"
+      }
+    },
+    {
+      "id": "099-past-lives",
+      "title": "Past Lives",
+      "artist": "sapientdream, Slushii",
+      "album": "Drowning",
+      "source": {
+        "kind": "youtube",
+        "videoId": "FPoeEA0yu08"
+      }
+    },
+    {
+      "id": "100-wake-live",
+      "title": "Wake (Live)",
+      "artist": "Hillsong Young & Free",
+      "album": "Wake",
+      "source": {
+        "kind": "youtube",
+        "videoId": "e33zCUm1ZnY"
+      }
+    },
+    {
+      "id": "101-somebody-that-i-used-to-know",
+      "title": "Somebody That I Used To Know",
+      "artist": "Gotye, Kimbra",
+      "album": "Making Mirrors",
+      "source": {
+        "kind": "youtube",
+        "videoId": "8UVNT4wvIGY"
+      }
+    },
+    {
+      "id": "102-the-nights",
+      "title": "The Nights",
+      "artist": "Avicii",
+      "album": "Live A Life You Will Remember",
+      "source": {
+        "kind": "youtube",
+        "videoId": "XmIgg9De9hY"
+      }
+    },
+    {
+      "id": "103-lost-stars",
+      "title": "Lost Stars",
+      "artist": "Adam Levine",
+      "album": "Begin Again (Original Motion Picture Soundtrack)",
+      "source": {
+        "kind": "youtube",
+        "videoId": "vyT-oGDnMqE"
+      }
+    },
+    {
+      "id": "104-closer",
+      "title": "Closer",
+      "artist": "The Chainsmokers, Halsey",
+      "source": {
+        "kind": "youtube",
+        "videoId": "0zGcUoRlhmw"
+      }
+    },
+    {
+      "id": "105-psycho-pt-2",
+      "title": "Psycho, Pt. 2",
+      "artist": "Russ",
+      "source": {
+        "kind": "youtube",
+        "videoId": "3mAjq2d3ejk"
+      }
+    },
+    {
+      "id": "106-counting-stars",
+      "title": "Counting Stars",
+      "artist": "OneRepublic",
+      "album": "Native (Deluxe Version)",
+      "source": {
+        "kind": "youtube",
+        "videoId": "hT_nvWreIhg"
+      }
+    },
+    {
+      "id": "107-shots-broiler-remix",
+      "title": "Shots (Broiler Remix)",
+      "artist": "Imagine Dragons, Broiler",
+      "album": "Shots",
+      "source": {
+        "kind": "youtube",
+        "videoId": "DTMo_wEwMnw"
+      }
+    },
+    {
+      "id": "108-bet-on-me",
+      "title": "Bet On Me",
+      "artist": "Walk off the Earth, D Smoke",
+      "source": {
+        "kind": "youtube",
+        "videoId": "0PRi4DTLaz8"
+      }
+    },
+    {
+      "id": "109-california-feat-jackson-wang-warren-hue",
+      "title": "California (feat. Jackson Wang & Warren Hue) [Remix]",
+      "artist": "88rising, Rich Brian, NIKI, Jackson Wang, Warren Hue",
+      "album": "California (Remix)",
+      "source": {
+        "kind": "youtube",
+        "videoId": "cULKkTO4glU"
+      }
+    },
+    {
+      "id": "110-say-it",
+      "title": "Say It.",
+      "artist": "Ebz the Artist",
+      "source": {
+        "kind": "youtube",
+        "videoId": "kAvpwCLp7ms"
+      }
+    },
+    {
+      "id": "111-head-in-the-clouds",
+      "title": "Head In The Clouds",
+      "artist": "Hayd",
+      "album": "Changes - EP",
+      "source": {
+        "kind": "youtube",
+        "videoId": "cnV-ER8xmGA"
+      }
+    },
+    {
+      "id": "112-afterthought",
+      "title": "Afterthought",
+      "artist": "Joji, BENEE",
+      "album": "Nectar",
+      "source": {
+        "kind": "youtube",
+        "videoId": "ujriV3vkC9w"
+      }
+    },
+    {
+      "id": "113-homage",
+      "title": "Homage",
+      "artist": "王OK",
+      "album": "Homepage",
+      "note": "Couldn't find this recording on YouTube, so this record has no source yet."
+    },
+    {
+      "id": "114-city-of-stars",
+      "title": "City Of Stars",
+      "artist": "Ryan Gosling, Emma Stone",
+      "album": "La La Land (Original Motion Picture Soundtrack)",
+      "source": {
+        "kind": "youtube",
+        "videoId": "xkqfm3muuhM"
+      }
+    },
+    {
+      "id": "115-heartbreak-anniversary",
+      "title": "HEARTBREAK ANNIVERSARY",
+      "artist": "GIVĒON",
+      "source": {
+        "kind": "youtube",
+        "videoId": "nja_0BaQcNg"
+      }
+    },
+    {
+      "id": "116-double-take",
+      "title": "double take",
+      "artist": "Dhruv",
+      "source": {
+        "kind": "youtube",
+        "videoId": "R8FHtIhWqNo"
+      }
+    }
+  ]
+}
