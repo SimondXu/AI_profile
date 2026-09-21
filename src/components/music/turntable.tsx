@@ -25,7 +25,8 @@ import { isPlayable, type MusicSelection } from "@/content/music";
 import { cn } from "@/lib/utils";
 import { Crate } from "./crate";
 import { playNeedle } from "./needle-sound";
-import { sleeveArt, sleeveGlow } from "./sleeve-art";
+import { sleeveGlow } from "./sleeve-art";
+import { SleeveImage } from "./sleeve-image";
 import {
   createSurfaceNoise,
   type Rpm,
@@ -764,10 +765,14 @@ export function Turntable({
                 swap === "in" && styles.recordIn,
               )}
             >
-              <div
-                className={styles.label}
-                style={current ? sleeveArt(current.id) : undefined}
-              >
+              <div className={styles.label}>
+                {current ? (
+                  <SleeveImage
+                    id={current.id}
+                    artwork={current.artwork}
+                    sizes="160px"
+                  />
+                ) : null}
                 <div className={cn(styles.labelInk, "max-lg:opacity-0")}>
                   {current ? (
                     <>
@@ -888,11 +893,21 @@ export function Turntable({
                   )}
                 />
                 {!engineCreated && !error ? (
-                  <div
-                    className={styles.monitorArt}
-                    style={sleeveArt(current.id)}
-                    aria-hidden="true"
-                  >
+                  <div className={styles.monitorArt} aria-hidden="true">
+                    <SleeveImage
+                      id={current.id}
+                      artwork={current.artwork}
+                      sizes="(min-width: 1024px) 384px, 100vw"
+                      className="scale-125 opacity-60 blur-2xl"
+                    />
+                    <div className={styles.monitorSquare}>
+                      <SleeveImage
+                        id={current.id}
+                        artwork={current.artwork}
+                        sizes="(min-width: 1024px) 216px, 60vw"
+                        priority
+                      />
+                    </div>
                     <span className={styles.monitorChip}>via YouTube</span>
                   </div>
                 ) : null}

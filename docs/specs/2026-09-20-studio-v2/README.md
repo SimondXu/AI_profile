@@ -103,3 +103,11 @@ src/content/music.ts / photos.ts   只读空数组 + 类型（字段按基线 ar
 - **Crate 翻箱**：封套重叠只露 3.4rem 书脊（竖排标题/艺人），hover/focus 抬起并把后面的推开 5.4rem（两个缺口可同时存在，用 CSS 变量相加）；当前唱片常驻抬起；鼠标可按住拖动（超过 6px 才接管 pointer capture，点击不受影响）；触屏原生滚动。
 - 移动端唱盘缩到 12rem，标签文字隐藏只留封套图。
 - 验收：tsc/lint/build 绿；axe 明暗 0 违规；1440/390 无溢出；headless Chromium 实测：落针→播放、从 crate 换片全程 phase 序列正确、盘面减速/加速数值正确、拖唱臂 seek、抬针；reduced-motion 下盘面无动画。
+
+### 7.5 真实专辑封面（2026-09-21）
+- 用户反馈程序化封套不好看。决定用**真实专辑封面**（方形、可识别）而不是 YouTube 缩略图（16:9、带人脸/文字横幅，整箱会像 YouTube 网格；且缩略图的使用条款绑定播放器场景）。
+- 来源：iTunes Search API（`is1-ssl.mzstatic.com`，600×600）为主，被限流后用 Deezer Search API（`cdn-images.dzcdn.net`，1000×1000）补齐；匹配规则：标题相似度 65% + 艺人相似度 35%，艺人低于 0.6 拒绝，带额外括号版本扣分；每个 URL HEAD 复核 200。112 首中 105 首有封面，7 首（翻唱/小众曲目）回落程序化封套。
+- 数据：`MusicSelection.artwork?: string`，Zod 限定 https 且域名在 mzstatic.com / dzcdn.net；`next.config.ts` `images.remotePatterns` 放行这两个域。热链 CDN，不下载存储。
+- 渲染：`sleeve-image.tsx`（next/image `fill` + `onError` 回落程序化封套），用于 crate 封套、唱片标签、monitor（模糊底 + 居中方形封套）。
+- 按用户要求删除了 4 首没有 YouTube 源的条目（Summer Lover、SUNDAY MORNING、One Last Time (Lancer remix)、王OK Homage）；crate 现为 112 首。
+- 版权说明：专辑封面通过发行平台 CDN 热链用于标识对应曲目，与 YouTube 缩略图同类的"识别性使用"；仍属第三方版权素材，若日后收到要求可整体切回程序化封套（删 `artwork` 字段即可）。

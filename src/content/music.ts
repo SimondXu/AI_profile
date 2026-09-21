@@ -12,6 +12,8 @@ export interface MusicSelection {
   album?: string;
   note?: string;
   externalUrl?: string;
+  /** Square album artwork (https, Apple/Deezer artwork CDNs); procedural art otherwise. */
+  artwork?: string;
   /** Playable source; entries without one are listed but can't go on the deck. */
   source?: MusicSource;
 }
@@ -53,6 +55,15 @@ const musicSelectionSchema = z.object({
     .refine((value) => value.startsWith("https://"), {
       message: "externalUrl must be an https:// URL",
     })
+    .optional(),
+  artwork: z
+    .string()
+    .url()
+    .refine(
+      (value) =>
+        /^https:\/\/[a-z0-9.-]+\.(mzstatic\.com|dzcdn\.net)\//.test(value),
+      { message: "artwork must be an https URL on mzstatic.com or dzcdn.net" },
+    )
     .optional(),
   source: musicSourceSchema.optional(),
 });

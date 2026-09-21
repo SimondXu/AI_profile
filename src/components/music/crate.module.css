@@ -156,9 +156,11 @@
 }
 
 .art {
+  position: relative;
   display: block;
   flex: 1;
   min-height: 0;
+  overflow: hidden;
 }
 
 /* Spine: readable while the sleeve is tucked; fades once it's pulled. */

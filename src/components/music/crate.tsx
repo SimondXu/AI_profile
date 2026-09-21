@@ -12,7 +12,7 @@ import {
 import type { MusicSelection } from "@/content/music";
 import { isPlayable } from "@/content/music";
 import { cn } from "@/lib/utils";
-import { sleeveArt } from "./sleeve-art";
+import { SleeveImage } from "./sleeve-image";
 import styles from "./crate.module.css";
 
 interface CrateProps {
@@ -297,11 +297,13 @@ export function Crate({
                         : "No source for this record yet"
                     }
                   >
-                    <span
-                      className={styles.art}
-                      style={sleeveArt(record.id)}
-                      aria-hidden="true"
-                    />
+                    <span className={styles.art} aria-hidden="true">
+                      <SleeveImage
+                        id={record.id}
+                        artwork={record.artwork}
+                        sizes="140px"
+                      />
+                    </span>
                     <span className={styles.spine} aria-hidden="true">
                       <span className={styles.spineTitle}>{record.title}</span>
                       <span className={styles.spineArtist}>

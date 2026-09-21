@@ -363,10 +363,28 @@
 .monitorArt {
   position: absolute;
   inset: 0;
+  overflow: hidden;
+  background: #0a0a0b;
   animation: art-in 400ms ease both;
 }
 
+/* Album art in the monitor: a blurred copy fills the 16:9 behind the
+   square sleeve, which stands centred with a paper edge. */
+.monitorSquare {
+  position: absolute;
+  inset: 0;
+  margin: auto;
+  height: 100%;
+  aspect-ratio: 1;
+  overflow: hidden;
+  z-index: 1;
+  box-shadow:
+    0 0 0 3px color-mix(in srgb, var(--material-paper) 88%, transparent),
+    0 18px 40px -18px rgba(0, 0, 0, 0.9);
+}
+
 .monitorArt::after {
+  z-index: 2;
   content: "";
   position: absolute;
   inset: 0;
