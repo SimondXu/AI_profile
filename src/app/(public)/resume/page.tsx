@@ -36,6 +36,15 @@ const SKILL_GROUPS: Array<{ label: string; key: keyof Skills }> = [
   { label: "Data / Infra", key: "data_infra" },
 ];
 
+/** Pipe-separated headline: the first clause leads, the rest become pills. */
+function headlineParts(description: string): { lead: string; pills: string[] } {
+  const [lead, ...pills] = description
+    .split("|")
+    .map((part) => part.trim())
+    .filter(Boolean);
+  return { lead: lead ?? description, pills };
+}
+
 const sectionLinks = [
   { id: "experience", label: "Experience" },
   { id: "education", label: "Education" },
@@ -52,6 +61,7 @@ export default function ResumePage() {
     config.education as typeof config.education & EducationWithPrevious
   ).previous;
   const certifications = config.education.achievements ?? [];
+  const headline = headlineParts(config.resume.description);
 
   return (
     <div className="mx-auto w-full max-w-6xl px-5 py-12 sm:px-8 lg:py-16">
@@ -160,8 +170,20 @@ export default function ResumePage() {
               {config.personal.name}
             </h1>
             <p className="max-w-prose text-[17px] leading-[1.6] text-muted-foreground">
-              {config.resume.description}
+              {headline.lead}
             </p>
+            {headline.pills.length ? (
+              <ul className="flex flex-wrap gap-2">
+                {headline.pills.map((pill) => (
+                  <li
+                    key={pill}
+                    className="inline-flex items-center rounded-full border border-border bg-surface/70 px-3 py-1 font-mono text-[12px] text-muted-foreground backdrop-blur"
+                  >
+                    {pill}
+                  </li>
+                ))}
+              </ul>
+            ) : null}
           </header>
 
           <section
