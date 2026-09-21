@@ -11,7 +11,9 @@
         "kind": "youtube",
         "videoId": "aPnqx56V8-0"
       },
-      "artwork": "https://is1-ssl.mzstatic.com/image/thumb/Music221/v4/25/0d/7e/250d7e42-3a2f-19ac-f865-f1e04a4a1f97/12UMDIM01007.rgb.jpg/600x600bb.jpg"
+      "artwork": "https://is1-ssl.mzstatic.com/image/thumb/Music221/v4/25/0d/7e/250d7e42-3a2f-19ac-f865-f1e04a4a1f97/12UMDIM01007.rgb.jpg/600x600bb.jpg",
+      "bpm": 93.0,
+      "glow": "#8c4d5e"
     },
     {
       "id": "002-until-i-found-you-piano-version",
@@ -21,7 +23,9 @@
         "kind": "youtube",
         "videoId": "oIKuyj2GQtY"
       },
-      "artwork": "https://is1-ssl.mzstatic.com/image/thumb/Music115/v4/64/d2/c5/64d2c511-67f4-ae09-5153-d39c3da413a3/21UMGIM75467.rgb.jpg/600x600bb.jpg"
+      "artwork": "https://is1-ssl.mzstatic.com/image/thumb/Music115/v4/64/d2/c5/64d2c511-67f4-ae09-5153-d39c3da413a3/21UMGIM75467.rgb.jpg/600x600bb.jpg",
+      "bpm": 100.9,
+      "glow": "#5e72ab"
     },
     {
       "id": "003-if-i-aint-got-you",
@@ -32,7 +36,8 @@
         "kind": "youtube",
         "videoId": "BvxjcH_tmWo"
       },
-      "artwork": "https://is1-ssl.mzstatic.com/image/thumb/Music221/v4/a0/65/c3/a065c392-a9ce-6d6d-62d7-b9f4743582bb/198704397387_Cover.jpg/600x600bb.jpg"
+      "artwork": "https://is1-ssl.mzstatic.com/image/thumb/Music221/v4/a0/65/c3/a065c392-a9ce-6d6d-62d7-b9f4743582bb/198704397387_Cover.jpg/600x600bb.jpg",
+      "glow": "#2654a2"
     },
     {
       "id": "004-her-feat-annika-wells",
@@ -42,7 +47,8 @@
         "kind": "youtube",
         "videoId": "ZxE0QzE2K9o"
       },
-      "artwork": "https://is1-ssl.mzstatic.com/image/thumb/Music211/v4/9c/0c/88/9c0c883c-0901-60a1-8f4b-6a96c36be366/198846140360.jpg/600x600bb.jpg"
+      "artwork": "https://is1-ssl.mzstatic.com/image/thumb/Music211/v4/9c/0c/88/9c0c883c-0901-60a1-8f4b-6a96c36be366/198846140360.jpg/600x600bb.jpg",
+      "glow": "#658c4d"
     },
     {
       "id": "005-begging-you-guide-ver-bonus-track",
@@ -53,7 +59,8 @@
         "kind": "youtube",
         "videoId": "r747U7NmK5g"
       },
-      "artwork": "https://is1-ssl.mzstatic.com/image/thumb/Music113/v4/c2/d1/76/c2d1760c-e7c8-44ee-70ab-5c6c2746d612/cover_KM0008214_1.jpg/600x600bb.jpg"
+      "artwork": "https://is1-ssl.mzstatic.com/image/thumb/Music113/v4/c2/d1/76/c2d1760c-e7c8-44ee-70ab-5c6c2746d612/cover_KM0008214_1.jpg/600x600bb.jpg",
+      "glow": "#7b8c4d"
     },
     {
       "id": "007-memories",
@@ -64,7 +71,8 @@
         "kind": "youtube",
         "videoId": "-yyq-Kr06D8"
       },
-      "artwork": "https://is1-ssl.mzstatic.com/image/thumb/Music115/v4/81/e0/7f/81e07f52-ee2f-aa2d-668e-047cee0ce480/886449354351.jpg/600x600bb.jpg"
+      "artwork": "https://is1-ssl.mzstatic.com/image/thumb/Music115/v4/81/e0/7f/81e07f52-ee2f-aa2d-668e-047cee0ce480/886449354351.jpg/600x600bb.jpg",
+      "glow": "#7470cc"
     },
     {
       "id": "008-i-dont-see-nobody-but-you",
@@ -74,7 +82,8 @@
         "kind": "youtube",
         "videoId": "K6iV1tCsPns"
       },
-      "artwork": "https://is1-ssl.mzstatic.com/image/thumb/Music221/v4/94/55/58/94555868-6d52-3a73-3d96-8d5d0b3c2e03/IDONT001FG.jpg/600x600bb.jpg"
+      "artwork": "https://is1-ssl.mzstatic.com/image/thumb/Music221/v4/94/55/58/94555868-6d52-3a73-3d96-8d5d0b3c2e03/IDONT001FG.jpg/600x600bb.jpg",
+      "glow": "#1a58d7"
     },
     {
       "id": "009-girl",
@@ -85,7 +94,9 @@
         "kind": "youtube",
         "videoId": "Hn0F8M0iiW0"
       },
-      "artwork": "https://is1-ssl.mzstatic.com/image/thumb/Music114/v4/55/ec/b6/55ecb6fc-83b5-5cd2-db30-66c8de5a96de/19UMGIM87793.rgb.jpg/600x600bb.jpg"
+      "artwork": "https://is1-ssl.mzstatic.com/image/thumb/Music114/v4/55/ec/b6/55ecb6fc-83b5-5cd2-db30-66c8de5a96de/19UMGIM87793.rgb.jpg/600x600bb.jpg",
+      "bpm": 100.0,
+      "glow": "#a45f4d"
     },
     {
       "id": "010-so-low",
@@ -95,7 +106,8 @@
         "kind": "youtube",
         "videoId": "zi87mqfaQtg"
       },
-      "artwork": "https://cdn-images.dzcdn.net/images/cover/4d038d08cf2c5530d5733d3a68cbcdf3/1000x1000-000000-80-0-0.jpg"
+      "artwork": "https://cdn-images.dzcdn.net/images/cover/4d038d08cf2c5530d5733d3a68cbcdf3/1000x1000-000000-80-0-0.jpg",
+      "glow": "#4d678c"
     },
     {
       "id": "011-location",
@@ -105,7 +117,9 @@
         "kind": "youtube",
         "videoId": "by3yRdlQvzs"
       },
-      "artwork": "https://is1-ssl.mzstatic.com/image/thumb/Music125/v4/f8/45/5a/f8455a71-8307-aa9a-9c95-3d22efe0804f/886446326146.jpg/600x600bb.jpg"
+      "artwork": "https://is1-ssl.mzstatic.com/image/thumb/Music125/v4/f8/45/5a/f8455a71-8307-aa9a-9c95-3d22efe0804f/886446326146.jpg/600x600bb.jpg",
+      "bpm": 80.1,
+      "glow": "#466d8c"
     },
     {
       "id": "012-single-af",
@@ -115,7 +129,8 @@
         "kind": "youtube",
         "videoId": "9CeOCcNDiBU"
       },
-      "artwork": "https://is1-ssl.mzstatic.com/image/thumb/Music114/v4/14/a7/83/14a7838d-e415-01d2-68f3-be8a10f1d2d3/886448870852.jpg/600x600bb.jpg"
+      "artwork": "https://is1-ssl.mzstatic.com/image/thumb/Music114/v4/14/a7/83/14a7838d-e415-01d2-68f3-be8a10f1d2d3/886448870852.jpg/600x600bb.jpg",
+      "glow": "#7e9e0b"
     },
     {
       "id": "013-what-it-is-block-boy",
@@ -125,7 +140,8 @@
         "kind": "youtube",
         "videoId": "AnWzc5M0PSY"
       },
-      "artwork": "https://is1-ssl.mzstatic.com/image/thumb/Music116/v4/57/e6/24/57e624a0-7b2f-c73e-ce99-ae7c299178b4/23UMGIM16361.rgb.jpg/600x600bb.jpg"
+      "artwork": "https://is1-ssl.mzstatic.com/image/thumb/Music116/v4/57/e6/24/57e624a0-7b2f-c73e-ce99-ae7c299178b4/23UMGIM16361.rgb.jpg/600x600bb.jpg",
+      "glow": "#8c834d"
     },
     {
       "id": "014-hot",
@@ -135,7 +151,8 @@
         "kind": "youtube",
         "videoId": "PREfuuZtlws"
       },
-      "artwork": "https://is1-ssl.mzstatic.com/image/thumb/Music126/v4/f4/df/c2/f4dfc20c-8cef-c15c-29ac-ac933846af65/190296373886.jpg/600x600bb.jpg"
+      "artwork": "https://is1-ssl.mzstatic.com/image/thumb/Music126/v4/f4/df/c2/f4dfc20c-8cef-c15c-29ac-ac933846af65/190296373886.jpg/600x600bb.jpg",
+      "glow": "#8c180a"
     },
     {
       "id": "015-drive-thru",
@@ -145,7 +162,8 @@
         "kind": "youtube",
         "videoId": "QjRHz3rRWaA"
       },
-      "artwork": "https://cdn-images.dzcdn.net/images/cover/c74622913ec84f24f2bbf1dc7c835540/1000x1000-000000-80-0-0.jpg"
+      "artwork": "https://cdn-images.dzcdn.net/images/cover/c74622913ec84f24f2bbf1dc7c835540/1000x1000-000000-80-0-0.jpg",
+      "glow": "#df7b82"
     },
     {
       "id": "016-aaa",
@@ -156,7 +174,8 @@
         "kind": "youtube",
         "videoId": "RS9RRjBqKS0"
       },
-      "artwork": "https://cdn-images.dzcdn.net/images/cover/2a884f9b5cd7e1acdb19f87553247a17/1000x1000-000000-80-0-0.jpg"
+      "artwork": "https://cdn-images.dzcdn.net/images/cover/2a884f9b5cd7e1acdb19f87553247a17/1000x1000-000000-80-0-0.jpg",
+      "glow": "#2f228c"
     },
     {
       "id": "017-money-trees",
@@ -167,7 +186,8 @@
         "kind": "youtube",
         "videoId": "0nF69UTw99E"
       },
-      "artwork": "https://is1-ssl.mzstatic.com/image/thumb/Music122/v4/36/86/ec/3686ec99-dec4-0a01-8b74-2d8a9a0263a7/12UMGIM52988.rgb.jpg/600x600bb.jpg"
+      "artwork": "https://is1-ssl.mzstatic.com/image/thumb/Music122/v4/36/86/ec/3686ec99-dec4-0a01-8b74-2d8a9a0263a7/12UMGIM52988.rgb.jpg/600x600bb.jpg",
+      "glow": "#8c894d"
     },
     {
       "id": "018-out-of-the-woods",
@@ -178,7 +198,9 @@
         "kind": "youtube",
         "videoId": "gp1MR2WAAXY"
       },
-      "artwork": "https://is1-ssl.mzstatic.com/image/thumb/Music211/v4/11/a6/80/11a680e6-2e48-08fa-5e87-3f18e838d31f/23UM1IM11868.rgb.jpg/600x600bb.jpg"
+      "artwork": "https://is1-ssl.mzstatic.com/image/thumb/Music211/v4/11/a6/80/11a680e6-2e48-08fa-5e87-3f18e838d31f/23UM1IM11868.rgb.jpg/600x600bb.jpg",
+      "bpm": 91.9,
+      "glow": "#956152"
     },
     {
       "id": "019-cruel-summer",
@@ -189,7 +211,9 @@
         "kind": "youtube",
         "videoId": "ic8j13piAhQ"
       },
-      "artwork": "https://is1-ssl.mzstatic.com/image/thumb/Music125/v4/49/3d/ab/493dab54-f920-9043-6181-80993b8116c9/19UMGIM53909.rgb.jpg/600x600bb.jpg"
+      "artwork": "https://is1-ssl.mzstatic.com/image/thumb/Music125/v4/49/3d/ab/493dab54-f920-9043-6181-80993b8116c9/19UMGIM53909.rgb.jpg/600x600bb.jpg",
+      "bpm": 85.1,
+      "glow": "#cc71ce"
     },
     {
       "id": "020-novocaine",
@@ -200,7 +224,8 @@
         "kind": "youtube",
         "videoId": "SxEcQEYR1aE"
       },
-      "artwork": "https://cdn-images.dzcdn.net/images/cover/4d038d08cf2c5530d5733d3a68cbcdf3/1000x1000-000000-80-0-0.jpg"
+      "artwork": "https://cdn-images.dzcdn.net/images/cover/4d038d08cf2c5530d5733d3a68cbcdf3/1000x1000-000000-80-0-0.jpg",
+      "glow": "#4d678c"
     },
     {
       "id": "021-white-ferrari",
@@ -211,7 +236,9 @@
         "kind": "youtube",
         "videoId": "Dlz_XHeUUis"
       },
-      "artwork": "https://is1-ssl.mzstatic.com/image/thumb/Music115/v4/bb/45/68/bb4568f3-68cd-619d-fbcb-4e179916545d/BlondCover-Final.jpg/600x600bb.jpg"
+      "artwork": "https://is1-ssl.mzstatic.com/image/thumb/Music115/v4/bb/45/68/bb4568f3-68cd-619d-fbcb-4e179916545d/BlondCover-Final.jpg/600x600bb.jpg",
+      "bpm": 108.8,
+      "glow": "#8c5e4d"
     },
     {
       "id": "022-sheluvme",
@@ -221,7 +248,8 @@
         "kind": "youtube",
         "videoId": "vUJtxFYLVVQ"
       },
-      "artwork": "https://is1-ssl.mzstatic.com/image/thumb/Music122/v4/06/22/91/062291bc-b4f5-d03c-6290-6db9d2334576/196589243102.jpg/600x600bb.jpg"
+      "artwork": "https://is1-ssl.mzstatic.com/image/thumb/Music122/v4/06/22/91/062291bc-b4f5-d03c-6290-6db9d2334576/196589243102.jpg/600x600bb.jpg",
+      "glow": "#ce4135"
     },
     {
       "id": "023-die-for-you",
@@ -232,7 +260,8 @@
         "kind": "youtube",
         "videoId": "kIEWJ1ljEro"
       },
-      "artwork": "https://is1-ssl.mzstatic.com/image/thumb/Music221/v4/d0/2a/43/d02a433a-3ab8-9a94-b07d-1dc599b64966/93624864387.jpg/600x600bb.jpg"
+      "artwork": "https://is1-ssl.mzstatic.com/image/thumb/Music221/v4/d0/2a/43/d02a433a-3ab8-9a94-b07d-1dc599b64966/93624864387.jpg/600x600bb.jpg",
+      "glow": "#4e868e"
     },
     {
       "id": "024-all-girls-are-the-same",
@@ -243,7 +272,9 @@
         "kind": "youtube",
         "videoId": "AYk-yuxDZiE"
       },
-      "artwork": "https://is1-ssl.mzstatic.com/image/thumb/Music126/v4/bb/7d/d3/bb7dd31e-d32a-6e8c-c4f5-5d80e5d72426/23UMGIM49821.rgb.jpg/600x600bb.jpg"
+      "artwork": "https://is1-ssl.mzstatic.com/image/thumb/Music126/v4/bb/7d/d3/bb7dd31e-d32a-6e8c-c4f5-5d80e5d72426/23UMGIM49821.rgb.jpg/600x600bb.jpg",
+      "bpm": 81.1,
+      "glow": "#a9855d"
     },
     {
       "id": "025-nonsense",
@@ -254,7 +285,8 @@
         "kind": "youtube",
         "videoId": "ECVA6FvhdEE"
       },
-      "artwork": "https://is1-ssl.mzstatic.com/image/thumb/Music122/v4/22/fe/7a/22fe7a31-534a-58d8-eb80-fd08fdb9274d/22UMGIM63573.rgb.jpg/600x600bb.jpg"
+      "artwork": "https://is1-ssl.mzstatic.com/image/thumb/Music122/v4/22/fe/7a/22fe7a31-534a-58d8-eb80-fd08fdb9274d/22UMGIM63573.rgb.jpg/600x600bb.jpg",
+      "glow": "#bf9769"
     },
     {
       "id": "026-moonlight",
@@ -265,7 +297,8 @@
         "kind": "youtube",
         "videoId": "Ob0uXrhdWhk"
       },
-      "artwork": "https://is1-ssl.mzstatic.com/image/thumb/Music116/v4/67/77/8a/67778a6b-0160-dbfd-bd3b-0dc0f729afe1/1268.jpg/600x600bb.jpg"
+      "artwork": "https://is1-ssl.mzstatic.com/image/thumb/Music116/v4/67/77/8a/67778a6b-0160-dbfd-bd3b-0dc0f729afe1/1268.jpg/600x600bb.jpg",
+      "glow": "#5a398c"
     },
     {
       "id": "027-as-it-was",
@@ -275,7 +308,8 @@
         "kind": "youtube",
         "videoId": "fn4JAuCfHQA"
       },
-      "artwork": "https://is1-ssl.mzstatic.com/image/thumb/Music112/v4/5f/70/d2/5f70d2b8-b0ee-db3e-1b48-45f707db230a/850041979113.jpg/600x600bb.jpg"
+      "artwork": "https://is1-ssl.mzstatic.com/image/thumb/Music112/v4/5f/70/d2/5f70d2b8-b0ee-db3e-1b48-45f707db230a/850041979113.jpg/600x600bb.jpg",
+      "glow": "#cca170"
     },
     {
       "id": "028-snowman",
@@ -286,7 +320,8 @@
         "kind": "youtube",
         "videoId": "oxyspxyfpNw"
       },
-      "artwork": "https://is1-ssl.mzstatic.com/image/thumb/Music221/v4/53/a8/59/53a859f4-910c-e5a5-ac9c-189efca3c3f1/196620371078_cover.jpg/600x600bb.jpg"
+      "artwork": "https://is1-ssl.mzstatic.com/image/thumb/Music221/v4/53/a8/59/53a859f4-910c-e5a5-ac9c-189efca3c3f1/196620371078_cover.jpg/600x600bb.jpg",
+      "glow": "#8c664d"
     },
     {
       "id": "029-why",
@@ -296,7 +331,8 @@
         "kind": "youtube",
         "videoId": "eLgB-hGGpjw"
       },
-      "artwork": "https://cdn-images.dzcdn.net/images/cover/0c216e39235a9b3fcb5dbf0b9561b95f/1000x1000-000000-80-0-0.jpg"
+      "artwork": "https://cdn-images.dzcdn.net/images/cover/0c216e39235a9b3fcb5dbf0b9561b95f/1000x1000-000000-80-0-0.jpg",
+      "glow": "#8c4d4d"
     },
     {
       "id": "030-21",
@@ -307,7 +343,9 @@
         "kind": "youtube",
         "videoId": "eyX5zUI3oq0"
       },
-      "artwork": "https://is1-ssl.mzstatic.com/image/thumb/Music211/v4/38/6a/e0/386ae072-1e4d-3e4c-8b2d-9bec57700ca2/25UM1IM59104.rgb.jpg/600x600bb.jpg"
+      "artwork": "https://is1-ssl.mzstatic.com/image/thumb/Music211/v4/38/6a/e0/386ae072-1e4d-3e4c-8b2d-9bec57700ca2/25UM1IM59104.rgb.jpg/600x600bb.jpg",
+      "bpm": 125.1,
+      "glow": "#8c3929"
     },
     {
       "id": "032-golden-hour",
@@ -318,7 +356,8 @@
         "kind": "youtube",
         "videoId": "UsR08cY8k0A"
       },
-      "artwork": "https://is1-ssl.mzstatic.com/image/thumb/Music211/v4/8d/1a/7b/8d1a7b44-316f-7c7f-4380-935673fb697a/5056167175650.jpg/600x600bb.jpg"
+      "artwork": "https://is1-ssl.mzstatic.com/image/thumb/Music211/v4/8d/1a/7b/8d1a7b44-316f-7c7f-4380-935673fb697a/5056167175650.jpg/600x600bb.jpg",
+      "glow": "#4d8c6c"
     },
     {
       "id": "033-shut-up-my-moms-calling",
@@ -329,7 +368,8 @@
         "kind": "youtube",
         "videoId": "HVmpI3d11oM"
       },
-      "artwork": "https://is1-ssl.mzstatic.com/image/thumb/Music116/v4/63/11/1b/63111b50-00ce-2734-e09f-94fb791c9dee/0d6bb465-1f3e-457c-99e5-a786f63c3fbb.jpg/600x600bb.jpg"
+      "artwork": "https://is1-ssl.mzstatic.com/image/thumb/Music116/v4/63/11/1b/63111b50-00ce-2734-e09f-94fb791c9dee/0d6bb465-1f3e-457c-99e5-a786f63c3fbb.jpg/600x600bb.jpg",
+      "glow": "#8c5848"
     },
     {
       "id": "034-glimpse-of-us",
@@ -339,7 +379,8 @@
         "kind": "youtube",
         "videoId": "NgsWGfUlwJI"
       },
-      "artwork": "https://is1-ssl.mzstatic.com/image/thumb/Music221/v4/d0/2a/43/d02a433a-3ab8-9a94-b07d-1dc599b64966/93624864387.jpg/600x600bb.jpg"
+      "artwork": "https://is1-ssl.mzstatic.com/image/thumb/Music221/v4/d0/2a/43/d02a433a-3ab8-9a94-b07d-1dc599b64966/93624864387.jpg/600x600bb.jpg",
+      "glow": "#4e868e"
     },
     {
       "id": "035-yeah-right",
@@ -349,7 +390,9 @@
         "kind": "youtube",
         "videoId": "tG7wLK4aAOE"
       },
-      "artwork": "https://is1-ssl.mzstatic.com/image/thumb/Music126/v4/ba/a3/7f/baa37ff3-a3e7-55c5-33be-cff0c8e6f8ec/190296945250.jpg/600x600bb.jpg"
+      "artwork": "https://is1-ssl.mzstatic.com/image/thumb/Music126/v4/ba/a3/7f/baa37ff3-a3e7-55c5-33be-cff0c8e6f8ec/190296945250.jpg/600x600bb.jpg",
+      "bpm": 112.4,
+      "glow": "#8c584d"
     },
     {
       "id": "036-slow-dancing-in-the-dark",
@@ -359,7 +402,9 @@
         "kind": "youtube",
         "videoId": "LUXu4aTnK7E"
       },
-      "artwork": "https://is1-ssl.mzstatic.com/image/thumb/Music126/v4/af/ee/e2/afeee208-5816-b700-f703-d4f46780c504/190296919015.jpg/600x600bb.jpg"
+      "artwork": "https://is1-ssl.mzstatic.com/image/thumb/Music126/v4/af/ee/e2/afeee208-5816-b700-f703-d4f46780c504/190296919015.jpg/600x600bb.jpg",
+      "bpm": 89.0,
+      "glow": "#8c654d"
     },
     {
       "id": "037-lalala",
@@ -369,7 +414,9 @@
         "kind": "youtube",
         "videoId": "X_nJ5ksFVbg"
       },
-      "artwork": "https://cdn-images.dzcdn.net/images/cover/57f9e0aa71f8831dc2150fa8e281496f/1000x1000-000000-80-0-0.jpg"
+      "artwork": "https://cdn-images.dzcdn.net/images/cover/57f9e0aa71f8831dc2150fa8e281496f/1000x1000-000000-80-0-0.jpg",
+      "bpm": 129.9,
+      "glow": "#4571b7"
     },
     {
       "id": "038-my-peanut-butter-chocolate-cake-with-koo",
@@ -388,7 +435,9 @@
         "kind": "youtube",
         "videoId": "UnyLfqpyi94"
       },
-      "artwork": "https://cdn-images.dzcdn.net/images/cover/01f590de9f839b55b49964ea70e744d9/1000x1000-000000-80-0-0.jpg"
+      "artwork": "https://cdn-images.dzcdn.net/images/cover/01f590de9f839b55b49964ea70e744d9/1000x1000-000000-80-0-0.jpg",
+      "bpm": 91.9,
+      "glow": "#38318c"
     },
     {
       "id": "040-die-for-you",
@@ -399,7 +448,9 @@
         "kind": "youtube",
         "videoId": "QLCpqdqeoII"
       },
-      "artwork": "https://is1-ssl.mzstatic.com/image/thumb/Music115/v4/e2/61/f8/e261f8c1-73db-9a7a-c89e-1068f19970e0/16UMGIM67863.rgb.jpg/600x600bb.jpg"
+      "artwork": "https://is1-ssl.mzstatic.com/image/thumb/Music115/v4/e2/61/f8/e261f8c1-73db-9a7a-c89e-1068f19970e0/16UMGIM67863.rgb.jpg/600x600bb.jpg",
+      "bpm": 133.8,
+      "glow": "#8c2b2d"
     },
     {
       "id": "041-lets-fall-in-love-for-the-night",
@@ -410,7 +461,9 @@
         "kind": "youtube",
         "videoId": "VaKzNtwPQxE"
       },
-      "artwork": "https://cdn-images.dzcdn.net/images/cover/e015a6ab613623f8ed03f0fe74ad474c/1000x1000-000000-80-0-0.jpg"
+      "artwork": "https://cdn-images.dzcdn.net/images/cover/e015a6ab613623f8ed03f0fe74ad474c/1000x1000-000000-80-0-0.jpg",
+      "bpm": 128.2,
+      "glow": "#8c4834"
     },
     {
       "id": "042-eyes-blue-or-brown-cant-remember",
@@ -420,7 +473,8 @@
         "kind": "youtube",
         "videoId": "ETbaHU736Tg"
       },
-      "artwork": "https://cdn-images.dzcdn.net/images/cover/ff26bfc87ed451548b10f87357a57076/1000x1000-000000-80-0-0.jpg"
+      "artwork": "https://cdn-images.dzcdn.net/images/cover/ff26bfc87ed451548b10f87357a57076/1000x1000-000000-80-0-0.jpg",
+      "glow": "#2e3d9b"
     },
     {
       "id": "043-number",
@@ -430,7 +484,9 @@
         "kind": "youtube",
         "videoId": "GR9xo0IWtKc"
       },
-      "artwork": "https://cdn-images.dzcdn.net/images/cover/e9be93cff5b61040d0327d09f65a55b8/1000x1000-000000-80-0-0.jpg"
+      "artwork": "https://cdn-images.dzcdn.net/images/cover/e9be93cff5b61040d0327d09f65a55b8/1000x1000-000000-80-0-0.jpg",
+      "bpm": 80.1,
+      "glow": "#8c5e36"
     },
     {
       "id": "044-peanut-butter",
@@ -441,7 +497,8 @@
         "kind": "youtube",
         "videoId": "-Mg5UwDvr5s"
       },
-      "artwork": "https://cdn-images.dzcdn.net/images/cover/215f895d3321fc9cefa1bcd4abb1dccf/1000x1000-000000-80-0-0.jpg"
+      "artwork": "https://cdn-images.dzcdn.net/images/cover/215f895d3321fc9cefa1bcd4abb1dccf/1000x1000-000000-80-0-0.jpg",
+      "glow": "#dd7aa5"
     },
     {
       "id": "045-sex-money-feelings-die",
@@ -452,7 +509,9 @@
         "kind": "youtube",
         "videoId": "BFD9Chg2Nmw"
       },
-      "artwork": "https://cdn-images.dzcdn.net/images/cover/013e022c4915cca132f2462bb940b57b/1000x1000-000000-80-0-0.jpg"
+      "artwork": "https://cdn-images.dzcdn.net/images/cover/013e022c4915cca132f2462bb940b57b/1000x1000-000000-80-0-0.jpg",
+      "bpm": 133.8,
+      "glow": "#ac3f3a"
     },
     {
       "id": "046-no-lie-male-cover",
@@ -471,7 +530,9 @@
         "kind": "youtube",
         "videoId": "9t5acBJgyN0"
       },
-      "artwork": "https://cdn-images.dzcdn.net/images/cover/906cb3cfe0a7d3c345460f0f78691c42/1000x1000-000000-80-0-0.jpg"
+      "artwork": "https://cdn-images.dzcdn.net/images/cover/906cb3cfe0a7d3c345460f0f78691c42/1000x1000-000000-80-0-0.jpg",
+      "bpm": 95.9,
+      "glow": "#c0796a"
     },
     {
       "id": "048-love-in-the-dark",
@@ -482,7 +543,9 @@
         "kind": "youtube",
         "videoId": "oytOOA9sOiE"
       },
-      "artwork": "https://is1-ssl.mzstatic.com/image/thumb/Music116/v4/08/8c/24/088c2405-2e33-801b-5c38-e967f2c01e69/191404113974.png/600x600bb.jpg"
+      "artwork": "https://is1-ssl.mzstatic.com/image/thumb/Music116/v4/08/8c/24/088c2405-2e33-801b-5c38-e967f2c01e69/191404113974.png/600x600bb.jpg",
+      "bpm": 109.7,
+      "glow": "#8c784d"
     },
     {
       "id": "049-cold",
@@ -493,7 +556,8 @@
         "kind": "youtube",
         "videoId": "et3MNeS1QA8"
       },
-      "artwork": "https://is1-ssl.mzstatic.com/image/thumb/Music125/v4/8a/49/80/8a49806e-e9b6-1025-f4a8-cf51edb4504b/17UM1IM31406.rgb.jpg/600x600bb.jpg"
+      "artwork": "https://is1-ssl.mzstatic.com/image/thumb/Music125/v4/8a/49/80/8a49806e-e9b6-1025-f4a8-cf51edb4504b/17UM1IM31406.rgb.jpg/600x600bb.jpg",
+      "glow": "#5f8cac"
     },
     {
       "id": "050-idontwannabeyouanymore-cover",
@@ -513,7 +577,9 @@
         "kind": "youtube",
         "videoId": "s830CSutPoE"
       },
-      "artwork": "https://is1-ssl.mzstatic.com/image/thumb/Music116/v4/0d/25/f8/0d25f8aa-df75-0b69-00eb-5f5e7cd7c0f5/067003046657.png/600x600bb.jpg"
+      "artwork": "https://is1-ssl.mzstatic.com/image/thumb/Music116/v4/0d/25/f8/0d25f8aa-df75-0b69-00eb-5f5e7cd7c0f5/067003046657.png/600x600bb.jpg",
+      "bpm": 74.9,
+      "glow": "#b77f2d"
     },
     {
       "id": "052-shadow-of-the-sun",
@@ -524,7 +590,9 @@
         "kind": "youtube",
         "videoId": "27hVYeaPHh8"
       },
-      "artwork": "https://is1-ssl.mzstatic.com/image/thumb/Music5/v4/4d/30/a0/4d30a057-7bd7-a120-0cc9-55795b6f7d35/dj.yyvinoqe.jpg/600x600bb.jpg"
+      "artwork": "https://is1-ssl.mzstatic.com/image/thumb/Music5/v4/4d/30/a0/4d30a057-7bd7-a120-0cc9-55795b6f7d35/dj.yyvinoqe.jpg/600x600bb.jpg",
+      "bpm": 126.0,
+      "glow": "#4d578c"
     },
     {
       "id": "053-mirrors",
@@ -535,7 +603,9 @@
         "kind": "youtube",
         "videoId": "U41KPUfOSFk"
       },
-      "artwork": "https://is1-ssl.mzstatic.com/image/thumb/Music125/v4/53/74/c9/5374c99e-cff1-61a6-ca0f-fa1219d050a0/886443854406.jpg/600x600bb.jpg"
+      "artwork": "https://is1-ssl.mzstatic.com/image/thumb/Music125/v4/53/74/c9/5374c99e-cff1-61a6-ca0f-fa1219d050a0/886443854406.jpg/600x600bb.jpg",
+      "bpm": 76.8,
+      "glow": "#8c7a4d"
     },
     {
       "id": "054-warm-feat-mia",
@@ -545,7 +615,8 @@
         "kind": "youtube",
         "videoId": "Ygp8PTrUhEk"
       },
-      "artwork": "https://is1-ssl.mzstatic.com/image/thumb/Music112/v4/b3/f1/df/b3f1df54-a03a-df22-cec0-208aea98374e/artwork.jpg/600x600bb.jpg"
+      "artwork": "https://is1-ssl.mzstatic.com/image/thumb/Music112/v4/b3/f1/df/b3f1df54-a03a-df22-cec0-208aea98374e/artwork.jpg/600x600bb.jpg",
+      "glow": "#98402b"
     },
     {
       "id": "055-thank-you-acoustic",
@@ -555,7 +626,9 @@
         "kind": "youtube",
         "videoId": "2Vcot4jY6LU"
       },
-      "artwork": "https://is1-ssl.mzstatic.com/image/thumb/Features114/v4/45/9a/24/459a24aa-0c31-0129-fa8d-44b03a04df62/dj.zcfxujdv.jpg/600x600bb.jpg"
+      "artwork": "https://is1-ssl.mzstatic.com/image/thumb/Features114/v4/45/9a/24/459a24aa-0c31-0129-fa8d-44b03a04df62/dj.zcfxujdv.jpg/600x600bb.jpg",
+      "bpm": 80.1,
+      "glow": "#8c2c35"
     },
     {
       "id": "056-demons",
@@ -566,7 +639,9 @@
         "kind": "youtube",
         "videoId": "pvrkfb1C4tE"
       },
-      "artwork": "https://is1-ssl.mzstatic.com/image/thumb/Music112/v4/1f/fa/09/1ffa092f-f52f-4a66-7d10-4cc5982dc747/12UMGIM46901.rgb.jpg/600x600bb.jpg"
+      "artwork": "https://is1-ssl.mzstatic.com/image/thumb/Music112/v4/1f/fa/09/1ffa092f-f52f-4a66-7d10-4cc5982dc747/12UMGIM46901.rgb.jpg/600x600bb.jpg",
+      "bpm": 88.7,
+      "glow": "#794d8c"
     },
     {
       "id": "057-lay-me-down",
@@ -576,7 +651,9 @@
         "kind": "youtube",
         "videoId": "HaMq2nn5ac0"
       },
-      "artwork": "https://is1-ssl.mzstatic.com/image/thumb/Music115/v4/80/74/b6/8074b6bc-387f-6cc9-5ede-92b76396ad5f/13UAEIM58958.rgb.jpg/600x600bb.jpg"
+      "artwork": "https://is1-ssl.mzstatic.com/image/thumb/Music115/v4/80/74/b6/8074b6bc-387f-6cc9-5ede-92b76396ad5f/13UAEIM58958.rgb.jpg/600x600bb.jpg",
+      "bpm": 119.8,
+      "glow": "#8c6f4d"
     },
     {
       "id": "058-upside-down-acoustic",
@@ -587,7 +664,9 @@
         "kind": "youtube",
         "videoId": "dqUdI4AIDF0"
       },
-      "artwork": "https://is1-ssl.mzstatic.com/image/thumb/Music115/v4/08/11/d2/0811d2b3-b4d5-dc22-1107-3625511844b5/00602537869770.rgb.jpg/600x600bb.jpg"
+      "artwork": "https://is1-ssl.mzstatic.com/image/thumb/Music115/v4/08/11/d2/0811d2b3-b4d5-dc22-1107-3625511844b5/00602537869770.rgb.jpg/600x600bb.jpg",
+      "bpm": 102.6,
+      "glow": "#f3e10c"
     },
     {
       "id": "059-its-ok",
@@ -597,7 +676,8 @@
         "kind": "youtube",
         "videoId": "8tem27lgr1Q"
       },
-      "artwork": "https://cdn-images.dzcdn.net/images/cover/342abb0ed67a13ebecc62eafb0b2534e/1000x1000-000000-80-0-0.jpg"
+      "artwork": "https://cdn-images.dzcdn.net/images/cover/342abb0ed67a13ebecc62eafb0b2534e/1000x1000-000000-80-0-0.jpg",
+      "glow": "#df7b92"
     },
     {
       "id": "060-mr-forgettable-emo-slow-version",
@@ -609,7 +689,8 @@
         "kind": "youtube",
         "videoId": "ZA-0Fweuu0g"
       },
-      "artwork": "https://is1-ssl.mzstatic.com/image/thumb/Music211/v4/53/0b/5e/530b5e7c-c068-2ba6-426a-df7cd9a4d5a1/842812165252_Cover.jpg/600x600bb.jpg"
+      "artwork": "https://is1-ssl.mzstatic.com/image/thumb/Music211/v4/53/0b/5e/530b5e7c-c068-2ba6-426a-df7cd9a4d5a1/842812165252_Cover.jpg/600x600bb.jpg",
+      "glow": "#ecea82"
     },
     {
       "id": "061-photograph",
@@ -620,7 +701,9 @@
         "kind": "youtube",
         "videoId": "KKQl-pIRQMY"
       },
-      "artwork": "https://is1-ssl.mzstatic.com/image/thumb/Music125/v4/2d/36/f9/2d36f9a7-2c3e-ce0f-7fb6-036feecb221f/825646974450.jpg/600x600bb.jpg"
+      "artwork": "https://is1-ssl.mzstatic.com/image/thumb/Music125/v4/2d/36/f9/2d36f9a7-2c3e-ce0f-7fb6-036feecb221f/825646974450.jpg/600x600bb.jpg",
+      "bpm": 108.0,
+      "glow": "#2fad52"
     },
     {
       "id": "062-trip",
@@ -631,7 +714,9 @@
         "kind": "youtube",
         "videoId": "JfGD75vHWrU"
       },
-      "artwork": "https://cdn-images.dzcdn.net/images/cover/9747893d144d612424ec129b71648bb0/1000x1000-000000-80-0-0.jpg"
+      "artwork": "https://cdn-images.dzcdn.net/images/cover/9747893d144d612424ec129b71648bb0/1000x1000-000000-80-0-0.jpg",
+      "bpm": 81.1,
+      "glow": "#8c554c"
     },
     {
       "id": "063-not-even-her-feat-shiloh",
@@ -641,7 +726,8 @@
         "kind": "youtube",
         "videoId": "qJez9qY0gek"
       },
-      "artwork": "https://is1-ssl.mzstatic.com/image/thumb/Music116/v4/84/de/6b/84de6bb6-0c50-c709-e408-9949d4aedaf3/cover.jpg/600x600bb.jpg"
+      "artwork": "https://is1-ssl.mzstatic.com/image/thumb/Music116/v4/84/de/6b/84de6bb6-0c50-c709-e408-9949d4aedaf3/cover.jpg/600x600bb.jpg",
+      "glow": "#9a4f8c"
     },
     {
       "id": "064-wolves",
@@ -661,7 +747,9 @@
         "kind": "youtube",
         "videoId": "gB9P0kpc1O4"
       },
-      "artwork": "https://is1-ssl.mzstatic.com/image/thumb/Music115/v4/53/a7/7f/53a77fab-c54c-a57b-8130-248fc12d0c80/093624948995.jpg/600x600bb.jpg"
+      "artwork": "https://is1-ssl.mzstatic.com/image/thumb/Music115/v4/53/a7/7f/53a77fab-c54c-a57b-8130-248fc12d0c80/093624948995.jpg/600x600bb.jpg",
+      "bpm": 105.2,
+      "glow": "#8c534d"
     },
     {
       "id": "066-take-me-to-church",
@@ -671,7 +759,9 @@
         "kind": "youtube",
         "videoId": "MYSVMgRr6pw"
       },
-      "artwork": "https://is1-ssl.mzstatic.com/image/thumb/Music115/v4/5e/1b/f1/5e1bf1de-e5f1-e73e-0752-e7882b4f2d57/886444718820.jpg/600x600bb.jpg"
+      "artwork": "https://is1-ssl.mzstatic.com/image/thumb/Music115/v4/5e/1b/f1/5e1bf1de-e5f1-e73e-0752-e7882b4f2d57/886444718820.jpg/600x600bb.jpg",
+      "bpm": 129.2,
+      "glow": "#8c674d"
     },
     {
       "id": "067-youth",
@@ -682,7 +772,9 @@
         "kind": "youtube",
         "videoId": "XYAghEq5Lfw"
       },
-      "artwork": "https://is1-ssl.mzstatic.com/image/thumb/Music211/v4/e3/b4/37/e3b437a6-5b47-e024-99a8-d6df655b35b2/26UMGIM16948.rgb.jpg/600x600bb.jpg"
+      "artwork": "https://is1-ssl.mzstatic.com/image/thumb/Music211/v4/e3/b4/37/e3b437a6-5b47-e024-99a8-d6df655b35b2/26UMGIM16948.rgb.jpg/600x600bb.jpg",
+      "bpm": 92.0,
+      "glow": "#4b91ae"
     },
     {
       "id": "068-red",
@@ -692,7 +784,8 @@
         "kind": "youtube",
         "videoId": "R_rUYuFtNO4"
       },
-      "artwork": "https://cdn-images.dzcdn.net/images/cover/a98df7a584f8a3f50d4bb312bdbc44ff/1000x1000-000000-80-0-0.jpg"
+      "artwork": "https://cdn-images.dzcdn.net/images/cover/a98df7a584f8a3f50d4bb312bdbc44ff/1000x1000-000000-80-0-0.jpg",
+      "glow": "#8c533c"
     },
     {
       "id": "069-end-game",
@@ -703,7 +796,9 @@
         "kind": "youtube",
         "videoId": "dfnCAmr569k"
       },
-      "artwork": "https://cdn-images.dzcdn.net/images/cover/e6f3afd8a5c3d8ea797f458694166e47/1000x1000-000000-80-0-0.jpg"
+      "artwork": "https://cdn-images.dzcdn.net/images/cover/e6f3afd8a5c3d8ea797f458694166e47/1000x1000-000000-80-0-0.jpg",
+      "bpm": 79.5,
+      "glow": "#a75c5c"
     },
     {
       "id": "070-i-love-you-baby",
@@ -713,7 +808,8 @@
         "kind": "youtube",
         "videoId": "obuOPwtJEUY"
       },
-      "artwork": "https://is1-ssl.mzstatic.com/image/thumb/Music114/v4/8e/52/dc/8e52dced-5608-cb15-fec8-bdf887b28b09/artwork.jpg/600x600bb.jpg"
+      "artwork": "https://is1-ssl.mzstatic.com/image/thumb/Music114/v4/8e/52/dc/8e52dced-5608-cb15-fec8-bdf887b28b09/artwork.jpg/600x600bb.jpg",
+      "glow": "#8c5521"
     },
     {
       "id": "071-lovely",
@@ -723,7 +819,9 @@
         "kind": "youtube",
         "videoId": "V1Pl8CzNzCw"
       },
-      "artwork": "https://cdn-images.dzcdn.net/images/cover/910033ba5cd64291a921061c8e8ba85a/1000x1000-000000-80-0-0.jpg"
+      "artwork": "https://cdn-images.dzcdn.net/images/cover/910033ba5cd64291a921061c8e8ba85a/1000x1000-000000-80-0-0.jpg",
+      "bpm": 114.8,
+      "glow": "#a58a5b"
     },
     {
       "id": "073-peter-pan-was-right",
@@ -733,7 +831,8 @@
         "kind": "youtube",
         "videoId": "D8rlcLH0pqk"
       },
-      "artwork": "https://is1-ssl.mzstatic.com/image/thumb/Music112/v4/c7/47/4e/c7474e8e-b96e-ef48-f772-a316066ff2d9/22UMGIM45468.rgb.jpg/600x600bb.jpg"
+      "artwork": "https://is1-ssl.mzstatic.com/image/thumb/Music112/v4/c7/47/4e/c7474e8e-b96e-ef48-f772-a316066ff2d9/22UMGIM45468.rgb.jpg/600x600bb.jpg",
+      "glow": "#48868c"
     },
     {
       "id": "074-peter-pan",
@@ -751,7 +850,8 @@
       "source": {
         "kind": "youtube",
         "videoId": "LHCob76kigA"
-      }
+      },
+      "bpm": 120.0
     },
     {
       "id": "076-runaway",
@@ -761,7 +861,8 @@
         "kind": "youtube",
         "videoId": "YAY7x1SrojE"
       },
-      "artwork": "https://cdn-images.dzcdn.net/images/cover/7187e3a636e6db3ffad65dd3c4290e39/1000x1000-000000-80-0-0.jpg"
+      "artwork": "https://cdn-images.dzcdn.net/images/cover/7187e3a636e6db3ffad65dd3c4290e39/1000x1000-000000-80-0-0.jpg",
+      "glow": "#4d6e8c"
     },
     {
       "id": "077-runaway",
@@ -772,7 +873,9 @@
         "kind": "youtube",
         "videoId": "mSIQ70Lfs-g"
       },
-      "artwork": "https://cdn-images.dzcdn.net/images/cover/8240bee90ba52ec6b7ffeab4828c78fd/1000x1000-000000-80-0-0.jpg"
+      "artwork": "https://cdn-images.dzcdn.net/images/cover/8240bee90ba52ec6b7ffeab4828c78fd/1000x1000-000000-80-0-0.jpg",
+      "bpm": 114.7,
+      "glow": "#8c0c37"
     },
     {
       "id": "078-im-so-tired-stripped-live-in-la",
@@ -782,7 +885,9 @@
         "kind": "youtube",
         "videoId": "JvgBbpz_uvU"
       },
-      "artwork": "https://cdn-images.dzcdn.net/images/cover/97915b1bfe5b2da6006a8325e6cdffa3/1000x1000-000000-80-0-0.jpg"
+      "artwork": "https://cdn-images.dzcdn.net/images/cover/97915b1bfe5b2da6006a8325e6cdffa3/1000x1000-000000-80-0-0.jpg",
+      "bpm": 102.9,
+      "glow": "#758c4d"
     },
     {
       "id": "079-2-soon",
@@ -792,7 +897,8 @@
         "kind": "youtube",
         "videoId": "LKZyp2cSAy4"
       },
-      "artwork": "https://cdn-images.dzcdn.net/images/cover/254979c193d29074067c64a3f4f628ee/1000x1000-000000-80-0-0.jpg"
+      "artwork": "https://cdn-images.dzcdn.net/images/cover/254979c193d29074067c64a3f4f628ee/1000x1000-000000-80-0-0.jpg",
+      "glow": "#8c4d55"
     },
     {
       "id": "080-mad-at-disney",
@@ -802,7 +908,8 @@
         "kind": "youtube",
         "videoId": "0VBEgFQZH-w"
       },
-      "artwork": "https://is1-ssl.mzstatic.com/image/thumb/Music126/v4/47/3b/d1/473bd18e-b868-d220-27bb-d86c41132fe6/842812134579.jpg/600x600bb.jpg"
+      "artwork": "https://is1-ssl.mzstatic.com/image/thumb/Music126/v4/47/3b/d1/473bd18e-b868-d220-27bb-d86c41132fe6/842812134579.jpg/600x600bb.jpg",
+      "glow": "#474ba2"
     },
     {
       "id": "081-stay",
@@ -812,7 +919,9 @@
         "kind": "youtube",
         "videoId": "rkYlZnIbe2E"
       },
-      "artwork": "https://is1-ssl.mzstatic.com/image/thumb/Music125/v4/89/59/6a/89596ab9-fa3c-8d08-4d95-a6450fa2013c/886449400515.jpg/600x600bb.jpg"
+      "artwork": "https://is1-ssl.mzstatic.com/image/thumb/Music125/v4/89/59/6a/89596ab9-fa3c-8d08-4d95-a6450fa2013c/886449400515.jpg/600x600bb.jpg",
+      "bpm": 86.1,
+      "glow": "#347e8c"
     },
     {
       "id": "082-wannabe",
@@ -822,7 +931,9 @@
         "kind": "youtube",
         "videoId": "TRqPNoB7D60"
       },
-      "artwork": "https://cdn-images.dzcdn.net/images/cover/fc65305b020b77d6a6bb570cf1ecb915/1000x1000-000000-80-0-0.jpg"
+      "artwork": "https://cdn-images.dzcdn.net/images/cover/fc65305b020b77d6a6bb570cf1ecb915/1000x1000-000000-80-0-0.jpg",
+      "bpm": 85.1,
+      "glow": "#3c528c"
     },
     {
       "id": "083-exile",
@@ -833,7 +944,9 @@
         "kind": "youtube",
         "videoId": "osdoLjUNFnA"
       },
-      "artwork": "https://cdn-images.dzcdn.net/images/cover/290abe93bdda84bb8b170f30a4998c4c/1000x1000-000000-80-0-0.jpg"
+      "artwork": "https://cdn-images.dzcdn.net/images/cover/290abe93bdda84bb8b170f30a4998c4c/1000x1000-000000-80-0-0.jpg",
+      "bpm": 76.0,
+      "glow": "#a85c5c"
     },
     {
       "id": "084-there-for-you",
@@ -843,7 +956,9 @@
         "kind": "youtube",
         "videoId": "pNNMr5glICM"
       },
-      "artwork": "https://is1-ssl.mzstatic.com/image/thumb/Music124/v4/9f/1f/ea/9f1fea1f-792e-1265-cfda-dc2a6c1e90b7/886446532165.jpg/600x600bb.jpg"
+      "artwork": "https://is1-ssl.mzstatic.com/image/thumb/Music124/v4/9f/1f/ea/9f1fea1f-792e-1265-cfda-dc2a6c1e90b7/886446532165.jpg/600x600bb.jpg",
+      "bpm": 106.0,
+      "glow": "#4d518c"
     },
     {
       "id": "085-maps",
@@ -854,7 +969,9 @@
         "kind": "youtube",
         "videoId": "xj6fHiF8Osg"
       },
-      "artwork": "https://cdn-images.dzcdn.net/images/cover/f0a1d4442389bcd7919a7054f8c0b785/1000x1000-000000-80-0-0.jpg"
+      "artwork": "https://cdn-images.dzcdn.net/images/cover/f0a1d4442389bcd7919a7054f8c0b785/1000x1000-000000-80-0-0.jpg",
+      "bpm": 119.8,
+      "glow": "#874f90"
     },
     {
       "id": "086-love-story",
@@ -865,7 +982,8 @@
         "kind": "youtube",
         "videoId": "8xg3vE8Ie_E"
       },
-      "artwork": "https://cdn-images.dzcdn.net/images/cover/cce4e99be496acc9dc2e4365c5b288fc/1000x1000-000000-80-0-0.jpg"
+      "artwork": "https://cdn-images.dzcdn.net/images/cover/cce4e99be496acc9dc2e4365c5b288fc/1000x1000-000000-80-0-0.jpg",
+      "glow": "#907045"
     },
     {
       "id": "087-normal-no-more",
@@ -875,7 +993,8 @@
         "kind": "youtube",
         "videoId": "wBrgVkgeHSY"
       },
-      "artwork": "https://cdn-images.dzcdn.net/images/cover/35d693046fe62ed6cc8c8f722cfafcdf/1000x1000-000000-80-0-0.jpg"
+      "artwork": "https://cdn-images.dzcdn.net/images/cover/35d693046fe62ed6cc8c8f722cfafcdf/1000x1000-000000-80-0-0.jpg",
+      "glow": "#84b6f1"
     },
     {
       "id": "088-enchanted",
@@ -886,7 +1005,9 @@
         "kind": "youtube",
         "videoId": "fvg01l43XBc"
       },
-      "artwork": "https://cdn-images.dzcdn.net/images/cover/c1613c3579a594bce2ebc77bccfaa4e7/1000x1000-000000-80-0-0.jpg"
+      "artwork": "https://cdn-images.dzcdn.net/images/cover/c1613c3579a594bce2ebc77bccfaa4e7/1000x1000-000000-80-0-0.jpg",
+      "bpm": 82.0,
+      "glow": "#8c4d5c"
     },
     {
       "id": "089-all-time-low",
@@ -896,7 +1017,9 @@
         "kind": "youtube",
         "videoId": "giBppYq6GMI"
       },
-      "artwork": "https://cdn-images.dzcdn.net/images/cover/fd575fd69964f865455616ee501c83de/1000x1000-000000-80-0-0.jpg"
+      "artwork": "https://cdn-images.dzcdn.net/images/cover/fd575fd69964f865455616ee501c83de/1000x1000-000000-80-0-0.jpg",
+      "bpm": 89.9,
+      "glow": "#8c574d"
     },
     {
       "id": "090-galway-girl",
@@ -907,7 +1030,9 @@
         "kind": "youtube",
         "videoId": "XjHr-6Zl5P8"
       },
-      "artwork": "https://cdn-images.dzcdn.net/images/cover/000a9228cecfcc7c2093d9cd7bb66447/1000x1000-000000-80-0-0.jpg"
+      "artwork": "https://cdn-images.dzcdn.net/images/cover/000a9228cecfcc7c2093d9cd7bb66447/1000x1000-000000-80-0-0.jpg",
+      "bpm": 99.9,
+      "glow": "#37a4ca"
     },
     {
       "id": "091-so-far-away",
@@ -916,7 +1041,8 @@
       "source": {
         "kind": "youtube",
         "videoId": "o7iL2KzDh38"
-      }
+      },
+      "bpm": 74.4
     },
     {
       "id": "092-2002",
@@ -927,7 +1053,9 @@
         "kind": "youtube",
         "videoId": "1tvLIhEaEKo"
       },
-      "artwork": "https://is1-ssl.mzstatic.com/image/thumb/Music125/v4/c1/5d/9b/c15d9bc5-4181-9874-d65b-7741203ccad6/190295567279.jpg/600x600bb.jpg"
+      "artwork": "https://is1-ssl.mzstatic.com/image/thumb/Music125/v4/c1/5d/9b/c15d9bc5-4181-9874-d65b-7741203ccad6/190295567279.jpg/600x600bb.jpg",
+      "bpm": 95.9,
+      "glow": "#a4835a"
     },
     {
       "id": "093-yellow",
@@ -938,7 +1066,9 @@
         "kind": "youtube",
         "videoId": "yKNxeF4KMsY"
       },
-      "artwork": "https://cdn-images.dzcdn.net/images/cover/970dce98eeea6729244c0ae71707a83d/1000x1000-000000-80-0-0.jpg"
+      "artwork": "https://cdn-images.dzcdn.net/images/cover/970dce98eeea6729244c0ae71707a83d/1000x1000-000000-80-0-0.jpg",
+      "bpm": 86.7,
+      "glow": "#a75d0c"
     },
     {
       "id": "094-let-me-down-slowly",
@@ -948,7 +1078,9 @@
         "kind": "youtube",
         "videoId": "gEo8IrFbecM"
       },
-      "artwork": "https://is1-ssl.mzstatic.com/image/thumb/Music125/v4/18/12/90/181290f5-737e-ac92-201f-d2f65c973f60/075679859518.jpg/600x600bb.jpg"
+      "artwork": "https://is1-ssl.mzstatic.com/image/thumb/Music125/v4/18/12/90/181290f5-737e-ac92-201f-d2f65c973f60/075679859518.jpg/600x600bb.jpg",
+      "bpm": 74.9,
+      "glow": "#b27d62"
     },
     {
       "id": "095-50-feet",
@@ -958,7 +1090,9 @@
         "kind": "youtube",
         "videoId": "yucxHQWcKyM"
       },
-      "artwork": "https://cdn-images.dzcdn.net/images/cover/11ef24226d9db26fb6c5e881da6c26bf/1000x1000-000000-80-0-0.jpg"
+      "artwork": "https://cdn-images.dzcdn.net/images/cover/11ef24226d9db26fb6c5e881da6c26bf/1000x1000-000000-80-0-0.jpg",
+      "bpm": 126.0,
+      "glow": "#8d4e4e"
     },
     {
       "id": "096-if-i-aint-got-you",
@@ -969,7 +1103,9 @@
         "kind": "youtube",
         "videoId": "twYtM7eOSdw"
       },
-      "artwork": "https://cdn-images.dzcdn.net/images/cover/cef30c1c2a5a63c773d26d56049c81e5/1000x1000-000000-80-0-0.jpg"
+      "artwork": "https://cdn-images.dzcdn.net/images/cover/cef30c1c2a5a63c773d26d56049c81e5/1000x1000-000000-80-0-0.jpg",
+      "bpm": 118.1,
+      "glow": "#8c664a"
     },
     {
       "id": "097-paris-in-the-rain",
@@ -979,7 +1115,9 @@
         "kind": "youtube",
         "videoId": "kOCkne-Bku4"
       },
-      "artwork": "https://is1-ssl.mzstatic.com/image/thumb/Music211/v4/5c/3d/e5/5c3de510-1123-0da6-9531-318d9597159c/5056167107347_Cover.jpg/600x600bb.jpg"
+      "artwork": "https://is1-ssl.mzstatic.com/image/thumb/Music211/v4/5c/3d/e5/5c3de510-1123-0da6-9531-318d9597159c/5056167107347_Cover.jpg/600x600bb.jpg",
+      "bpm": 87.8,
+      "glow": "#5c7fc8"
     },
     {
       "id": "098-stitches",
@@ -990,7 +1128,9 @@
         "kind": "youtube",
         "videoId": "QNrpYYj-iRc"
       },
-      "artwork": "https://cdn-images.dzcdn.net/images/cover/46fab8006e0da286831fe157ccc4f31c/1000x1000-000000-80-0-0.jpg"
+      "artwork": "https://cdn-images.dzcdn.net/images/cover/46fab8006e0da286831fe157ccc4f31c/1000x1000-000000-80-0-0.jpg",
+      "bpm": 75.2,
+      "glow": "#578c4d"
     },
     {
       "id": "099-past-lives",
@@ -1001,7 +1141,8 @@
         "kind": "youtube",
         "videoId": "FPoeEA0yu08"
       },
-      "artwork": "https://is1-ssl.mzstatic.com/image/thumb/Music211/v4/bb/e4/33/bbe43315-6820-5a64-3a89-ffb3a808d1b3/53.jpg/600x600bb.jpg"
+      "artwork": "https://is1-ssl.mzstatic.com/image/thumb/Music211/v4/bb/e4/33/bbe43315-6820-5a64-3a89-ffb3a808d1b3/53.jpg/600x600bb.jpg",
+      "glow": "#6c3d8c"
     },
     {
       "id": "100-wake-live",
@@ -1012,7 +1153,9 @@
         "kind": "youtube",
         "videoId": "e33zCUm1ZnY"
       },
-      "artwork": "https://cdn-images.dzcdn.net/images/cover/80a0de5bd3610e8042d367188acbb0af/1000x1000-000000-80-0-0.jpg"
+      "artwork": "https://cdn-images.dzcdn.net/images/cover/80a0de5bd3610e8042d367188acbb0af/1000x1000-000000-80-0-0.jpg",
+      "bpm": 131.1,
+      "glow": "#74d3ce"
     },
     {
       "id": "101-somebody-that-i-used-to-know",
@@ -1023,7 +1166,9 @@
         "kind": "youtube",
         "videoId": "8UVNT4wvIGY"
       },
-      "artwork": "https://is1-ssl.mzstatic.com/image/thumb/Music115/v4/b3/8a/98/b38a9867-2a9c-de2f-2d80-c624fb2200ec/11UMGIM19347.rgb.jpg/600x600bb.jpg"
+      "artwork": "https://is1-ssl.mzstatic.com/image/thumb/Music115/v4/b3/8a/98/b38a9867-2a9c-de2f-2d80-c624fb2200ec/11UMGIM19347.rgb.jpg/600x600bb.jpg",
+      "bpm": 129.0,
+      "glow": "#cfa772"
     },
     {
       "id": "102-the-nights",
@@ -1034,7 +1179,9 @@
         "kind": "youtube",
         "videoId": "XmIgg9De9hY"
       },
-      "artwork": "https://is1-ssl.mzstatic.com/image/thumb/Music126/v4/35/4d/a0/354da058-972b-dcf9-feec-609895ba8cb2/14UMGIM56567.rgb.jpg/600x600bb.jpg"
+      "artwork": "https://is1-ssl.mzstatic.com/image/thumb/Music126/v4/35/4d/a0/354da058-972b-dcf9-feec-609895ba8cb2/14UMGIM56567.rgb.jpg/600x600bb.jpg",
+      "bpm": 126.0,
+      "glow": "#985d54"
     },
     {
       "id": "103-lost-stars",
@@ -1045,7 +1192,9 @@
         "kind": "youtube",
         "videoId": "vyT-oGDnMqE"
       },
-      "artwork": "https://is1-ssl.mzstatic.com/image/thumb/Music125/v4/24/ab/07/24ab076d-9e33-b2ea-8cf7-5e7308320b00/00602537902187.rgb.jpg/600x600bb.jpg"
+      "artwork": "https://is1-ssl.mzstatic.com/image/thumb/Music125/v4/24/ab/07/24ab076d-9e33-b2ea-8cf7-5e7308320b00/00602537902187.rgb.jpg/600x600bb.jpg",
+      "bpm": 82.0,
+      "glow": "#548c4d"
     },
     {
       "id": "104-closer",
@@ -1055,7 +1204,9 @@
         "kind": "youtube",
         "videoId": "0zGcUoRlhmw"
       },
-      "artwork": "https://is1-ssl.mzstatic.com/image/thumb/Music125/v4/41/f8/38/41f8380b-9b56-d5d4-31f7-a6411c0c9aaa/886446102054.jpg/600x600bb.jpg"
+      "artwork": "https://is1-ssl.mzstatic.com/image/thumb/Music125/v4/41/f8/38/41f8380b-9b56-d5d4-31f7-a6411c0c9aaa/886446102054.jpg/600x600bb.jpg",
+      "bpm": 95.0,
+      "glow": "#bea769"
     },
     {
       "id": "105-psycho-pt-2",
@@ -1065,7 +1216,9 @@
         "kind": "youtube",
         "videoId": "3mAjq2d3ejk"
       },
-      "artwork": "https://cdn-images.dzcdn.net/images/cover/648ef94059f72e68b4ab16943bb62b9d/1000x1000-000000-80-0-0.jpg"
+      "artwork": "https://cdn-images.dzcdn.net/images/cover/648ef94059f72e68b4ab16943bb62b9d/1000x1000-000000-80-0-0.jpg",
+      "bpm": 83.0,
+      "glow": "#d943ed"
     },
     {
       "id": "106-counting-stars",
@@ -1076,7 +1229,8 @@
         "kind": "youtube",
         "videoId": "hT_nvWreIhg"
       },
-      "artwork": "https://cdn-images.dzcdn.net/images/cover/016f3117546e2bcc4229142c7268fb04/1000x1000-000000-80-0-0.jpg"
+      "artwork": "https://cdn-images.dzcdn.net/images/cover/016f3117546e2bcc4229142c7268fb04/1000x1000-000000-80-0-0.jpg",
+      "glow": "#8c4d6e"
     },
     {
       "id": "107-shots-broiler-remix",
@@ -1087,7 +1241,9 @@
         "kind": "youtube",
         "videoId": "DTMo_wEwMnw"
       },
-      "artwork": "https://cdn-images.dzcdn.net/images/cover/ee5e3e4d92b6014ea4edc9b91a1dfeb4/1000x1000-000000-80-0-0.jpg"
+      "artwork": "https://cdn-images.dzcdn.net/images/cover/ee5e3e4d92b6014ea4edc9b91a1dfeb4/1000x1000-000000-80-0-0.jpg",
+      "bpm": 104.9,
+      "glow": "#986b2c"
     },
     {
       "id": "108-bet-on-me",
@@ -1097,7 +1253,8 @@
         "kind": "youtube",
         "videoId": "0PRi4DTLaz8"
       },
-      "artwork": "https://cdn-images.dzcdn.net/images/cover/a22ad07de47f46630971a9b7316ce50a/1000x1000-000000-80-0-0.jpg"
+      "artwork": "https://cdn-images.dzcdn.net/images/cover/a22ad07de47f46630971a9b7316ce50a/1000x1000-000000-80-0-0.jpg",
+      "glow": "#9b9955"
     },
     {
       "id": "109-california-feat-jackson-wang-warren-hue",
@@ -1108,7 +1265,8 @@
         "kind": "youtube",
         "videoId": "cULKkTO4glU"
       },
-      "artwork": "https://cdn-images.dzcdn.net/images/cover/290b9f162a68455fa07b8f3513280870/1000x1000-000000-80-0-0.jpg"
+      "artwork": "https://cdn-images.dzcdn.net/images/cover/290b9f162a68455fa07b8f3513280870/1000x1000-000000-80-0-0.jpg",
+      "glow": "#3a808c"
     },
     {
       "id": "110-say-it",
@@ -1118,7 +1276,9 @@
         "kind": "youtube",
         "videoId": "kAvpwCLp7ms"
       },
-      "artwork": "https://cdn-images.dzcdn.net/images/cover/115c8612a514418f2d7402f4299b6d1e/1000x1000-000000-80-0-0.jpg"
+      "artwork": "https://cdn-images.dzcdn.net/images/cover/115c8612a514418f2d7402f4299b6d1e/1000x1000-000000-80-0-0.jpg",
+      "bpm": 104.9,
+      "glow": "#8c261c"
     },
     {
       "id": "111-head-in-the-clouds",
@@ -1129,7 +1289,8 @@
         "kind": "youtube",
         "videoId": "cnV-ER8xmGA"
       },
-      "artwork": "https://cdn-images.dzcdn.net/images/cover/d6fb1b306580ada577a516b00e4c3aeb/1000x1000-000000-80-0-0.jpg"
+      "artwork": "https://cdn-images.dzcdn.net/images/cover/d6fb1b306580ada577a516b00e4c3aeb/1000x1000-000000-80-0-0.jpg",
+      "glow": "#b98066"
     },
     {
       "id": "112-afterthought",
@@ -1140,7 +1301,9 @@
         "kind": "youtube",
         "videoId": "ujriV3vkC9w"
       },
-      "artwork": "https://cdn-images.dzcdn.net/images/cover/122fd1b9f6498e9fb8e1c148926a7d55/1000x1000-000000-80-0-0.jpg"
+      "artwork": "https://cdn-images.dzcdn.net/images/cover/122fd1b9f6498e9fb8e1c148926a7d55/1000x1000-000000-80-0-0.jpg",
+      "bpm": 83.0,
+      "glow": "#8c272c"
     },
     {
       "id": "114-city-of-stars",
@@ -1151,7 +1314,9 @@
         "kind": "youtube",
         "videoId": "xkqfm3muuhM"
       },
-      "artwork": "https://is1-ssl.mzstatic.com/image/thumb/Music118/v4/8e/5f/84/8e5f8427-3bc9-0f19-a6da-48303179c5c7/00602557403732.rgb.jpg/600x600bb.jpg"
+      "artwork": "https://is1-ssl.mzstatic.com/image/thumb/Music118/v4/8e/5f/84/8e5f8427-3bc9-0f19-a6da-48303179c5c7/00602557403732.rgb.jpg/600x600bb.jpg",
+      "bpm": 98.0,
+      "glow": "#39278c"
     },
     {
       "id": "115-heartbreak-anniversary",
@@ -1161,7 +1326,9 @@
         "kind": "youtube",
         "videoId": "nja_0BaQcNg"
       },
-      "artwork": "https://is1-ssl.mzstatic.com/image/thumb/Music221/v4/51/89/1b/51891b63-e1cd-bda7-9473-31fb6b473040/886448298816.jpg/600x600bb.jpg"
+      "artwork": "https://is1-ssl.mzstatic.com/image/thumb/Music221/v4/51/89/1b/51891b63-e1cd-bda7-9473-31fb6b473040/886448298816.jpg/600x600bb.jpg",
+      "bpm": 129.9,
+      "glow": "#8c6e4d"
     },
     {
       "id": "116-double-take",
@@ -1171,7 +1338,8 @@
         "kind": "youtube",
         "videoId": "R8FHtIhWqNo"
       },
-      "artwork": "https://cdn-images.dzcdn.net/images/cover/6eca25598f46a5c9ec2fbea93102e4d5/1000x1000-000000-80-0-0.jpg"
+      "artwork": "https://cdn-images.dzcdn.net/images/cover/6eca25598f46a5c9ec2fbea93102e4d5/1000x1000-000000-80-0-0.jpg",
+      "glow": "#955f52"
     }
   ]
 }

@@ -19,6 +19,7 @@
   --ring: #8fa7ff;
 
   position: relative;
+  isolation: isolate;
   color: var(--foreground);
   border-radius: 26px;
   background:
@@ -47,6 +48,28 @@
     0 40px 80px -40px rgba(0, 0, 0, 0.8),
     0 0 120px -30px
       color-mix(in srgb, var(--record-glow, var(--accent)) 60%, transparent);
+}
+
+/* Beat halo: sits behind the plinth, tinted by the record, opacity driven
+   by --beat (compositor-only, so 60fps costs nothing). */
+.halo {
+  position: absolute;
+  inset: -28px;
+  z-index: -1;
+  border-radius: 40px;
+  background: radial-gradient(
+    60% 60% at 50% 50%,
+    color-mix(in srgb, var(--record-glow, var(--accent)) 55%, transparent),
+    transparent 75%
+  );
+  filter: blur(36px);
+  opacity: calc(var(--beat, 0) * 0.7);
+  will-change: opacity;
+  pointer-events: none;
+}
+
+.bpm {
+  opacity: calc(0.55 + var(--beat, 0) * 0.45);
 }
 
 /* Brushed-metal grain on the plinth top. */
@@ -324,6 +347,8 @@
   position: relative;
   width: 100%;
   max-width: 24rem;
+  transform: scale(calc(1 + var(--beat, 0) * 0.01));
+  will-change: transform;
   aspect-ratio: 16 / 9;
   min-height: 200px;
   overflow: hidden;
@@ -501,7 +526,8 @@
 .deck[data-playing="true"] .lamp,
 .deck[data-phase="dropping"] .lamp {
   background: #ff6b3d;
-  box-shadow: 0 0 10px 2px rgba(255, 107, 61, 0.55);
+  box-shadow: 0 0 calc(10px + var(--beat, 0) * 8px)
+    calc(2px + var(--beat, 0) * 2px) rgba(255, 107, 61, 0.55);
 }
 
 /* ── Transport ───────────────────────────────────────────────────────── */
