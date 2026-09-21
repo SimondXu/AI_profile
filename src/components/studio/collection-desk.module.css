@@ -78,8 +78,8 @@
   }
 
   .mugSlot {
-    top: 38%;
-    left: 58%;
+    top: 40%;
+    left: 60%;
     z-index: 5;
   }
 }
@@ -127,9 +127,9 @@
   }
 
   .slotMusic {
-    top: 46%;
-    right: 8%;
-    width: clamp(5rem, 15%, 6rem);
+    top: 36%;
+    left: 36%;
+    width: clamp(3.75rem, 12%, 5rem);
   }
 
   .slotPhotos {
@@ -169,7 +169,11 @@
   bottom: 0;
   width: 12px;
   height: 12px;
-  background: linear-gradient(135deg, transparent 50%, color-mix(in srgb, black 12%, transparent) 50%);
+  background: linear-gradient(
+    135deg,
+    transparent 50%,
+    color-mix(in srgb, black 12%, transparent) 50%
+  );
   border-bottom-right-radius: 6px;
 }
 

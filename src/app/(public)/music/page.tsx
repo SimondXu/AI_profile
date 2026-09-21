@@ -9,8 +9,6 @@ export const metadata: Metadata = {
   alternates: {
     canonical: "/music",
   },
-  // Hidden section: keep out of the index until it has content.
-  robots: { index: false, follow: false },
 };
 
 interface MusicPageProps {

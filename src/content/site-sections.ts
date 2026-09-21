@@ -17,7 +17,7 @@ export const siteSections: ReadonlyArray<SiteSection> = [
   { id: "projects", label: "Projects", href: "/projects", visible: true },
   { id: "resume", label: "Resume", href: "/resume", visible: true },
   { id: "ask", label: "Ask", href: "/chat", visible: true },
-  { id: "music", label: "Music", href: "/music", visible: false },
+  { id: "music", label: "Music", href: "/music", visible: true },
   { id: "photos", label: "Photos", href: "/photos", visible: false },
 ];
 

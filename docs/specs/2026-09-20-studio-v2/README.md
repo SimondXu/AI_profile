@@ -111,3 +111,7 @@ src/content/music.ts / photos.ts   只读空数组 + 类型（字段按基线 ar
 - 渲染：`sleeve-image.tsx`（next/image `fill` + `onError` 回落程序化封套），用于 crate 封套、唱片标签、monitor（模糊底 + 居中方形封套）。
 - 按用户要求删除了 4 首没有 YouTube 源的条目（Summer Lover、SUNDAY MORNING、One Last Time (Lancer remix)、王OK Homage）；crate 现为 112 首。
 - 版权说明：专辑封面通过发行平台 CDN 热链用于标识对应曲目，与 YouTube 缩略图同类的"识别性使用"；仍属第三方版权素材，若日后收到要求可整体切回程序化封套（删 `artwork` 字段即可）。
+
+### 7.6 Music 上导航（2026-09-21）
+- `site-sections.ts` 的 music `visible: true`：桌面/移动导航、页脚、收藏台同时露出；`/music` 去掉 `noindex`，加入 `public/sitemap.xml`。
+- 收藏台的唱片物件重画为"半抽出封套的唱片"（hover 抽出更多），slot 移到气泡下方 `top 36% / left 36%`，马克杯右移到 `top 40% / left 60%`；1024 / 1440 复核无重叠。Photos 仍隐藏。
