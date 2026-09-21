@@ -14,6 +14,10 @@ export interface MusicSelection {
   externalUrl?: string;
   /** Square album artwork (https, Apple/Deezer artwork CDNs); procedural art otherwise. */
   artwork?: string;
+  /** Tempo from the source catalogue, used to pace the deck's pulse; absent → no pulse. */
+  bpm?: number;
+  /** Dominant colour of the artwork (hex), for ambient light; derived from the seed otherwise. */
+  glow?: string;
   /** Playable source; entries without one are listed but can't go on the deck. */
   source?: MusicSource;
 }
@@ -64,6 +68,11 @@ const musicSelectionSchema = z.object({
         /^https:\/\/[a-z0-9.-]+\.(mzstatic\.com|dzcdn\.net)\//.test(value),
       { message: "artwork must be an https URL on mzstatic.com or dzcdn.net" },
     )
+    .optional(),
+  bpm: z.number().positive().max(300).optional(),
+  glow: z
+    .string()
+    .regex(/^#[0-9a-f]{6}$/)
     .optional(),
   source: musicSourceSchema.optional(),
 });

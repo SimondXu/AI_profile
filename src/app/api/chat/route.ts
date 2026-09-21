@@ -30,6 +30,11 @@ const RATE_LIMIT_MAX_REQUESTS = 20;
 const HOUR_MS = 60 * 60_000;
 const DAY_MS = 24 * HOUR_MS;
 const DEFAULT_MAX_OUTPUT_TOKENS = 1024;
+const DEFAULT_OPENROUTER_MODEL = "deepseek/deepseek-v4.1-flash";
+// Fireworks: unquantized, full tools/tool_choice/reasoning support, 100% 1d uptime
+// when checked (2026-09-21). Avoids OpenRouter routing across fp4/fp8 endpoints
+// with inconsistent tool_choice support.
+const DEFAULT_OPENROUTER_PROVIDER_ORDER = "fireworks";
 const UNTRUSTED_CLIENT_ID = "untrusted";
 
 type RateLimitEntry = { count: number; resetAt: number };
@@ -82,6 +87,28 @@ const chatRequestSchema = z.object({
   trackingPathname: z.string().regex(/^\/[a-zA-Z0-9/_-]*$/).max(160).optional(),
 });
 
+// OpenRouter provider slugs to pin the model to, in priority order. An empty
+// value disables pinning and lets OpenRouter route freely.
+const OPENROUTER_PROVIDER_ORDER = (
+  process.env.OPENROUTER_PROVIDER_ORDER ?? DEFAULT_OPENROUTER_PROVIDER_ORDER
+)
+  .split(",")
+  .map((slug) => slug.trim())
+  .filter(Boolean);
+
+/**
+ * OpenRouter reads provider routing from the request body, and @ai-sdk/openai
+ * has no hook for extra body fields, so inject it at the fetch layer.
+ */
+const openrouterFetch: typeof fetch = (input, init) => {
+  if (OPENROUTER_PROVIDER_ORDER.length === 0 || typeof init?.body !== "string") {
+    return fetch(input, init);
+  }
+  const body = JSON.parse(init.body) as Record<string, unknown>;
+  body.provider = { order: OPENROUTER_PROVIDER_ORDER, allow_fallbacks: false };
+  return fetch(input, { ...init, body: JSON.stringify(body) });
+};
+
 const openrouter = createOpenAI({
   apiKey: process.env.OPENROUTER_API_KEY,
   baseURL: "https://openrouter.ai/api/v1",
@@ -89,10 +116,10 @@ const openrouter = createOpenAI({
     "HTTP-Referer": process.env.NEXT_PUBLIC_SITE_URL ?? "http://localhost:3000",
     "X-Title": "Simon Xu Portfolio",
   },
+  fetch: openrouterFetch,
 });
 
-const openrouterModel =
-  process.env.OPENROUTER_MODEL || "openai/gpt-5.6-luna";
+const openrouterModel = process.env.OPENROUTER_MODEL || DEFAULT_OPENROUTER_MODEL;
 
 function getClientIdentifier(req: Request) {
   const ip = getTrustedClientIp(req);
@@ -271,6 +298,7 @@ export async function POST(req: Request) {
       messageCount: messages.length,
       totalTextLength,
       model: openrouterModel,
+      providerOrder: OPENROUTER_PROVIDER_ORDER,
     });
 
     // Add tools
@@ -298,7 +326,9 @@ export async function POST(req: Request) {
       ...baseConfig,
       providerOptions: {
         openai: {
-          reasoningEffort: "medium",
+          // Portfolio Q&A needs no deep reasoning; low keeps TTFT and output
+          // cost down and leaves more of maxOutputTokens for the visible reply.
+          reasoningEffort: "low",
         },
       },
     });
