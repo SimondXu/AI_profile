@@ -59,12 +59,10 @@ export const portfolioConfigSchema = z
     ),
     skills: z
       .object({
-        programming: z.array(z.string()),
-        ml_ai: z.array(z.string()),
-        web_development: z.array(z.string()),
-        databases: z.array(z.string()),
-        devops_cloud: z.array(z.string()),
-        big_data: z.array(z.string()),
+        languages: z.array(z.string()),
+        ai_llm: z.array(z.string()),
+        frameworks: z.array(z.string()),
+        data_infra: z.array(z.string()),
         soft_skills: z.array(z.string()),
       })
       .passthrough(),

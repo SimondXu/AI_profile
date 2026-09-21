@@ -5,10 +5,10 @@ import { getConfig } from "@/lib/config-loader";
 export default function Skills() {
   const config = getConfig();
   const groups = [
-    { title: "Applied AI", values: config.skills.ml_ai.slice(0, 6) },
-    { title: "Languages", values: config.skills.programming },
-    { title: "Web", values: config.skills.web_development.slice(0, 6) },
-    { title: "Cloud and data", values: [...config.skills.databases, ...config.skills.devops_cloud.slice(0, 5)] },
+    { title: "Languages", values: config.skills.languages },
+    { title: "AI / LLM", values: config.skills.ai_llm },
+    { title: "Frameworks", values: config.skills.frameworks },
+    { title: "Data / Infra", values: config.skills.data_infra },
   ];
 
   return (

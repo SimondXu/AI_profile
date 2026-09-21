@@ -43,12 +43,10 @@ export interface Experience {
 }
 
 export interface Skills {
-  programming: string[];
-  ml_ai: string[];
-  web_development: string[];
-  databases: string[];
-  devops_cloud: string[];
-  big_data: string[];
+  languages: string[];
+  ai_llm: string[];
+  frameworks: string[];
+  data_infra: string[];
   soft_skills: string[];
 }
 

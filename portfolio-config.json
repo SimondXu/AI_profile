@@ -95,45 +95,10 @@
     }
   ],
   "skills": {
-    "programming": ["Python", "TypeScript", "JavaScript", "Java", "Go", "SQL", "Agentic AI Coding (Claude Code, Codex, Cursor)"],
-    "ml_ai": [
-      "RAG",
-      "Multi-Agent Architecture",
-      "LLM-as-Judge",
-      "Agent Evals",
-      "Embedding Models",
-      "Fine-tuning (SFT, QLoRA)",
-      "Agent Harness Engineering",
-      "LangChain",
-      "MCP",
-      "Temporal",
-      "PyTorch",
-      "Hugging Face Transformers",
-      "PEFT",
-      "vLLM",
-      "Vertex AI",
-      "Gemini"
-    ],
-    "web_development": [
-      "React.js",
-      "Vue.js",
-      "Next.js",
-      "FastAPI",
-      "Flask",
-      "Node.js",
-      "Express.js"
-    ],
-    "databases": ["PostgreSQL/pgvector", "Redis"],
-    "devops_cloud": [
-      "Docker",
-      "Kubernetes",
-      "CI/CD",
-      "AWS",
-      "GCP",
-      "OpenTelemetry",
-      "Prometheus"
-    ],
-    "big_data": ["PySpark"],
+    "languages": ["Python", "TypeScript", "JavaScript", "Go", "SQL", "Agentic AI Coding (Claude Code, Codex, Cursor)"],
+    "ai_llm": ["RAG", "Agent Harness Engineering", "LLM-as-Judge", "Agent Evals", "Fine-tuning", "Embedding Models"],
+    "frameworks": ["PyTorch", "Hugging Face Transformers", "PEFT", "vLLM", "LangChain", "Temporal", "MCP", "FastAPI", "React"],
+    "data_infra": ["PostgreSQL/pgvector", "Redis", "Docker", "Kubernetes", "CI/CD", "AWS", "GCP", "OpenTelemetry"],
     "soft_skills": [
       "Systems Thinking",
       "Pragmatic Problem Solving",
@@ -241,7 +206,7 @@
       ],
       "date": "Apr 2025 - May 2025",
       "status": "Completed",
-      "featured": false,
+      "featured": true,
       "achievements": [
         "Converted natural-language prompts into FigJam components at approximately 85% first-try accuracy.",
         "Reduced API costs by approximately 28% and lowered latency with PostgreSQL-backed memory, caching, and model routing."

@@ -60,12 +60,10 @@ try {
     },
     experience: [],
     skills: {
-      programming: [],
-      ml_ai: [],
-      web_development: [],
-      databases: [],
-      devops_cloud: [],
-      big_data: [],
+      languages: [],
+      ai_llm: [],
+      frameworks: [],
+      data_infra: [],
       soft_skills: []
     },
     projects: [],

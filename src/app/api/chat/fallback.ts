@@ -56,11 +56,10 @@ function describeSkills() {
   const { skills } = getConfig();
 
   return [
-    `**Languages:** ${skills.programming.join(", ")}`,
-    `**AI / ML:** ${skills.ml_ai.join(", ")}`,
-    `**Web:** ${skills.web_development.join(", ")}`,
-    `**Data:** ${skills.databases.join(", ")}`,
-    `**Cloud / DevOps:** ${skills.devops_cloud.join(", ")}`,
+    `**Languages:** ${skills.languages.join(", ")}`,
+    `**AI / LLM:** ${skills.ai_llm.join(", ")}`,
+    `**Frameworks:** ${skills.frameworks.join(", ")}`,
+    `**Data / Infra:** ${skills.data_infra.join(", ")}`,
   ].join("\n\n");
 }
 

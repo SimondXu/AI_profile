@@ -85,11 +85,10 @@ ${aiProfile.evidenceBoundaries.map((boundary) => `- ${boundary}`).join("\n")}
 - Bio: ${personal.bio}
 
 ### Technical Expertise
-- Programming Languages: ${skills.programming?.join(", ") || "N/A"}
-- ML/AI Technologies: ${skills.ml_ai?.join(", ") || "N/A"}
-- Web Development: ${skills.web_development?.join(", ") || "N/A"}
-- Database Systems: ${skills.databases?.join(", ") || "N/A"}
-- DevOps & Cloud: ${skills.devops_cloud?.join(", ") || "N/A"}
+- Languages: ${skills.languages?.join(", ") || "N/A"}
+- AI / LLM: ${skills.ai_llm?.join(", ") || "N/A"}
+- Frameworks: ${skills.frameworks?.join(", ") || "N/A"}
+- Data / Infra: ${skills.data_infra?.join(", ") || "N/A"}
 
 ### Professional Experience
 ${experience
@@ -171,28 +170,23 @@ ${aiProfile.frequentlyAskedQuestions
 
     return [
       {
-        category: "Programming Languages",
-        skills: skills.programming,
+        category: "Languages",
+        skills: skills.languages,
         color: "bg-blue-50 text-blue-600 border border-blue-200",
       },
       {
-        category: "ML/AI Technologies",
-        skills: skills.ml_ai,
+        category: "AI / LLM",
+        skills: skills.ai_llm,
         color: "bg-purple-50 text-purple-600 border border-purple-200",
       },
       {
-        category: "Web Development",
-        skills: skills.web_development,
+        category: "Frameworks",
+        skills: skills.frameworks,
         color: "bg-green-50 text-green-600 border border-green-200",
       },
       {
-        category: "Databases",
-        skills: skills.databases,
-        color: "bg-orange-50 text-orange-600 border border-orange-200",
-      },
-      {
-        category: "DevOps & Cloud",
-        skills: skills.devops_cloud,
+        category: "Data / Infra",
+        skills: skills.data_infra,
         color: "bg-emerald-50 text-emerald-600 border border-emerald-200",
       },
       {

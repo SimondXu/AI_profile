@@ -30,12 +30,10 @@ type EducationWithPrevious = {
 };
 
 const SKILL_GROUPS: Array<{ label: string; key: keyof Skills }> = [
-  { label: "AI / ML", key: "ml_ai" },
-  { label: "Languages", key: "programming" },
-  { label: "Web", key: "web_development" },
-  { label: "Cloud & DevOps", key: "devops_cloud" },
-  { label: "Data", key: "databases" },
-  { label: "Big data", key: "big_data" },
+  { label: "Languages", key: "languages" },
+  { label: "AI / LLM", key: "ai_llm" },
+  { label: "Frameworks", key: "frameworks" },
+  { label: "Data / Infra", key: "data_infra" },
 ];
 
 const sectionLinks = [
@@ -290,9 +288,17 @@ export default function ResumePage() {
                           {project.date}
                         </span>
                       </h3>
-                      <p className="max-w-prose text-[15px] leading-6 text-foreground">
-                        {project.description}
-                      </p>
+                      {project.achievements?.length ? (
+                        <ul className="list-inside list-disc space-y-1 max-w-prose text-[15px] leading-6 text-foreground">
+                          {project.achievements.map((item) => (
+                            <li key={item}>{item}</li>
+                          ))}
+                        </ul>
+                      ) : (
+                        <p className="max-w-prose text-[15px] leading-6 text-foreground">
+                          {project.description}
+                        </p>
+                      )}
                       <p className="font-mono text-[12px] text-muted-foreground">
                         {project.techStack.join(" · ")}
                       </p>

@@ -31,11 +31,10 @@ export const getEntryLevel = tool({
       },
       skills: {
         technical: [
-          ...config.skills.programming,
-          ...config.skills.ml_ai,
-          ...config.skills.web_development,
-          ...config.skills.databases,
-          ...config.skills.devops_cloud
+          ...config.skills.languages,
+          ...config.skills.ai_llm,
+          ...config.skills.frameworks,
+          ...config.skills.data_infra
         ],
         soft: config.skills.soft_skills
       },

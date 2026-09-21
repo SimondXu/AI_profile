@@ -20,7 +20,7 @@ interface AvailabilityCardProps {
 export default function AvailabilityCard({ data }: AvailabilityCardProps) {
   const config = getConfig();
   const location = data?.preferences.location || config.personal.location.current;
-  const skills = data?.skills.technical?.slice(0, 8) || config.skills.programming;
+  const skills = data?.skills.technical?.slice(0, 8) || config.skills.languages;
 
   return (
     <section className="quiet-tool-surface" aria-labelledby="availability-title">
